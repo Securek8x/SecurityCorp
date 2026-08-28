@@ -93,6 +93,9 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     const host = canvasHostRef.current;
     const heroEl = containerRef.current;
     if (!host || !heroEl) return;
+    // Preserve the narrowed element for closures below; React may clear the
+    // ref during unmount while cleanup is still being assembled.
+    const canvasHost = host;
     const heroSection = heroEl.closest<HTMLElement>(".hero") ?? heroEl;
 
     // These setBroken calls detect synchronous WebGL-context failure from an
@@ -101,7 +104,7 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     // render" lint guidance doesn't apply to this specific external check.
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: "low-power" });
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
     } catch {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setBroken(true);
@@ -117,9 +120,8 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     const camera = new THREE.PerspectiveCamera(42, 1, 1, 1000);
     camera.position.set(0, 0, 340);
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setClearColor(0x000000, 0);
-    host.appendChild(renderer.domElement);
+    canvasHost.appendChild(renderer.domElement);
 
     const { nodes, edges } = buildLattice();
 
@@ -149,8 +151,8 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     // behind it for a soft glow without a postprocessing bloom pass.
     const nodeMeshes: THREE.Mesh[] = [];
     const glowMeshes: THREE.Mesh[] = [];
-    const nodeGeo = new THREE.SphereGeometry(2.6, 10, 10);
-    const glowGeo = new THREE.SphereGeometry(6, 8, 8);
+    const nodeGeo = new THREE.SphereGeometry(2.6, 18, 18);
+    const glowGeo = new THREE.SphereGeometry(6, 14, 14);
     for (const n of nodes) {
       const color = COLOR[n.role];
       const mesh = new THREE.Mesh(nodeGeo, new THREE.MeshBasicMaterial({ color }));
@@ -168,7 +170,7 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
       .filter((i) => i < cyanEdgeList.length)
       .map((i) => cyanEdgeList[i]);
     const packets = packetRoutes.map((route, i) => {
-      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1.6, 8, 8), new THREE.MeshBasicMaterial({ color: COLOR.cyan }));
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(1.6, 12, 12), new THREE.MeshBasicMaterial({ color: COLOR.cyan }));
       scene.add(mesh);
       return { mesh, a: nodes[route[0]].pos, b: nodes[route[1]].pos, phase: i / packetRoutes.length, speed: 0.00022 };
     });
@@ -197,16 +199,31 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     io.observe(heroEl);
 
     function resize() {
-      const rect = heroEl!.getBoundingClientRect();
+      // The canvas is visually displayed within this negatively-inset host,
+      // not across the full hero. Keeping the drawing buffer, CSS box, and
+      // camera projection tied to this exact rectangle prevents CSS scaling
+      // from softening or aliasing the lattice.
+      const rect = canvasHost.getBoundingClientRect();
       const w = Math.max(1, Math.round(rect.width));
       const h = Math.max(1, Math.round(rect.height));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
     }
     const resizeObserver = new ResizeObserver(resize);
-    resizeObserver.observe(heroEl);
-    resize();
+    resizeObserver.observe(canvasHost);
+    // Resolution media queries change when browser zoom or a display DPR
+    // changes without necessarily changing the host's CSS dimensions.
+    let dprMediaQuery: MediaQueryList | null = null;
+    function watchDevicePixelRatio() {
+      dprMediaQuery?.removeEventListener("change", watchDevicePixelRatio);
+      dprMediaQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+      dprMediaQuery.addEventListener("change", watchDevicePixelRatio);
+      resize();
+    }
+    window.visualViewport?.addEventListener("resize", resize);
+    watchDevicePixelRatio();
 
     function onContextLost(e: Event) {
       e.preventDefault();
@@ -276,6 +293,8 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
       heroSection.style.removeProperty("--pointer-y");
       io.disconnect();
       resizeObserver.disconnect();
+      dprMediaQuery?.removeEventListener("change", watchDevicePixelRatio);
+      window.visualViewport?.removeEventListener("resize", resize);
       heroEl.removeEventListener("pointermove", onPointerMove);
       heroEl.removeEventListener("pointerleave", onPointerLeave);
       renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
@@ -295,7 +314,7 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
         (p.mesh.material as THREE.Material).dispose();
       }
       renderer.dispose();
-      if (renderer.domElement.parentNode === host) host.removeChild(renderer.domElement);
+      if (renderer.domElement.parentNode === canvasHost) canvasHost.removeChild(renderer.domElement);
     };
   }, [containerRef]);
 
