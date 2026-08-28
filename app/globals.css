@@ -302,9 +302,24 @@ nav a[aria-current="page"]{color:var(--acid)}
 .scope-card{align-self:end;position:relative;z-index:1;border-top:5px solid var(--acid);background:var(--surface-raised);padding:24px;overflow:hidden}
 
 /* ---- hero network: decorative, sits behind/around the scope card ---- */
-.hero .hero-network{position:absolute;top:-40px;right:-30px;width:min(30vw,380px);height:auto;max-height:120%;z-index:0;pointer-events:none;overflow:visible}
-.hero .hero-network .flow-node{stroke-width:1.5}
-@media(max-width:900px){.hero .hero-network{display:none}}
+.hero .hero-visual{position:absolute;top:-40px;right:-30px;width:min(30vw,380px);height:min(30vw,380px);max-height:120%;z-index:0;pointer-events:none;overflow:visible;perspective:1400px}
+.hero .hero-visual .hero-network{position:absolute;inset:0;width:100%;height:100%;transition:opacity var(--motion-standard) var(--ease-system)}
+.hero .hero-visual .hero-network .flow-node{stroke-width:1.5}
+.hero-webgl-host{position:absolute;inset:-40% -60% -20% -60%;opacity:0;transition:opacity 700ms var(--ease-system)}
+.hero-webgl-host canvas{width:100%;height:100%;display:block}
+.hero-webgl-host[data-state="ready"]{opacity:1}
+.hero-visual:has(.hero-webgl-host[data-state="ready"]) .hero-network{opacity:0}
+@media(max-width:900px){.hero .hero-visual{display:none}}
+
+/* subtle pointer-driven depth on the scope card: --pointer-x/--pointer-y
+   are set directly (no React state) on .hero by the same rAF loop that
+   drives the WebGL scene (see hero-webgl-canvas.tsx) and inherit down to
+   any descendant, including the scope card, which is a sibling of the
+   canvas host rather than a descendant of it. */
+@media(prefers-reduced-motion:no-preference) and (pointer:fine){
+  .hero{--pointer-x:0;--pointer-y:0}
+  .scope-card{transition:transform var(--motion-fast) var(--ease-system);transform-style:preserve-3d;transform:perspective(1400px) rotateX(calc(var(--pointer-y) * -2deg)) rotateY(calc(var(--pointer-x) * 2deg))}
+}
 .mono-label,.section-label{font:10px/1.3 var(--font-mono);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .scope-card ul{list-style:none;margin:20px 0 28px;padding:0}
 .scope-card li{border-top:1px solid var(--line);padding:13px 0;font-size:13px;font-weight:700;color:var(--ink)}
@@ -331,7 +346,11 @@ nav a[aria-current="page"]{color:var(--acid)}
 .article-row p{color:var(--muted);margin:0;max-width:720px;line-height:1.5;font-size:14px}
 .row-arrow{align-self:center;color:var(--muted)}
 
-.projects-preview{padding:95px clamp(22px,5vw,76px);background:var(--night);color:var(--inverted-foreground);--ink:var(--inverted-foreground);--muted:var(--inverted-muted);--line:var(--inverted-border);--acid:var(--inverted-primary)}
+/* cinematic seam: a thin gradient line where the page dips into the
+   inverted-dark projects section — a stronger transition cue between
+   surfaces without any scroll-hijacking or pinning */
+.projects-preview{position:relative;padding:95px clamp(22px,5vw,76px);background:var(--night);color:var(--inverted-foreground);--ink:var(--inverted-foreground);--muted:var(--inverted-muted);--line:var(--inverted-border);--acid:var(--inverted-primary)}
+.projects-preview::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--inverted-primary) 35%,var(--accent2) 65%,transparent);opacity:.6}
 .light .section-label{color:var(--acid)}
 .head-copy{max-width:440px;color:var(--muted);line-height:1.6}
 .project-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
@@ -348,12 +367,19 @@ nav a[aria-current="page"]{color:var(--acid)}
 .record-trace:hover::before,.record-trace:focus-within::before{transform:scaleX(1)}
 @media(prefers-reduced-motion:reduce){.record-trace::before{transition:none}}
 .article-no::before{content:"LOG // "}
-.project-schematic{width:100%;max-width:170px;height:auto;margin:65px 0 28px;display:block}
+.project-schematic{width:100%;max-width:170px;height:auto;margin:65px 0 28px;display:block;overflow:visible}
+.project-schematic-layer{fill:color-mix(in srgb,var(--acid) 4%,transparent);stroke:var(--line);stroke-width:1;opacity:0}
+.project-schematic-signal{fill:var(--acid);opacity:0}
 @media(prefers-reduced-motion:no-preference){
   .project-schematic .flow-path{stroke-dasharray:var(--path-length,100);stroke-dashoffset:var(--path-length,100);transition:stroke-dashoffset var(--motion-draw) var(--ease-flow)}
   .project-card:hover .project-schematic .flow-path,.project-card:focus-within .project-schematic .flow-path{stroke-dashoffset:0}
-  .project-schematic .flow-node-active{transition:filter var(--motion-standard) var(--ease-system)}
-  .project-card:hover .project-schematic .flow-node-active,.project-card:focus-within .project-schematic .flow-node-active{filter:drop-shadow(0 0 5px var(--diagram-line))}
+  .project-schematic .flow-node-active{transition:filter var(--motion-standard) var(--ease-system),transform var(--motion-standard) var(--ease-system);transform-box:fill-box;transform-origin:center}
+  .project-card:hover .project-schematic .flow-node-active,.project-card:focus-within .project-schematic .flow-node-active{filter:drop-shadow(0 0 6px var(--diagram-line));transform:scale(1.12)}
+  .project-schematic-layer{transition:opacity var(--motion-standard) var(--ease-system)}
+  .project-card:hover .project-schematic-layer,.project-card:focus-within .project-schematic-layer{opacity:1}
+  .project-schematic-secondary-path{opacity:0;transition:opacity var(--motion-fast) var(--ease-system) var(--motion-standard)}
+  .project-card:hover .project-schematic-secondary-path,.project-card:focus-within .project-schematic-secondary-path{opacity:1}
+  .project-card:hover .project-schematic-signal,.project-card:focus-within .project-schematic-signal{animation:flow-packet-move 1.4s var(--ease-flow) 1 var(--motion-draw)}
 }
 .project-card h3{font:25px/1.1 var(--font-serif);margin:0 0 14px;color:var(--ink)}
 .project-card>p{color:var(--muted);font-size:13px;line-height:1.6;margin:0}
@@ -375,6 +401,14 @@ nav a[aria-current="page"]{color:var(--acid)}
 
 .guide-index{padding:70px clamp(22px,7vw,110px);display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
 .guide-card{background:var(--paper);padding:28px;min-height:410px;display:flex;flex-direction:column;transition:background .2s}
+
+/* ---- shared 3D tilt + specular glow for [data-tilt] surfaces ---- */
+@media(prefers-reduced-motion:no-preference) and (pointer:fine){
+  [data-tilt]{--tilt-x:0;--tilt-y:0;--glow-x:50%;--glow-y:50%;position:relative;transform-style:preserve-3d;transform:perspective(1000px) rotateX(calc(var(--tilt-y) * -3deg)) rotateY(calc(var(--tilt-x) * 3deg));transition:transform var(--motion-fast) var(--ease-system)}
+  [data-tilt]::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity var(--motion-fast) var(--ease-system);background:radial-gradient(220px circle at var(--glow-x) var(--glow-y),color-mix(in srgb,var(--acid) 16%,transparent),transparent 70%)}
+  [data-tilt]:hover::after,[data-tilt]:focus-within::after{opacity:1}
+  [data-tilt]:focus-within{transform:perspective(1000px) translateY(-2px)}
+}
 .guide-card:hover{background:var(--surface-raised)}
 .guide-card .article-meta{margin:25px 0}
 .guide-card h2{font:30px/1.08 var(--font-serif);margin:0 0 18px;color:var(--ink)}
@@ -582,7 +616,12 @@ a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
 .cut-tab-verdict{font:9px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border:1px solid currentColor;margin-left:2px}
 .cut-tab-verdict.cut-verdict-validated{color:var(--go)}
 .cut-tab-verdict.cut-verdict-design{color:var(--warn)}
-.cut-panel{position:relative;border:1px solid var(--line);border-top:0;padding:30px;background:color-mix(in srgb,var(--surface-raised) 55%,transparent)}
+.cut-panel{position:relative;border:1px solid var(--line);border-top:0;padding:30px;background:color-mix(in srgb,var(--surface-raised) 55%,transparent);view-transition-name:cut-panel-content}
+/* Scoped, short crossfade for the Control-Under-Test scenario switch —
+   startViewTransition() is only ever called outside prefers-reduced-motion
+   (see components/control-under-test.tsx), so no separate media query is
+   needed here. */
+::view-transition-old(cut-panel-content),::view-transition-new(cut-panel-content){animation-duration:180ms}
 .cut-panel::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acid),var(--accent2),transparent)}
 .cut-panel dl{display:grid;gap:22px;margin:0 0 24px}
 .cut-panel dt{font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
@@ -619,6 +658,36 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
 .arch-diagram-svg{width:100%;height:auto;display:block}
 .arch-diagram-svg [tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 .arch-diagram figcaption{margin-top:14px;font-size:13px;color:var(--muted);line-height:1.5}
+
+/* ---- interactive flow diagram: mode dim/undim, node exploration ---- */
+.flow-path{transition:opacity var(--motion-standard) var(--ease-system)}
+.flow-path-dim{opacity:.14}
+.flow-path-explore-dim{opacity:.22}
+.flow-node{transition:opacity var(--motion-standard) var(--ease-system),filter var(--motion-fast) var(--ease-system)}
+.flow-node-dim{opacity:.4}
+.flow-node-explore-dim{opacity:.35}
+.flow-node-group{cursor:pointer}
+.flow-node-group:focus{outline:none}
+.flow-node-group:focus-visible .flow-node,.flow-node-explored .flow-node{filter:drop-shadow(0 0 7px var(--diagram-line));transform:translateY(-2px)}
+.flow-node-group text{pointer-events:none;transition:opacity var(--motion-standard) var(--ease-system)}
+.diagram-controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.diagram-control-btn{border:1px solid var(--line);background:transparent;color:var(--muted);padding:8px 14px;font:11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:border-color .2s,color .2s;min-height:36px}
+.diagram-control-btn[aria-pressed="true"]{border-color:var(--acid);color:var(--acid);background:color-mix(in srgb,var(--acid) 6%,transparent)}
+.diagram-control-btn:hover{color:var(--ink)}
+.diagram-control-btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.diagram-control-replay{margin-left:auto}
+.diagram-explore-panel{margin-top:14px;min-height:44px;padding:12px 16px;border-left:3px solid var(--acid);background:color-mix(in srgb,var(--acid) 5%,transparent)}
+.diagram-explore-panel p{margin:0;font-size:13.5px;line-height:1.6;color:var(--ink)}
+.diagram-explore-panel strong{color:var(--acid)}
+.diagram-explore-hint{color:var(--muted)!important;font-style:italic}
+@media(prefers-reduced-motion:reduce){
+  .flow-node-group:focus-visible .flow-node,.flow-node-explored .flow-node{transform:none}
+}
+@media(max-width:600px){
+  .diagram-controls{gap:6px}
+  .diagram-control-btn{padding:8px 10px;font-size:10px}
+  .diagram-control-replay{margin-left:0}
+}
 
 /* ---- evidence panel ---- */
 .evidence-panel{margin:60px 0 0;max-width:900px;padding:0 clamp(22px,7vw,0px)}
@@ -659,7 +728,10 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
 .card-cta{display:inline-flex;align-items:center;gap:6px;margin-top:18px;font:11px var(--font-mono);text-transform:uppercase;letter-spacing:.05em;color:var(--acid);border-bottom:1px solid transparent;transition:border-color .2s}
 .card-cta:hover,.card-cta:focus-visible{border-color:var(--acid)}
 .project-card:focus-within{background:color-mix(in srgb,var(--acid) 5%,transparent)}
-@media(prefers-reduced-motion:no-preference){
+/* hover/focus lift is now the shared [data-tilt] transform above — on
+   coarse-pointer or reduced-motion, [data-tilt] doesn't apply at all, so
+   this plain fallback lift covers those cases without fighting the tilt. */
+@media(prefers-reduced-motion:no-preference) and (pointer:coarse){
   .project-card:hover,.project-card:focus-within{transform:translateY(-3px)}
 }
 .failure-list{padding-left:18px;line-height:1.8;color:var(--ink);font-size:16px}

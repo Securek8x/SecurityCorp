@@ -3,6 +3,7 @@ import { ArrowUpRight, Menu, Rss, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { WordmarkIcon } from "@/components/wordmark-icon";
 import { MotionController } from "@/components/motion-controller";
+import { InteractiveSurfaceController } from "@/components/interactive-surface-controller";
 import { profileLinks } from "@/lib/profile";
 
 const NAV_LINKS = [
@@ -86,6 +87,7 @@ export function Shell({ children, current }: { children: React.ReactNode; curren
   return (
     <>
       <MotionController />
+      <InteractiveSurfaceController />
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>

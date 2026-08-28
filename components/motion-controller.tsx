@@ -1,6 +1,65 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+
+// Module-level pub-sub so additional consumers (the WebGL hero scene, the
+// card-tilt controller) can read tab-hidden state without each attaching
+// its own `visibilitychange` listener — MotionController's own listener
+// (below) is the only one that ever fires; this just fans it out.
+const tabHiddenListeners = new Set<(hidden: boolean) => void>();
+let lastTabHidden = false;
+function notifyTabHidden(hidden: boolean) {
+  lastTabHidden = hidden;
+  tabHiddenListeners.forEach((cb) => cb(hidden));
+}
+
+/** True while the document tab is hidden. Shares MotionController's one listener. */
+export function useTabHidden(): boolean {
+  const [hidden, setHidden] = useState(lastTabHidden);
+  useEffect(() => {
+    tabHiddenListeners.add(setHidden);
+    return () => {
+      tabHiddenListeners.delete(setHidden);
+    };
+  }, []);
+  return hidden;
+}
+
+function matchMediaState(query: string): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia(query).matches;
+}
+
+/** True if the user has asked for reduced motion. Re-evaluates on change. */
+export function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(() => matchMediaState("(prefers-reduced-motion: reduce)"));
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return reduced;
+}
+
+/** True on devices whose primary input has no hover/fine pointer (touch). */
+export function useCoarsePointer(): boolean {
+  const [coarse, setCoarse] = useState(() => matchMediaState("(pointer: coarse)"));
+  useEffect(() => {
+    const mq = window.matchMedia("(pointer: coarse)");
+    const onChange = () => setCoarse(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return coarse;
+}
+
+/** True when the browser has requested reduced data usage (Save-Data). */
+export function prefersReducedData(): boolean {
+  if (typeof navigator === "undefined") return false;
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  return Boolean(conn?.saveData);
+}
 
 /**
  * Single shared IntersectionObserver for every `[data-motion]` element on
@@ -20,6 +79,22 @@ import { usePathname } from "next/navigation";
  * the CSS default (fully drawn/complete) already satisfies that case, so
  * there is nothing for this controller to do.
  */
+// Module-level so components that remount an already-primed element (a
+// React `key` change — the guide diagrams' Replay button, most notably)
+// can re-register themselves with the *same* running observer instead of
+// waiting for a route change to be rescanned. Safe to call with no
+// observer yet (reduced motion, or before MotionController has mounted) —
+// it's just a no-op then, matching the reduced-motion CSS fallback.
+let sharedObserver: IntersectionObserver | null = null;
+
+/** Re-observe an element whose data-motion sequence needs to run again
+ *  (e.g. after a key-remount) without waiting for the next route change. */
+export function reobserveMotionElement(el: HTMLElement | null) {
+  if (!el || !sharedObserver) return;
+  delete el.dataset.motionState;
+  sharedObserver.observe(el);
+}
+
 export function MotionController() {
   const pathname = usePathname();
 
@@ -55,19 +130,23 @@ export function MotionController() {
       },
       { threshold: 0.25 }
     );
+    sharedObserver = observer;
 
     document.querySelectorAll<HTMLElement>("[data-motion]").forEach((el) => {
       if (el.dataset.motionState !== "complete") observer.observe(el);
     });
 
     function onVisibility() {
-      document.body.classList.toggle("motion-tab-hidden", document.visibilityState !== "visible");
+      const hidden = document.visibilityState !== "visible";
+      document.body.classList.toggle("motion-tab-hidden", hidden);
+      notifyTabHidden(hidden);
     }
     document.addEventListener("visibilitychange", onVisibility);
     onVisibility();
 
     return () => {
       observer.disconnect();
+      if (sharedObserver === observer) sharedObserver = null;
       document.removeEventListener("visibilitychange", onVisibility);
     };
     // Re-scan after every route change: elements on the new page need fresh

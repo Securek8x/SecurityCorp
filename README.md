@@ -33,6 +33,9 @@ claims that aren't backed by something that was actually built and tested.
   [`app/globals.css`](./app/globals.css) — the visual design isn't built
   from a component library.
 - [`lucide-react`](https://lucide.dev) for icons.
+- [`three`](https://threejs.org) — used only, and lazily loaded only, for
+  the homepage hero's WebGL layer (see "Motion architecture" below); every
+  other route never loads it.
 - Deployed on Cloudflare Pages. No backend, no database, no application
   secrets — the whole site is HTML, CSS, and content data compiled at
   build time.
@@ -126,6 +129,26 @@ nothing regresses without JavaScript) and only inside
 with `prefers-reduced-motion: reduce`, sees every diagram fully drawn and
 legible immediately — never a blank or partially-drawn state waiting on
 JavaScript.
+
+**The WebGL hero** (`components/hero-webgl-canvas.tsx`, `three` — the only
+non-dev dependency beyond Next/React) is an isolated, lazily-loaded layer
+behind the always-present, already-complete `components/diagrams/
+hero-network.tsx` SVG — never a replacement for it. `hero-scene-loader.tsx`
+decides whether to even fetch the WebGL module at all: it skips entirely
+under `prefers-reduced-motion: reduce`, `(pointer: coarse)`,
+`navigator.connection.saveData`, or no WebGL context, so most mobile and
+all reduced-motion visits never download it. When it does run, it owns its
+own lifecycle — pauses via `IntersectionObserver` and the shared
+`useTabHidden()` hook, disposes all Three.js resources on unmount, and
+falls back to the SVG (crossfading back in) on WebGL context loss. Card
+tilt (`components/interactive-surface-controller.tsx`) and the guide
+diagrams' node-hover/mode-toggle/replay interactivity
+(`components/diagrams/interactive-flow-diagram.tsx`, shared by all three
+guides) follow the same rule: CSS custom properties written directly from
+`requestAnimationFrame`, never React state per pointer move, and every
+interactive affordance (node exploration, mode switching, replay) has a
+keyboard-operable equivalent — see `diagram-explore-panel` and
+`diagram-controls` in `app/globals.css`.
 
 ## Appearance
 

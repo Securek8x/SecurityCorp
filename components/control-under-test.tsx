@@ -13,6 +13,22 @@ function verdictOf(observed: string): { label: string; className: string } {
     : { label: "Design only", className: "cut-verdict-design" };
 }
 
+// Feature-detected, reduced-motion-respecting: a genuine no-op (instant
+// swap, same as before) everywhere this isn't supported or isn't wanted —
+// this is purely a progressive crossfade layered on identical state logic,
+// never a second source of truth for what tab is selected.
+function changeScenario(next: () => void) {
+  const canTransition =
+    typeof document !== "undefined" &&
+    "startViewTransition" in document &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (canTransition) {
+    (document as Document & { startViewTransition: (cb: () => void) => void }).startViewTransition(next);
+  } else {
+    next();
+  }
+}
+
 export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }) {
   const [activeId, setActiveId] = useState(scenarios[0].id);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -22,7 +38,7 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
 
   function focusTab(index: number) {
     const wrapped = (index + scenarios.length) % scenarios.length;
-    setActiveId(scenarios[wrapped].id);
+    changeScenario(() => setActiveId(scenarios[wrapped].id));
     tabRefs.current[wrapped]?.focus();
   }
 
@@ -52,7 +68,7 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
               aria-controls={`cut-panel-${s.id}`}
               tabIndex={s.id === activeId ? 0 : -1}
               className="cut-tab clip-corner-sm"
-              onClick={() => setActiveId(s.id)}
+              onClick={() => changeScenario(() => setActiveId(s.id))}
             >
               {s.id === activeId && <CheckCircle2 size={14} aria-hidden="true" />}
               {s.control}

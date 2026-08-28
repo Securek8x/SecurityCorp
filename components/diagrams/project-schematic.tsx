@@ -21,8 +21,10 @@ export function ProjectSchematic({ visual }: { visual: ProjectVisual }) {
     const branch = "M65,40 V54";
     return (
       <svg {...common}>
+        <rect className="project-schematic-layer" x="2" y="6" width="126" height="48" rx="8" />
         <path className="flow-path" d={route} style={{ "--path-length": 94 } as React.CSSProperties} />
         <path className="flow-path flow-path-failure" d={branch} style={{ "--path-length": 14 } as React.CSSProperties} />
+        <circle className="project-schematic-signal" r="2.6" style={{ offsetPath: `path("${route}")` } as React.CSSProperties} />
         <circle className="flow-node" cx="8" cy="30" r="5" />
         <circle className="flow-node flow-node-active" cx="65" cy="30" r="7" />
         <circle className="flow-node flow-node-safe" cx="122" cy="30" r="5" />
@@ -36,8 +38,10 @@ export function ProjectSchematic({ visual }: { visual: ProjectVisual }) {
     const branch = "M60,30 V54";
     return (
       <svg {...common}>
+        <rect className="project-schematic-layer" x="2" y="4" width="126" height="52" rx="8" />
         <path className="flow-path" d={route} style={{ "--path-length": 94 } as React.CSSProperties} />
         <path className="flow-path flow-path-failure" d={branch} style={{ "--path-length": 24 } as React.CSSProperties} />
+        <circle className="project-schematic-signal" r="2.6" style={{ offsetPath: `path("${route}")` } as React.CSSProperties} />
         <rect className="flow-node" x="4" y="12" width="12" height="16" rx="2" />
         <rect className="flow-node flow-node-active" x="44" y="10" width="22" height="20" rx="3" />
         <circle className="flow-node flow-node-safe" cx="122" cy="20" r="5" />
@@ -48,9 +52,13 @@ export function ProjectSchematic({ visual }: { visual: ProjectVisual }) {
 
   if (visual === "gateway") {
     const route = "M8,30 H40 M60,30 H90 M110,30 H122";
+    const secondary = "M50,30 V12 H82";
     return (
       <svg {...common}>
+        <rect className="project-schematic-layer" x="2" y="6" width="126" height="48" rx="8" />
+        <path className="flow-path flow-path-secondary project-schematic-secondary-path" d={secondary} style={{ "--path-length": 50 } as React.CSSProperties} />
         <path className="flow-path" d={route} style={{ "--path-length": 94 } as React.CSSProperties} />
+        <circle className="project-schematic-signal" r="2.6" style={{ offsetPath: `path("${route}")` } as React.CSSProperties} />
         <circle className="flow-node" cx="8" cy="30" r="5" />
         <circle className="flow-node flow-node-active" cx="50" cy="30" r="6" />
         <rect className="flow-node" x="82" y="21" width="16" height="18" rx="3" />
@@ -62,10 +70,13 @@ export function ProjectSchematic({ visual }: { visual: ProjectVisual }) {
   // k8s-parity: two paired columns (current / target) linked by parity
   // arrows — deliberately neutral (no green/safe node): the migration is
   // design-only, and this visual must not read as validated or operational.
+  // No .project-schematic-signal here — a moving packet would read as
+  // "traffic flowing," which is exactly what a design-only project must not imply.
   const parityTop = "M22,16 H98";
   const parityBottom = "M22,44 H98";
   return (
     <svg {...common}>
+      <rect className="project-schematic-layer" x="2" y="4" width="126" height="52" rx="8" />
       <path className="flow-path flow-path-secondary" d={parityTop} style={{ "--path-length": 76 } as React.CSSProperties} />
       <path className="flow-path flow-path-secondary" d={parityBottom} style={{ "--path-length": 76 } as React.CSSProperties} />
       <circle className="flow-node flow-node-active" cx="12" cy="16" r="6" />
