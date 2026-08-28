@@ -1,13 +1,31 @@
 import type { Metadata, Viewport } from "next";
+import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ogImages, twitterImages } from "@/lib/seo";
 import { websiteJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/json-ld";
 
+// Self-hosted at build time by next/font — no runtime request to Google Fonts,
+// no render-blocking network dependency, subset to latin to keep payload small.
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["500", "700"],
+  variable: "--font-sans-nf",
+  display: "swap",
+});
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono-nf",
+  display: "swap",
+});
+
 // Runs synchronously in <head>, before first paint, so the resolved theme is
 // already applied by the time anything is visible — no light/dark flash.
 // Reads localStorage only; no network, no eval, no user-controlled code path.
-const THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem("securitycorp-theme");var r=(s==="light"||s==="dark")?s:(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");var d=document.documentElement;d.setAttribute("data-theme",r);d.setAttribute("data-theme-preference",r);d.style.colorScheme=r}catch(e){}})();`;
+// Dark is the default first-visit theme regardless of OS preference; only an
+// explicit stored choice switches it to light.
+const THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem("securitycorp-theme");var r=(s==="light"||s==="dark")?s:"dark";var d=document.documentElement;d.setAttribute("data-theme",r);d.setAttribute("data-theme-preference",r);d.style.colorScheme=r}catch(e){}})();`;
 
 const siteUrl = "https://securitycorp.net";
 const siteDescription =
@@ -50,7 +68,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f5f7fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#080b12" },
+    { media: "(prefers-color-scheme: dark)", color: "#070b12" },
   ],
 };
 
@@ -60,7 +78,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <link rel="alternate" type="application/rss+xml" title="SecurityCorp — RSS feed" href="/rss.xml" />

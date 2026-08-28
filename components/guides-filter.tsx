@@ -38,7 +38,7 @@ export function GuidesFilter({ articles }: { articles: Article[] }) {
       ) : (
         <section className="guide-index">
           {filtered.map((a) => (
-            <Link href={`/guides/${a.slug}`} className="guide-card" key={a.slug}>
+            <Link href={`/guides/${a.slug}`} className="guide-card record-trace clip-corner-sm" key={a.slug}>
               <span className="article-no">{a.number}</span>
               <div className="article-meta">
                 <span>{a.category}</span>

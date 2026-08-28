@@ -14,7 +14,7 @@ function apply(pref: ThemePreference) {
 
 function readDocumentPreference(): ThemePreference {
   const current = document.documentElement.getAttribute("data-theme-preference");
-  return current === "light" || current === "dark" ? current : "light";
+  return current === "light" || current === "dark" ? current : "dark";
 }
 
 function subscribeToMount() {
@@ -27,7 +27,7 @@ export function ThemeToggle() {
   const [selectedPref, setSelectedPref] = useState<ThemePreference | null>(null);
   const mounted = useSyncExternalStore(subscribeToMount, () => true, () => false);
   const transitionTimer = useRef<number | undefined>(undefined);
-  const pref = selectedPref ?? (mounted ? readDocumentPreference() : "light");
+  const pref = selectedPref ?? (mounted ? readDocumentPreference() : "dark");
 
   useEffect(() => () => window.clearTimeout(transitionTimer.current), []);
 

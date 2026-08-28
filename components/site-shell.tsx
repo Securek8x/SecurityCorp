@@ -12,14 +12,20 @@ const NAV_LINKS = [
 export function Header({ current }: { current?: string }) {
   return (
     <header className="site-header">
-      <Link href="/" className="wordmark">
-        <span className="mark">
-          <ShieldCheck size={18} aria-hidden="true" />
+      <div className="brand-group">
+        <Link href="/" className="wordmark">
+          <span className="mark clip-corner-sm">
+            <ShieldCheck size={18} aria-hidden="true" />
+          </span>
+          <span>
+            SECURITY<span>CORP</span>
+          </span>
+        </Link>
+        <span className="header-status signal">
+          <i aria-hidden="true" />
+          Publication active
         </span>
-        <span>
-          SECURITY<span>CORP</span>
-        </span>
-      </Link>
+      </div>
       <input type="checkbox" id="nav-toggle" className="nav-toggle-input" />
       <label htmlFor="nav-toggle" className="nav-toggle-label">
         <Menu size={20} aria-hidden="true" />
