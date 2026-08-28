@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight, Menu, Rss, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WordmarkIcon } from "@/components/wordmark-icon";
+import { MotionController } from "@/components/motion-controller";
 import { profileLinks } from "@/lib/profile";
 
 const NAV_LINKS = [
@@ -13,9 +15,9 @@ export function Header({ current }: { current?: string }) {
   return (
     <header className="site-header">
       <div className="brand-group">
-        <Link href="/" className="wordmark">
+        <Link href="/" className="wordmark wordmark-animated">
           <span className="mark clip-corner-sm">
-            <ShieldCheck size={18} aria-hidden="true" />
+            <WordmarkIcon size={18} />
           </span>
           <span>
             SECURITY<span>CORP</span>
@@ -83,6 +85,7 @@ export function Footer() {
 export function Shell({ children, current }: { children: React.ReactNode; current?: string }) {
   return (
     <>
+      <MotionController />
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>

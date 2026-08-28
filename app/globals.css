@@ -83,8 +83,137 @@
 @keyframes scanline-sweep{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
 @keyframes border-trace{to{background-position:200% 0}}
 @media(prefers-reduced-motion:reduce){
-  [class*="node-pulse"],.scanline{animation:none!important}
+  [class*="node-pulse"]{animation:none!important}
 }
+
+/* ==================================================================
+   MOTION SYSTEM — centralized tokens + shared flow-diagram vocabulary.
+   Used by hero-network, the three guide architecture diagrams, the
+   control-under-test failure-path diagram, the build-log circuit, and
+   the case timeline. See components/motion-controller.tsx for the
+   lifecycle rules (offscreen pause, hidden-tab pause, play-once).
+
+   Default state (no JS, or prefers-reduced-motion: reduce) is always
+   the COMPLETE, fully-drawn diagram — motion is added on top, never a
+   prerequisite for seeing the finished, meaningful state. ================================================================== */
+:root{
+  --motion-fast:180ms;
+  --motion-standard:420ms;
+  --motion-draw:900ms;
+  --motion-flow:1800ms;
+  --motion-sequence:7s;
+  --motion-ambient:12s;
+  --ease-system:cubic-bezier(.2,.7,.3,1);
+  --ease-flow:cubic-bezier(.45,0,.2,1);
+}
+
+/* Flow-diagram primitives — semantic tokens only, so every diagram works
+   in both themes without hardcoded colors. */
+.flow-path{fill:none;stroke:var(--diagram-line);stroke-width:2;stroke-linecap:round}
+.flow-path-secondary{stroke:var(--accent2)}
+.flow-path-failure{stroke:var(--diagram-failure);stroke-dasharray:6 5}
+.flow-path-safe{stroke:var(--go)}
+.flow-node{fill:var(--diagram-node-bg);stroke:var(--diagram-node-border);stroke-width:1.5}
+.flow-node-active{stroke:var(--diagram-line);stroke-width:2}
+.flow-node-safe{stroke:var(--go)}
+.flow-node-blocked{stroke:var(--diagram-failure)}
+.flow-packet{opacity:0}
+.flow-packet-cyan{fill:var(--diagram-line)}
+.flow-packet-violet{fill:var(--accent2)}
+.flow-packet-safe{fill:var(--go)}
+
+/* Play-once / play-loop sequences: complete (fully drawn/settled) by
+   default. Only once JS has attached data-js-motion to <html> — and only
+   without a reduced-motion preference — do sequences get an "undrawn"
+   starting point to animate from. */
+@media(prefers-reduced-motion:no-preference){
+  /* Draw state uses data-motion-primed, not data-motion-state: primed is set
+     once and never cleared, so a loop element's already-drawn path does not
+     snap back to "undrawn" each time it pauses offscreen. Only the packet
+     and pulse loops (below) actually respond to the active/paused toggle. */
+  html[data-js-motion="true"] [data-motion]:not([data-motion-primed="true"]) .flow-path{
+    stroke-dashoffset:var(--path-length,0);
+  }
+  html[data-js-motion="true"] [data-motion]:not([data-motion-primed="true"]) .flow-node-reveal{
+    opacity:0;
+  }
+  html[data-js-motion="true"] [data-motion-primed="true"] .flow-path{
+    stroke-dasharray:var(--path-length,0);
+    animation:flow-draw var(--draw-duration,var(--motion-draw)) var(--ease-flow) forwards;
+    animation-delay:var(--draw-delay,0ms);
+  }
+  html[data-js-motion="true"] [data-motion-primed="true"] .flow-node-reveal{
+    animation:flow-node-reveal var(--motion-fast) var(--ease-system) forwards;
+    animation-delay:var(--reveal-delay,0ms);
+  }
+  html[data-js-motion="true"] [data-motion-state="active"] .flow-packet,
+  html[data-js-motion="true"] [data-motion-state="complete"] .flow-packet.flow-packet-loop{
+    animation:flow-packet-move var(--flow-duration,var(--motion-flow)) var(--ease-flow) infinite;
+    animation-delay:var(--flow-delay,0ms);
+  }
+  html[data-js-motion="true"] [data-motion-state="active"] .flow-packet.flow-packet-once{
+    animation-iteration-count:1;
+    animation-fill-mode:forwards;
+  }
+  html[data-js-motion="true"] [data-motion-state="active"] .flow-pulse-once{
+    animation:node-pulse-once var(--motion-standard) var(--ease-system) both;
+    animation-delay:var(--pulse-delay,0ms);
+  }
+  html[data-js-motion="true"] [data-motion-primed="true"] .flow-pulse-loop{
+    animation:node-pulse-once 3.4s var(--ease-system) infinite;
+    animation-delay:var(--pulse-delay,0ms);
+  }
+  /* loop sequences: pause offscreen, pause in a hidden tab */
+  html[data-js-motion="true"] [data-motion="loop"][data-motion-state="paused"] .flow-packet-loop,
+  html[data-js-motion="true"] [data-motion="loop"][data-motion-state="paused"] .flow-pulse-loop,
+  html[data-js-motion="true"] .motion-tab-hidden [data-motion="loop"] .flow-packet-loop,
+  html[data-js-motion="true"] .motion-tab-hidden [data-motion="loop"] .flow-pulse-loop{
+    animation-play-state:paused;
+  }
+}
+@keyframes flow-draw{to{stroke-dashoffset:0}}
+@keyframes flow-node-reveal{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes flow-packet-move{0%{offset-distance:0%;opacity:0}5%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes node-pulse-once{0%,100%{filter:none}45%{filter:drop-shadow(0 0 6px currentColor)}}
+
+/* Restrained "route brighten": one route dims/brightens slowly, never a
+   flashing effect — GPU-friendly (opacity only). */
+@keyframes flow-route-brighten{0%,100%{opacity:.55}50%{opacity:1}}
+@media(prefers-reduced-motion:no-preference){
+  html[data-js-motion="true"] [data-motion-state="active"] .flow-route-ambient,
+  html[data-js-motion="true"] [data-motion-state="complete"] .flow-route-ambient{
+    animation:flow-route-brighten var(--motion-ambient) var(--ease-system) infinite;
+  }
+  html[data-js-motion="true"] [data-motion="loop"][data-motion-state="paused"] .flow-route-ambient,
+  html[data-js-motion="true"] .motion-tab-hidden [data-motion="loop"] .flow-route-ambient{
+    animation-play-state:paused;
+  }
+}
+
+.diagram-sequence{isolation:isolate}
+
+/* diagram-sequence-auto: for sequences triggered by React state (a tab
+   switch, a fresh key-remount) rather than scroll position — there is no
+   "offscreen" for an already-open tab panel, so this bypasses the shared
+   viewport controller entirely and just plays once on mount, gated only by
+   prefers-reduced-motion. Each remount is already a natural restart. */
+@media(prefers-reduced-motion:no-preference){
+  .diagram-sequence-auto .flow-path{
+    stroke-dasharray:var(--path-length,0);
+    stroke-dashoffset:var(--path-length,0);
+    animation:flow-draw var(--draw-duration,var(--motion-draw)) var(--ease-flow) forwards;
+    animation-delay:var(--draw-delay,0ms);
+  }
+  .diagram-sequence-auto .flow-packet{
+    animation:flow-packet-move var(--flow-duration,var(--motion-flow)) var(--ease-flow) 1 forwards;
+    animation-delay:var(--flow-delay,0ms);
+  }
+  .diagram-sequence-auto .flow-pulse-once{
+    animation:node-pulse-once var(--motion-standard) var(--ease-system) both;
+    animation-delay:var(--pulse-delay,0ms);
+  }
+}
+.motion-ambient,.motion-explanatory,.motion-interactive{display:contents}
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -116,7 +245,19 @@ a:focus-visible,button:focus-visible,.nav-toggle-label:focus-within{outline:2px 
 .brand-group{display:flex;align-items:center;gap:22px}
 .wordmark{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;letter-spacing:.04em}
 .wordmark>span:last-child>span{color:var(--muted)}
-.mark{width:32px;height:32px;display:grid;place-items:center;background:var(--acid);color:var(--primary-foreground);box-shadow:0 0 18px var(--glow)}
+.mark{width:32px;height:32px;display:grid;place-items:center;background:var(--acid);color:var(--primary-foreground);box-shadow:0 0 18px var(--glow);transition:box-shadow var(--motion-standard) var(--ease-system)}
+
+/* ---- logo microanimation: draws once on header entrance, never loops ---- */
+.wordmark-shield-outline,.wordmark-shield-check{stroke-dasharray:var(--path-length,50);stroke-dashoffset:0}
+@media(prefers-reduced-motion:no-preference){
+  .wordmark-animated .wordmark-shield-outline{stroke-dashoffset:var(--path-length,50);animation:flow-draw var(--motion-draw) var(--ease-flow) 120ms forwards}
+  .wordmark-animated .wordmark-shield-check{stroke-dashoffset:var(--path-length,50);animation:flow-draw var(--motion-standard) var(--ease-system) calc(var(--motion-draw) + 120ms) forwards}
+}
+.wordmark-animated .mark{transition:box-shadow var(--motion-fast) var(--ease-system),transform var(--motion-fast) var(--ease-system)}
+.wordmark-animated:hover .mark,.wordmark-animated:focus-visible .mark{box-shadow:0 0 22px var(--glow),0 0 0 3px color-mix(in srgb,var(--acid) 35%,transparent)}
+@media(prefers-reduced-motion:no-preference){
+  .wordmark-animated:hover .mark,.wordmark-animated:focus-visible .mark{transform:scale(1.06)}
+}
 .header-status{padding-left:20px;border-left:1px solid var(--line)}
 @media(max-width:1100px){.brand-group .header-status{display:none}}
 nav{display:flex;align-items:center;gap:34px;font-size:13px;font-weight:700}
@@ -158,14 +299,12 @@ nav a[aria-current="page"]{color:var(--acid)}
 .primary-link{background:var(--acid);color:var(--primary-foreground);padding:16px 19px;width:max-content;transition:box-shadow .2s,background .2s}
 .primary-link:hover{background:var(--primary-hover);box-shadow:0 0 26px var(--glow)}
 .primary-link-terminal::before{content:"$";font-family:var(--font-mono);margin-right:11px;opacity:.6}
-.scope-card{align-self:end;position:relative;border-top:5px solid var(--acid);background:var(--surface-raised);padding:24px;overflow:hidden}
-.scope-schematic{position:absolute;top:14px;right:14px;width:110px;height:auto;opacity:.55;pointer-events:none}
-.schematic-node-pulse{transform-origin:center;transform-box:fill-box}
-@media(prefers-reduced-motion:no-preference){.schematic-node-pulse{animation:node-pulse 3.2s ease-in-out infinite}}
-.scanline{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.scanline::before{content:"";position:absolute;left:0;right:0;top:-140px;height:140px;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--acid) 10%,transparent) 45%,transparent);will-change:transform}
-@keyframes hero-scanline-sweep{from{transform:translateY(0)}to{transform:translateY(calc(100vh + 280px))}}
-@media(prefers-reduced-motion:no-preference){.scanline::before{animation:hero-scanline-sweep 11s linear infinite}}
+.scope-card{align-self:end;position:relative;z-index:1;border-top:5px solid var(--acid);background:var(--surface-raised);padding:24px;overflow:hidden}
+
+/* ---- hero network: decorative, sits behind/around the scope card ---- */
+.hero .hero-network{position:absolute;top:-40px;right:-30px;width:min(30vw,380px);height:auto;max-height:120%;z-index:0;pointer-events:none;overflow:visible}
+.hero .hero-network .flow-node{stroke-width:1.5}
+@media(max-width:900px){.hero .hero-network{display:none}}
 .mono-label,.section-label{font:10px/1.3 var(--font-mono);letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .scope-card ul{list-style:none;margin:20px 0 28px;padding:0}
 .scope-card li{border-top:1px solid var(--line);padding:13px 0;font-size:13px;font-weight:700;color:var(--ink)}
@@ -209,7 +348,13 @@ nav a[aria-current="page"]{color:var(--acid)}
 .record-trace:hover::before,.record-trace:focus-within::before{transform:scaleX(1)}
 @media(prefers-reduced-motion:reduce){.record-trace::before{transition:none}}
 .article-no::before{content:"LOG // "}
-.project-icon{margin:65px 0 28px;color:var(--acid)}
+.project-schematic{width:100%;max-width:170px;height:auto;margin:65px 0 28px;display:block}
+@media(prefers-reduced-motion:no-preference){
+  .project-schematic .flow-path{stroke-dasharray:var(--path-length,100);stroke-dashoffset:var(--path-length,100);transition:stroke-dashoffset var(--motion-draw) var(--ease-flow)}
+  .project-card:hover .project-schematic .flow-path,.project-card:focus-within .project-schematic .flow-path{stroke-dashoffset:0}
+  .project-schematic .flow-node-active{transition:filter var(--motion-standard) var(--ease-system)}
+  .project-card:hover .project-schematic .flow-node-active,.project-card:focus-within .project-schematic .flow-node-active{filter:drop-shadow(0 0 5px var(--diagram-line))}
+}
 .project-card h3{font:25px/1.1 var(--font-serif);margin:0 0 14px;color:var(--ink)}
 .project-card>p{color:var(--muted);font-size:13px;line-height:1.6;margin:0}
 .tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:20px}
@@ -398,10 +543,25 @@ footer>div:first-child>p{color:var(--muted);font-size:12px}
 /* ---- build log ---- */
 .build-log{padding:90px clamp(22px,5vw,76px);border-top:1px solid var(--line)}
 .build-log h2{font:46px/1 var(--font-serif);margin:12px 0 20px;color:var(--ink)}
-.build-log ol{list-style:none;margin:35px 0 0;padding:0;border-top:1px solid var(--line)}
-.build-log-row{display:grid;grid-template-columns:34px 1fr;gap:20px;padding:24px 4px;border-bottom:1px solid var(--line);transition:background .2s}
+.build-log-track{position:relative;margin:35px 0 0}
+.build-log ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.build-log-circuit-line{position:absolute;left:17px;top:0;bottom:0;width:1px;background:var(--line);transform-origin:top;z-index:0}
+@media(prefers-reduced-motion:no-preference){
+  html[data-js-motion="true"] .build-log-track:not([data-motion-primed="true"]) .build-log-circuit-line{transform:scaleY(0)}
+  html[data-js-motion="true"] .build-log-track[data-motion-primed="true"] .build-log-circuit-line{animation:circuit-draw var(--motion-flow) var(--ease-flow) forwards}
+}
+@keyframes circuit-draw{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.build-log-row{position:relative;z-index:1;display:grid;grid-template-columns:34px 1fr;gap:20px;padding:24px 4px;border-bottom:1px solid var(--line);transition:background .2s}
 a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
-.build-log-icon{display:flex;align-items:center;justify-content:center;color:var(--acid)}
+.build-log-icon{display:flex;align-items:center;justify-content:center;background:var(--paper)}
+.build-log-icon-published{color:var(--acid)}
+.build-log-icon-validated{color:var(--go)}
+.build-log-icon-documented{color:var(--accent2)}
+.build-log-icon-planned{color:var(--muted)}
+.build-log-ambient{width:6px;height:6px;border-radius:50%;background:currentColor;margin-left:8px;display:inline-block}
+@media(prefers-reduced-motion:no-preference){
+  html[data-js-motion="true"] [data-motion-primed="true"] .build-log-ambient{animation:flow-route-brighten var(--motion-ambient) var(--ease-system) infinite}
+}
 .build-log-date{display:block;margin-bottom:6px;color:var(--muted)}
 .build-log-status{display:inline-block;margin:0 0 8px;font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border:1px solid var(--line)}
 .build-log-status-published{color:var(--acid);border-color:var(--acid)}
@@ -431,6 +591,8 @@ a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
 .cut-verdict{display:inline-block;font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.06em;padding:3px 9px;border:1px solid;vertical-align:middle}
 .cut-verdict.cut-verdict-validated{color:var(--go);border-color:var(--go)}
 .cut-verdict.cut-verdict-design{color:var(--warn);border-color:var(--warn)}
+.failure-path-diagram{margin:0 0 26px;max-width:640px}
+.failure-path-label{margin-bottom:10px}
 
 /* ---- guides filter ---- */
 .guides-filter{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:0 clamp(22px,7vw,110px);margin:40px 0 -1px}
@@ -475,7 +637,14 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
 
 /* ---- case timeline ---- */
 .case-timeline{margin:60px 0 0;max-width:900px}
-.case-timeline ol{list-style:none;margin:20px 0 0;padding:0;border-left:2px solid var(--line)}
+.case-timeline-track{position:relative;margin-top:20px}
+.case-timeline ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+/* colored trace overlays the always-visible muted border-left above — the
+   base line never depends on JS or motion, only the highlight does */
+.case-timeline-trace{position:absolute;left:-2px;top:0;bottom:0;width:2px;background:var(--acid);transform-origin:top;transform:scaleY(0);pointer-events:none}
+@media(prefers-reduced-motion:no-preference){
+  html[data-js-motion="true"] .case-timeline[data-motion-primed="true"] .case-timeline-trace{animation:circuit-draw var(--motion-flow) var(--ease-flow) forwards}
+}
 .case-timeline li{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:0 0 32px 24px;margin-left:-2px;position:relative}
 .timeline-index{font:11px var(--font-mono);color:var(--acid);background:var(--paper);border:1px solid var(--acid);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;margin-left:-38px}
 .case-timeline strong{display:block;font-size:15px;color:var(--ink);margin-bottom:6px}

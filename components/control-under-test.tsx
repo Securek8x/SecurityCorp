@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, ArrowUpRight } from "lucide-react";
 import type { ControlScenario } from "@/lib/control-under-test";
+import { FailurePathDiagram } from "@/components/diagrams/failure-path-diagram";
 
 // The verdict badge is derived from the scenario's own "observed" text — never
 // asserted independently — so the badge can't drift from the underlying claim.
@@ -68,6 +69,7 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
         tabIndex={0}
         className="cut-panel"
       >
+        <FailurePathDiagram key={active.id} scenario={active} verdictClassName={activeVerdict.className} />
         <dl>
           <div>
             <dt>Failure injection</dt>

@@ -88,13 +88,44 @@ routing — rather than the dev server's behavior, which can differ.
 
 ## Testing strategy
 
-There is no separate unit or integration test suite. This is a static
-content site with no client-side application logic, no API routes, and no
-data layer to unit test — the meaningful checks are that every route
-type-checks, lints clean, and produces valid static HTML. `npm run check`
-is that verification. If the site grows real interactive behavior (a
-client component doing something non-trivial), add tests for that behavior
-specifically rather than a blanket test harness.
+There is still no separate unit or integration test suite — the meaningful
+checks are that every route type-checks, lints clean, and produces valid
+static HTML, which `npm run check` verifies. The site does now have one
+piece of non-trivial client-side logic (the motion controller below);
+verifying it means driving the actual static export in a real browser
+(local `npm run build:pages && npm start`, or Cloudflare's own preview
+deploy) rather than adding a test harness — checking route/console/
+hydration errors, `prefers-reduced-motion` behavior, and offscreen/
+hidden-tab pausing by hand or with a throwaway script, not committed to
+the repo.
+
+### Motion architecture
+
+Decorative motion (the hero network, the three guide architecture
+diagrams, the build-log circuit, and the case timeline) is CSS-driven —
+`stroke-dasharray`/`stroke-dashoffset` for line-drawing, `offset-path` for
+moving packets, `opacity`/`transform` for pulses — with timing tokens
+centralized in `app/globals.css` under "MOTION SYSTEM". The only runtime
+JavaScript involved is `components/motion-controller.tsx`, one shared
+`IntersectionObserver` mounted once in `Shell` that starts play-once
+sequences when they enter the viewport, toggles looping sequences between
+active/paused as they enter/leave the viewport, and pauses everything
+looping while the tab is hidden (`document.visibilityState`). It exists
+because that lifecycle — pause offscreen, pause in a hidden tab, play a
+sequence exactly once — has no CSS-only equivalent; every other motion
+effect in the redesign has none. The control-under-test failure-path
+diagram and the project-card hover schematics don't use it at all: the
+former restarts via a normal React `key` remount on tab change, the latter
+is driven purely by `:hover`/`:focus-within`.
+
+**Static fallback and reduced motion**: the CSS default for every motion
+primitive is the complete, fully-drawn state — animation is added on top
+via `[data-js-motion="true"]` (set by the controller on `<html>`, so
+nothing regresses without JavaScript) and only inside
+`@media (prefers-reduced-motion: no-preference)`. A user with `no-JS`, or
+with `prefers-reduced-motion: reduce`, sees every diagram fully drawn and
+legible immediately — never a blank or partially-drawn state waiting on
+JavaScript.
 
 ## Appearance
 
