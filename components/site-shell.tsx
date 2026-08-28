@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowUpRight, Menu, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Menu, Rss, ShieldCheck } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { profileLinks } from "@/lib/profile";
 
 const NAV_LINKS = [
   { href: "/guides", label: "Guides" },
@@ -59,6 +60,14 @@ export function Footer() {
             {l.label}
           </Link>
         ))}
+        {profileLinks.map((l) => (
+          <a key={l.href} href={l.href} target="_blank" rel="noreferrer noopener">
+            {l.label}
+          </a>
+        ))}
+        <a href="/rss.xml">
+          <Rss size={13} aria-hidden="true" /> RSS
+        </a>
       </nav>
       <p className="copyright">© 2026 Ravi Teja Thota</p>
     </footer>

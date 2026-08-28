@@ -6,6 +6,8 @@ import {articles,projects} from "@/lib/content";
 import {buildLog} from "@/lib/build-log";
 import {controlScenarios} from "@/lib/control-under-test";
 import {ControlUnderTest} from "@/components/control-under-test";
+import {ogImages,twitterImages} from "@/lib/seo";
+import {homepageCertifications} from "@/lib/profile";
 
 const statusIcon = {published:BookOpen,validated:ShieldCheck,documented:FileCheck,planned:Hourglass} as const;
 const statusLabel = {published:"Published",validated:"Validated",documented:"Documented",planned:"Planned"} as const;
@@ -14,8 +16,8 @@ export const metadata: Metadata = {
   title: "SecurityCorp — Security is a practice",
   description: "Hands-on security guides, honest lab notes, and defensive systems built to fail safely. Field notes from a practitioner, not a listicle.",
   alternates: {canonical: "/"},
-  openGraph: {type: "website", url: "https://securitycorp.net", title: "SecurityCorp — Security is a practice", description: "Hands-on security guides, honest lab notes, and defensive systems built to fail safely.", images: ["/opengraph-image"]},
-  twitter: {card: "summary_large_image", title: "SecurityCorp — Security is a practice", description: "Hands-on security guides, honest lab notes, and defensive systems built to fail safely."},
+  openGraph: {type: "website", url: "https://securitycorp.net", siteName: "SecurityCorp", title: "SecurityCorp — Security is a practice", description: "Hands-on security guides, honest lab notes, and defensive systems built to fail safely.", images: ogImages("SecurityCorp — Security is a practice")},
+  twitter: {card: "summary_large_image", title: "SecurityCorp — Security is a practice", description: "Hands-on security guides, honest lab notes, and defensive systems built to fail safely.", images: twitterImages("SecurityCorp — Security is a practice")},
 };
 
 export default function Home(){return <Shell current="/"><main>
@@ -25,5 +27,5 @@ export default function Home(){return <Shell current="/"><main>
 <section className="latest"><div className="section-head"><div><p className="section-label">Latest intelligence</p><h2>Guides from the lab</h2></div><Link href="/guides">View all guides <ArrowUpRight size={15} aria-hidden="true"/></Link></div><div className="article-list">{articles.map(a=><Link href={`/guides/${a.slug}`} className="article-row" key={a.slug}><span className="article-no">{a.number}</span><div><div className="article-meta"><span>{a.category}</span><span>{a.read} read</span><span>{a.level}</span></div><h3>{a.title}</h3><p>{a.dek}</p></div><ArrowUpRight className="row-arrow" aria-hidden="true"/></Link>)}</div></section>
 <ControlUnderTest scenarios={controlScenarios} />
 <section className="projects-preview"><div className="section-head light"><div><p className="section-label">Selected builds</p><h2>Systems, not demos.</h2></div><p className="head-copy">Real infrastructure, instrumented and tested. Each project records its assumptions, controls, and known limitations.</p></div><div className="project-grid">{projects.map((p,i)=><article className="project-card" key={p.index}><div className="project-top"><span>{p.index}</span><span className="status">{i===3?<CircleDot size={12} aria-hidden="true"/>:<CheckCircle2 size={12} aria-hidden="true"/>} {p.status}</span></div><FlaskConical className="project-icon" aria-hidden="true"/><h3>{p.title}</h3><p>{p.text}</p><div className="tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div>{p.slug?<Link href={`/projects/${p.slug}`} className="card-cta">View case study <ArrowUpRight size={13} aria-hidden="true"/></Link>:p.guideSlug?<Link href={`/guides/${p.guideSlug}`} className="card-cta">Read the guide <ArrowUpRight size={13} aria-hidden="true"/></Link>:null}</article>)}</div><Link href="/projects" className="outline-link">Open the project index <ArrowRight size={16} aria-hidden="true"/></Link></section>
-<section className="author-strip"><div><p className="section-label">Your operator</p><h2>Ravi Teja Thota</h2><p>Writes SecurityCorp from the point where architecture diagrams meet inconvenient reality — Kubernetes, cloud, and detection engineering, tested before they&apos;re published.</p></div><div className="credentials"><span>CKA</span><span>CKS</span><span>CKAD</span><span>CRTP</span><span>AWS SAA</span></div><Link href="/about" className="text-link">More about the author <ArrowRight size={15}/></Link></section>
+<section className="author-strip"><div><p className="section-label">Your operator</p><h2>Ravi Teja Thota</h2><p>Writes SecurityCorp from the point where architecture diagrams meet inconvenient reality — Kubernetes, cloud, and detection engineering, tested before they&apos;re published.</p></div><div className="credentials">{homepageCertifications.map(c=><span key={c}>{c}</span>)}</div><Link href="/about" className="text-link">More about the author <ArrowRight size={15}/></Link></section>
 </main></Shell>}

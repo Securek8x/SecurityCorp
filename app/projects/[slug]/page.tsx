@@ -4,6 +4,9 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Shell } from "@/components/site-shell";
 import { projects } from "@/lib/content";
+import { ogImages, twitterImages } from "@/lib/seo";
+import { breadcrumbJsonLd } from "@/lib/json-ld";
+import { JsonLd } from "@/components/json-ld";
 import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
 import { EvidencePanel, type Evidence } from "@/components/evidence-panel";
 import { CaseTimeline, type TimelineStage } from "@/components/case-timeline";
@@ -50,8 +53,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: project.title,
     description: project.text,
     alternates: { canonical: `/projects/${slug}` },
-    openGraph: { type: "website", url, title: `${project.title} | SecurityCorp`, description: project.text, images: ["/opengraph-image"] },
-    twitter: { card: "summary_large_image", title: `${project.title} | SecurityCorp`, description: project.text },
+    openGraph: { type: "website", url, siteName: "SecurityCorp", title: `${project.title} | SecurityCorp`, description: project.text, images: ogImages(project.title) },
+    twitter: { card: "summary_large_image", title: `${project.title} | SecurityCorp`, description: project.text, images: twitterImages(project.title) },
   };
 }
 
@@ -66,6 +69,13 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
 
   return (
     <Shell current="/projects">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: "https://securitycorp.net/" },
+          { name: "Projects", url: "https://securitycorp.net/projects/" },
+          { name: project.title, url: `https://securitycorp.net/projects/${slug}/` },
+        ])}
+      />
       <main className="article-page project-detail">
         <Link href="/projects" className="back">
           <ArrowLeft size={15} aria-hidden="true" /> All projects

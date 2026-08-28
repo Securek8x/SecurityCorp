@@ -12,6 +12,9 @@ import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
 import VpnWorkloadDiagram from "@/components/diagrams/vpn-workload-diagram";
 import ReverseProxyDiagram from "@/components/diagrams/reverse-proxy-diagram";
 import { articles, type Callout } from "@/lib/content";
+import { ogImages, twitterImages } from "@/lib/seo";
+import { articleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
+import { JsonLd } from "@/components/json-ld";
 
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
@@ -52,14 +55,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       type: "article",
       url,
+      siteName: "SecurityCorp",
       title: article.title,
       description: article.dek,
       publishedTime: published,
       authors: ["Ravi Teja Thota"],
       tags: [article.category],
-      images: ["/opengraph-image"],
+      images: ogImages(article.title),
     },
-    twitter: { card: "summary_large_image", title: article.title, description: article.dek },
+    twitter: { card: "summary_large_image", title: article.title, description: article.dek, images: twitterImages(article.title) },
   };
 }
 
@@ -77,6 +81,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <Shell current="/guides">
+      <JsonLd data={articleJsonLd(article)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: "https://securitycorp.net/" },
+          { name: "Guides", url: "https://securitycorp.net/guides/" },
+          { name: article.title, url: `https://securitycorp.net/guides/${article.slug}/` },
+        ])}
+      />
       <ReadingProgress />
       <main className="article-page">
         <Link href="/guides" className="back">
