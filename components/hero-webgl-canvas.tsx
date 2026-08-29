@@ -54,28 +54,41 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     // holographic-tiger-guardian: an original, code-native line-art
     // reinterpretation (not a bitmap) of the reference avatar, built from
     // the same tone/material helpers as the rest of the scene so it themes,
-    // disposes, and animates through the existing pipeline. Sits where the
-    // old wireframe core/inner icosahedra did, at the center of the
-    // existing node/route network (guardian-telemetry-mesh).
+    // disposes, and animates through the existing pipeline. Offset toward
+    // the right-center of the frame (guardianPos), embedded in the
+    // existing node/route network (guardian-telemetry-mesh) via a few
+    // static connector links.
     const guardian = new THREE.Group(); boundary.add(guardian);
+    const guardianPos = new THREE.Vector3(16, -20, 0); guardian.position.copy(guardianPos);
     const mirrorX = (pts: [number, number][]): [number, number][] => pts.map(([x, y]) => [-x, y]);
     const loopSegs = (pts: [number, number][], z: number): number[] => { const out: number[] = []; for (let i = 0; i < pts.length; i += 1) { const a = pts[i], b = pts[(i + 1) % pts.length]; out.push(a[0], a[1], z, b[0], b[1], z); } return out; };
     const pairSegs = (pairs: Array<[number, number, number, number]>, z: number): number[] => { const out: number[] = []; pairs.forEach(([x1, y1, x2, y2]) => out.push(x1, y1, z, x2, y2, z)); return out; };
-    const headRight: [number, number][] = [[0, 56], [16, 54], [34, 66], [30, 46], [44, 24], [46, 2], [36, -22], [18, -40], [0, -48]];
+    // Broader jaw/cheek, clearer pointed ears, and a distinct muzzle bump —
+    // a bigger, more unmistakably feline silhouette than the first pass.
+    const headRight: [number, number][] = [[0, 78], [16, 75], [47, 96], [34, 65], [65, 36], [75, 0], [62, -36], [39, -62], [13, -75], [0, -83]];
     const headLoop: [number, number][] = [...headRight, ...mirrorX(headRight.slice(1, -1)).reverse()];
-    const stripeSegs: Array<[number, number, number, number]> = [[-10, 50, -4, 38], [10, 50, 4, 38], [-14, 34, -6, 20], [14, 34, 6, 20], [30, 10, 40, -4], [-30, 10, -40, -4], [24, -14, 34, -26], [-24, -14, -34, -26], [0, -8, -8, -28], [0, -8, 8, -28]];
-    const cheekHexRight: [number, number][] = [[30, 10], [44, 14], [50, 0], [44, -14], [32, -16], [24, -4]];
-    const foreheadDiamond: [number, number][] = [[0, 52], [14, 40], [0, 30], [-14, 40]];
-    const traceTicks: Array<[number, number, number, number]> = [[44, 14, 62, 22], [50, 0, 70, -2], [44, -14, 60, -24], [14, 40, 20, 58], [-44, 14, -62, 22], [-50, 0, -70, -2], [-44, -14, -60, -24], [-14, 40, -20, 58]];
-    const silhouette = new THREE.LineSegments(geometry(loopSegs(headLoop, -16)), lineMaterial("cyan", .16)); guardian.add(silhouette);
-    const contour = new THREE.LineSegments(geometry([...loopSegs(headLoop, -8), ...pairSegs(stripeSegs, -6), ...pairSegs(traceTicks, 6)]), lineMaterial("cyan", .5)); guardian.add(contour);
-    const armor = new THREE.LineSegments(geometry([...loopSegs(cheekHexRight, -2), ...loopSegs(foreheadDiamond, 4)]), lineMaterial("violet", .38)); guardian.add(armor);
-    const socket = new THREE.Mesh(nodeGeometry, meshMaterial("violet", .7)); socket.position.set(0, 46, 5); guardian.add(socket);
-    const eyeGeometry = new THREE.SphereGeometry(3, 12, 12);
-    const eyeCores = [-17, 17].map((x) => { const eye = new THREE.Mesh(eyeGeometry, meshMaterial("warning", .55, true)); eye.position.set(x, 4, 9); guardian.add(eye); return eye; });
-    const eyeRings = [-17, 17].map((x) => { const ring = new THREE.Mesh(ringGeometry, meshMaterial("cyan", .4)); ring.position.set(x, 4, 8); ring.scale.setScalar(.62); guardian.add(ring); return ring; });
-    const scanGeometry = new THREE.PlaneGeometry(96, 5);
-    const scan = new THREE.Mesh(scanGeometry, meshMaterial("cyan", 0, true)); scan.position.set(0, -50, 10); guardian.add(scan);
+    const stripeSegs: Array<[number, number, number, number]> = [[-18, 73, -8, 55], [18, 73, 8, 55], [-26, 49, -10, 29], [26, 49, 10, 29], [-34, 23, -16, 3], [34, 23, 16, 3], [44, 13, 60, -8], [-44, 13, -60, -8], [34, -18, 49, -39], [-34, -18, -49, -39]];
+    const noseLoop: [number, number][] = [[0, -60], [8, -73], [0, -83], [-8, -73]];
+    const whiskerSegs: Array<[number, number, number, number]> = [[21, -65, 39, -68], [-21, -65, -39, -68], [21, -75, 36, -81], [-21, -75, -36, -81]];
+    const cheekHexRight: [number, number][] = [[49, 23], [70, 29], [78, 3], [68, -21], [49, -23], [36, -3]];
+    const foreheadDiamond: [number, number][] = [[0, 86], [23, 65], [0, 47], [-23, 65]];
+    const silhouette = new THREE.LineSegments(geometry(loopSegs(headLoop, -16)), lineMaterial("cyan", .22)); guardian.add(silhouette);
+    const contour = new THREE.LineSegments(geometry([...loopSegs(headLoop, -8), ...pairSegs(stripeSegs, -6), ...pairSegs(whiskerSegs, 7), ...loopSegs(noseLoop, -4)]), lineMaterial("cyan", .62)); guardian.add(contour);
+    const armor = new THREE.LineSegments(geometry([...loopSegs(cheekHexRight, -2), ...loopSegs(foreheadDiamond, 4)]), lineMaterial("violet", .46)); guardian.add(armor);
+    const socket = new THREE.Mesh(nodeGeometry, meshMaterial("violet", .7)); socket.position.set(0, 75, 5); guardian.add(socket);
+    const eyeGeometry = new THREE.SphereGeometry(3.6, 12, 12);
+    const eyeCores = [-29, 29].map((x) => { const eye = new THREE.Mesh(eyeGeometry, meshMaterial("warning", .55, true)); eye.position.set(x, 8, 9); guardian.add(eye); return eye; });
+    const eyeRings = [-29, 29].map((x) => { const ring = new THREE.Mesh(ringGeometry, meshMaterial("cyan", .48)); ring.position.set(x, 8, 8); ring.scale.setScalar(.9); guardian.add(ring); return ring; });
+    const scanGeometry = new THREE.PlaneGeometry(150, 7);
+    const scan = new THREE.Mesh(scanGeometry, meshMaterial("cyan", 0, true)); scan.position.set(0, -85, 10); guardian.add(scan);
+    // static connectors from the nearest existing network nodes into the
+    // guardian's silhouette edge, so it reads as embedded rather than a
+    // separate object floating over the network (no packets — decorative).
+    const linkAnchors: Array<[number, number, number]> = [[75, 0, -16], [0, 86, -16], [-65, 36, -16]];
+    const nearestNodes = [...nodes].sort((a, b) => a.pos.distanceTo(guardianPos) - b.pos.distanceTo(guardianPos)).slice(0, 3);
+    const linkPoints: number[] = [];
+    nearestNodes.forEach((node, index) => { const anchor = linkAnchors[index]; linkPoints.push(node.pos.x, node.pos.y, node.pos.z, guardianPos.x + anchor[0], guardianPos.y + anchor[1], guardianPos.z + anchor[2]); });
+    const guardianLinks = new THREE.LineSegments(geometry(linkPoints), lineMaterial("cyan", .22)); world.add(guardianLinks);
     nodes.forEach((node) => { const dot = new THREE.Mesh(nodeGeometry, meshMaterial(node.tone, .92)); dot.position.copy(node.pos); world.add(dot); nodeMeshes.push(dot); const glow = new THREE.Mesh(glowGeometry, meshMaterial(node.tone, node.tone === "cyan" ? .11 : .08, true)); glow.position.copy(node.pos); world.add(glow); glows.push(glow); });
     const activeRoutes = routes.filter((route) => route.tone === "cyan" || route.tone === "violet");
     const packets = [0, 3, 7, 12, 17].map((routeIndex, index) => { const route = activeRoutes[routeIndex % activeRoutes.length], tone: Tone = index === 3 ? "safe" : route.tone, dot = new THREE.Mesh(packetGeometry, meshMaterial(tone, .95, true)), ring = new THREE.Mesh(ringGeometry, meshMaterial(tone, 0, true)); world.add(dot); ring.position.copy(nodes[route.b].pos); world.add(ring); return { dot, ring, a: nodes[route.a].pos, b: nodes[route.b].pos, phase: index / 5, speed: .00012 + index * .000025 }; });
@@ -88,14 +101,14 @@ export default function HeroWebglCanvas({ containerRef }: { containerRef: React.
     let inView = true; const observer = new IntersectionObserver((entries) => { inView = entries.some((entry) => entry.isIntersecting); }, { threshold: .1 }); observer.observe(hero);
     const resize = () => { const rect = host.getBoundingClientRect(), width = Math.max(1, Math.round(rect.width)), height = Math.max(1, Math.round(rect.height)); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2)); renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); }; const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(host); let dprQuery: MediaQueryList | null = null; const watchDpr = () => { dprQuery?.removeEventListener("change", watchDpr); dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`); dprQuery.addEventListener("change", watchDpr); resize(); }; window.visualViewport?.addEventListener("resize", resize); watchDpr();
     let cancelled = false, rafId = 0; const clock = new THREE.Clock(), onContextLost = (event: Event) => { event.preventDefault(); cancelled = true; setBroken(true); }; renderer.domElement.addEventListener("webglcontextlost", onContextLost);
-    const frame = () => { if (cancelled) return; rafId = requestAnimationFrame(frame); if (!inView || tabHiddenRef.current) { clock.getDelta(); return; } const dt = Math.min(clock.getDelta(), .05), time = clock.elapsedTime; pointer.x += (pointer.tx - pointer.x) * .045; pointer.y += (pointer.ty - pointer.y) * .045; heroSection.style.setProperty("--pointer-x", pointer.x.toFixed(3)); heroSection.style.setProperty("--pointer-y", pointer.y.toFixed(3)); camera.position.x = 16 + Math.sin(time * .035) * 7 + pointer.x * 13; camera.position.y = -4 + Math.cos(time * .03) * 5 - pointer.y * 9; camera.lookAt(0, -8, 0); world.rotation.y = pointer.x * .035; world.rotation.x = pointer.y * .018; boundary.rotation.y += dt * .075; boundary.rotation.x += dt * .022; particles.position.y = time * -2.2 % 20 - 10;
-      guardian.scale.setScalar(1 + Math.sin(time * .11) * .008); silhouette.position.z = -16 + Math.sin(time * .05) * 2; contour.position.z = -8 + Math.sin(time * .04 + 2.1) * 1.2; armor.position.z = 4 + Math.sin(time * .045 + 1.3) * 1.5; (armor.material as THREE.LineBasicMaterial).opacity = .3 + Math.max(0, Math.sin(time * .12)) * .18; const scanPhase = (time * .045) % 1; scan.position.y = -50 + scanPhase * 110; (scan.material as THREE.MeshBasicMaterial).opacity = Math.sin(scanPhase * Math.PI) * .1;
+    const frame = () => { if (cancelled) return; rafId = requestAnimationFrame(frame); if (!inView || tabHiddenRef.current) { clock.getDelta(); return; } const dt = Math.min(clock.getDelta(), .05), time = clock.elapsedTime; pointer.x += (pointer.tx - pointer.x) * .045; pointer.y += (pointer.ty - pointer.y) * .045; heroSection.style.setProperty("--pointer-x", pointer.x.toFixed(3)); heroSection.style.setProperty("--pointer-y", pointer.y.toFixed(3)); camera.position.x = 16 + Math.sin(time * .035) * 7 + pointer.x * 13; camera.position.y = -4 + Math.cos(time * .03) * 5 - pointer.y * 9; camera.lookAt(0, -8, 0); world.rotation.y = pointer.x * .035; world.rotation.x = pointer.y * .018; boundary.rotation.y = Math.sin(time * .05) * .09; boundary.rotation.x = Math.sin(time * .04 + 1) * .05; particles.position.y = time * -2.2 % 20 - 10;
+      guardian.scale.setScalar(1 + Math.sin(time * .11) * .008); silhouette.position.z = -16 + Math.sin(time * .05) * 2; contour.position.z = -8 + Math.sin(time * .04 + 2.1) * 1.2; armor.position.z = 4 + Math.sin(time * .045 + 1.3) * 1.5; (armor.material as THREE.LineBasicMaterial).opacity = .4 + Math.max(0, Math.sin(time * .12)) * .18; const scanPhase = (time * .045) % 1; scan.position.y = -85 + scanPhase * 170; (scan.material as THREE.MeshBasicMaterial).opacity = Math.sin(scanPhase * Math.PI) * .1;
       let eyePulse = 0;
       nodes.forEach((node, index) => { projected.copy(node.pos).project(camera); const near = Math.max(0, 1 - Math.hypot(projected.x - pointer.x, projected.y - pointer.y) / .42); glows[index].scale.setScalar(1 + near * .75); (glows[index].material as THREE.MeshBasicMaterial).opacity = (node.tone === "cyan" ? .1 : .07) + near * .26; nodeMeshes[index].scale.setScalar(1 + near * .3); }); packets.forEach((packet, index) => { packet.phase = (packet.phase + packet.speed * dt * 1000) % 1; packet.dot.position.lerpVectors(packet.a, packet.b, packet.phase); const arrival = Math.max(0, 1 - Math.abs(packet.phase - .96) / .04); packet.ring.scale.setScalar(1 + arrival * 4.5); (packet.ring.material as THREE.MeshBasicMaterial).opacity = arrival * .34; if (index === 1) (routeLines.get("cyan")!.material as THREE.LineBasicMaterial).opacity = .29 + Math.max(0, 1 - Math.abs(packet.phase - .5) / .28) * .23; if (index === 2) eyePulse = arrival; }); (routeLines.get("violet")!.material as THREE.LineBasicMaterial).opacity = .18 + Math.max(0, Math.sin(time * .18)) * .16;
       eyeCores.forEach((eye) => { (eye.material as THREE.MeshBasicMaterial).opacity = .5 + eyePulse * .35; }); eyeRings.forEach((ring) => { (ring.material as THREE.MeshBasicMaterial).opacity = .35 + eyePulse * .25; });
       renderer.render(scene, camera); };
     rafId = requestAnimationFrame(frame); setReady(true);
-    return () => { cancelled = true; cancelAnimationFrame(rafId); observer.disconnect(); themeObserver.disconnect(); resizeObserver.disconnect(); dprQuery?.removeEventListener("change", watchDpr); window.visualViewport?.removeEventListener("resize", resize); hero.removeEventListener("pointermove", onPointerMove); hero.removeEventListener("pointerleave", onPointerLeave); renderer.domElement.removeEventListener("webglcontextlost", onContextLost); heroSection.style.removeProperty("--pointer-x"); heroSection.style.removeProperty("--pointer-y"); [silhouette.geometry, contour.geometry, armor.geometry, eyeGeometry, scanGeometry, nodeGeometry, glowGeometry, ringGeometry, packetGeometry, particleGeometry, grid.geometry, ticks.geometry, ...Array.from(routeLines.values()).map((line) => line.geometry)].forEach((item) => item.dispose()); materials.forEach((item) => item.dispose()); renderer.dispose(); renderer.domElement.remove(); };
+    return () => { cancelled = true; cancelAnimationFrame(rafId); observer.disconnect(); themeObserver.disconnect(); resizeObserver.disconnect(); dprQuery?.removeEventListener("change", watchDpr); window.visualViewport?.removeEventListener("resize", resize); hero.removeEventListener("pointermove", onPointerMove); hero.removeEventListener("pointerleave", onPointerLeave); renderer.domElement.removeEventListener("webglcontextlost", onContextLost); heroSection.style.removeProperty("--pointer-x"); heroSection.style.removeProperty("--pointer-y"); [silhouette.geometry, contour.geometry, armor.geometry, guardianLinks.geometry, eyeGeometry, scanGeometry, nodeGeometry, glowGeometry, ringGeometry, packetGeometry, particleGeometry, grid.geometry, ticks.geometry, ...Array.from(routeLines.values()).map((line) => line.geometry)].forEach((item) => item.dispose()); materials.forEach((item) => item.dispose()); renderer.dispose(); renderer.domElement.remove(); };
   }, [containerRef]);
   return <div ref={hostRef} className="hero-webgl-host" aria-hidden="true" data-state={broken ? "broken" : ready ? "ready" : "loading"} />;
 }

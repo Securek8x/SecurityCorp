@@ -311,7 +311,12 @@ nav a[aria-current="page"]{color:var(--acid)}
 .hero-visual:has(.hero-webgl-host[data-state="ready"]) .hero-network{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 48% 76% at 31% 66%,var(--paper) 0%,color-mix(in srgb,var(--paper) 85%,transparent) 33%,transparent 72%),radial-gradient(ellipse 42% 70% at 103% 54%,var(--paper) 0%,transparent 68%)}
 @media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}}
-@media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}}
+@media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}
+  /* intentional smaller mobile composition: the desktop-scale guardian
+     would crowd/clip at 375px, so it's scaled down and nudged inward
+     rather than shrinking the whole desktop network. */
+  .hero-network .tiger-guardian{transform:translate(-70px,-40px) scale(.55);transform-origin:300px 235px}
+}
 :root[data-theme="light"] .hero-webgl-host{opacity:.52;filter:saturate(.72) contrast(1.18)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
 
