@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Impeccable provider payloads are audited as third-party artifacts, not
+    // application source; keep their upstream lint warnings out of CI.
+    ".agents/skills/impeccable/**",
+    ".claude/skills/impeccable/**",
   ]),
 ]);
 

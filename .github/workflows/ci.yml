@@ -29,7 +29,12 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: "true"
         run: npm ci
+
+      - name: Frontend design audit
+        run: npm run design:audit
 
       - name: Lint
         run: npm run lint
@@ -39,3 +44,9 @@ jobs:
 
       - name: Build (Cloudflare Pages production build)
         run: npm run build:pages
+
+      - name: Verify draft isolation
+        run: npm run check:draft-isolation
+
+      - name: Knowledge-base release guard
+        run: npm run guard:release

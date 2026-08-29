@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { articles, projects } from "@/lib/content";
+import { pillars, categories } from "@/lib/taxonomy";
+import { publishedKnowledgeArticles } from "@/lib/knowledge-content";
 
 export const dynamic = "force-static";
 
@@ -44,11 +46,53 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.4,
     },
+    {
+      url: `${siteUrl}/topics/`,
+      lastModified: latestArticleDate,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/knowledge/`,
+      lastModified: latestArticleDate,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/learning-paths/`,
+      lastModified: latestArticleDate,
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
   ];
+
+  const pillarRoutes: MetadataRoute.Sitemap = pillars.map((p) => ({
+    url: `${siteUrl}/topics/${p.id}/`,
+    lastModified: latestArticleDate,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  const categoryRoutes: MetadataRoute.Sitemap = categories.map((c) => ({
+    url: `${siteUrl}/topics/${c.pillar}/${c.id}/`,
+    lastModified: latestArticleDate,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
 
   const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${siteUrl}/guides/${article.slug}/`,
     lastModified: toDate(article.date),
+    changeFrequency: "yearly",
+    priority: 0.7,
+  }));
+
+  // Only publishedKnowledgeArticles (already status==="published" and
+  // schema-valid) ever reach the sitemap — draft/review-stage entries in
+  // knowledgeArticles are excluded upstream, not filtered here.
+  const knowledgeRoutes: MetadataRoute.Sitemap = publishedKnowledgeArticles.map((a) => ({
+    url: `${siteUrl}/knowledge/${a.meta.slug}/`,
+    lastModified: toDate(a.meta.updatedAt ?? a.meta.publishedAt ?? new Date().toISOString()),
     changeFrequency: "yearly",
     priority: 0.7,
   }));
@@ -62,5 +106,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
     }));
 
-  return [...staticRoutes, ...articleRoutes, ...projectRoutes];
+  return [...staticRoutes, ...pillarRoutes, ...categoryRoutes, ...articleRoutes, ...knowledgeRoutes, ...projectRoutes];
 }

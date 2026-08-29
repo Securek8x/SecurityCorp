@@ -7,6 +7,7 @@ import { InteractiveSurfaceController } from "@/components/interactive-surface-c
 import { profileLinks } from "@/lib/profile";
 
 const NAV_LINKS = [
+  { href: "/topics", label: "Topics" },
   { href: "/guides", label: "Guides" },
   { href: "/projects", label: "Projects" },
   { href: "/about", label: "About" },

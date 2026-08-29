@@ -1,0 +1,68 @@
+{
+  "detector": {
+    "designSystem": {
+      "enabled": true
+    },
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": ["app/globals.css"],
+        "reason": "Narrow file-scoped waiver for four verified incumbent accents at app/globals.css lines 439, 452, 705, and 720; this detector rule has no extractable value."
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": ["app/globals.css"],
+        "reason": "Narrow file-scoped waiver for the verified incumbent responsive padding transition at app/globals.css line 344; review any future motion change."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "Arial",
+        "files": ["components/diagrams/interactive-flow-diagram.tsx"],
+        "reason": "Existing diagram SVG label fallback; preserve incumbent visual output until a human-approved typography change."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "files": ["app/globals.css"],
+        "reason": "Existing browser-safe transparent/fallback color at app/globals.css line 308."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(255,255,255,.15)",
+        "files": ["app/globals.css"],
+        "reason": "Existing tiger/visual overlay color at app/globals.css line 436."
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "2px",
+        "files": ["app/globals.css"],
+        "reason": "Existing technical visual radius at app/globals.css line 436."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(0,0,0,.25)",
+        "files": ["app/globals.css"],
+        "reason": "Existing visual depth overlay at app/globals.css line 507."
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "3px",
+        "files": ["app/globals.css"],
+        "reason": "Existing responsive visual radius at app/globals.css line 766."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#f5f7fa",
+        "files": ["app/layout.tsx"],
+        "reason": "Existing light-theme metadata color at app/layout.tsx line 70."
+      }
+    ]
+  },
+  "hook": {
+    "enabled": true
+  }
+}

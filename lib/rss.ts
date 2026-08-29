@@ -1,4 +1,5 @@
 import { articles } from "@/lib/content";
+import { publishedKnowledgeArticles } from "@/lib/knowledge-content";
 
 const siteUrl = "https://securitycorp.net";
 
@@ -20,9 +21,18 @@ export function buildRssFeed(): string {
   // Sorted newest-first from each article's own real date — no invented
   // publishing cadence, no dates beyond what's already in lib/content.ts.
   const sorted = [...articles].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  const lastBuildDate = sorted.length > 0 ? toRfc822(sorted[0].date) : new Date().toUTCString();
 
-  const items = sorted
+  // publishedKnowledgeArticles is already filtered to status==="published"
+  // and schema-valid (see isPubliclyVisible) — nothing draft, in-review, or
+  // retired ever reaches this feed.
+  const knowledgeItems = [...publishedKnowledgeArticles].sort(
+    (a, b) => new Date(b.meta.publishedAt ?? 0).getTime() - new Date(a.meta.publishedAt ?? 0).getTime(),
+  );
+
+  const newestDate = [sorted[0]?.date, knowledgeItems[0]?.meta.publishedAt].filter((d): d is string => Boolean(d)).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0];
+  const lastBuildDate = newestDate ? toRfc822(newestDate) : new Date().toUTCString();
+
+  const guideItems = sorted
     .map((a) => {
       const url = `${siteUrl}/guides/${a.slug}/`;
       return `    <item>
@@ -32,8 +42,20 @@ export function buildRssFeed(): string {
       <description>${escapeXml(a.dek)}</description>
       <pubDate>${toRfc822(a.date)}</pubDate>
     </item>`;
-    })
-    .join("\n");
+    });
+
+  const knowledgeRssItems = knowledgeItems.map((a) => {
+    const url = `${siteUrl}/knowledge/${a.meta.slug}/`;
+    return `    <item>
+      <title>${escapeXml(a.meta.title)}</title>
+      <link>${escapeXml(url)}</link>
+      <guid isPermaLink="true">${escapeXml(url)}</guid>
+      <description>${escapeXml(a.meta.summary)}</description>
+      <pubDate>${toRfc822(a.meta.publishedAt ?? new Date().toISOString())}</pubDate>
+    </item>`;
+  });
+
+  const items = [...guideItems, ...knowledgeRssItems].join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
