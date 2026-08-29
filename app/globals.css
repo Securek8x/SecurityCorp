@@ -316,7 +316,7 @@ nav a[aria-current="page"]{color:var(--acid)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
 
 /* ---- holographic-tiger-guardian (image edition): the actual supplied
-   artwork, a plain <img>, always visible — independent of the network's
+   artwork, a plain img element, always visible — independent of the network's
    opacity/visibility rules above so no fallback path (no-JS, reduced
    motion, coarse pointer, Save-Data, WebGL unavailable/failed) ever hides
    or dims it. Square source blended into the hero via a radial mask (face
