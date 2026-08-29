@@ -3,6 +3,7 @@ import type { KnowledgeArticle } from "@/lib/knowledge-content";
 import { findKnowledgeArticle } from "@/lib/knowledge-content";
 import { pillarById, categoryById } from "@/lib/taxonomy";
 import type { ContentModule } from "@/lib/knowledge-content-types";
+import { InteractiveFlowDiagram } from "@/components/diagrams/interactive-flow-diagram";
 
 const CONTENT_TYPE_LABEL: Record<string, string> = {
   guide: "Guide",
@@ -223,6 +224,8 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
       <TextSection heading="Problem or security question" id="sec-problem" paragraphs={sections.problem} />
       <TextSection heading="Threat model or relevant risk" id="sec-threat-model" paragraphs={sections.threatModel} />
       <TextSection heading="Main technical content" id="sec-main-content" paragraphs={sections.mainContent} />
+
+      {article.diagram && <InteractiveFlowDiagram spec={article.diagram} />}
 
       {renderModule(module)}
 

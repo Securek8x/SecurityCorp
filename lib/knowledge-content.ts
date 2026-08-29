@@ -5,11 +5,20 @@
 import type { KnowledgeArticleMeta } from "./knowledge-schema.ts";
 import { isPubliclyVisible } from "./knowledge-schema.ts";
 import type { UniversalSections, ContentModule } from "./knowledge-content-types.ts";
+import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
+import { article as networkTrustBoundaries } from "./articles/network-trust-boundaries.ts";
+import { article as threatModelingCicdPipeline } from "./articles/threat-modeling-cicd-pipeline.ts";
+import { article as securingApiAuth } from "./articles/securing-api-authentication-authorization.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
   sections: UniversalSections;
   module?: ContentModule;
+  /** Interactive architecture diagram, reusing the existing guide diagram
+   * system (components/diagrams/interactive-flow-diagram.tsx) — one spec
+   * drives the same hover-explore/mode-toggle/replay renderer already used
+   * by the three guide pages, so no second diagram system exists. */
+  diagram?: FlowDiagramSpec;
 };
 
 export const knowledgeArticles: KnowledgeArticle[] = [
@@ -103,6 +112,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
       ],
     },
   },
+  networkTrustBoundaries,
+  threatModelingCicdPipeline,
+  securingApiAuth,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
