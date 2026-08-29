@@ -43,6 +43,9 @@ export function HeroSceneLoader({ containerRef }: { containerRef: React.RefObjec
     };
   }, [reducedMotion, coarsePointer]);
 
-  if (!attempt) return null;
+  // A preference change after the idle import has started must still return
+  // immediately to the complete static SVG; animation is never the only
+  // representation of the hero.
+  if (!attempt || reducedMotion || coarsePointer || prefersReducedData()) return null;
   return <HeroWebglCanvas containerRef={containerRef} />;
 }
