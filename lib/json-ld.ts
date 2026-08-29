@@ -1,5 +1,6 @@
 import { profile } from "@/lib/profile";
 import type { Article } from "@/lib/content";
+import type { KnowledgeArticleMeta } from "@/lib/knowledge-schema";
 
 const siteUrl = "https://securitycorp.net";
 
@@ -43,6 +44,26 @@ export function articleJsonLd(article: Article) {
     datePublished: publishedIso,
     dateModified: reviewedIso ?? publishedIso,
     author: { "@type": "Person", name: "Ravi Teja Thota", url: `${siteUrl}/about/` },
+    publisher: { "@type": "Organization", name: "SecurityCorp", url: siteUrl },
+    image: `${siteUrl}/opengraph-image.png`,
+  };
+}
+
+// Only ever called for a publicly-visible article (see
+// isPubliclyVisible/findKnowledgeArticle) — draft/review-stage metadata
+// never reaches this function, let alone the page it renders into.
+export function knowledgeArticleJsonLd(meta: KnowledgeArticleMeta) {
+  const url = `${siteUrl}/knowledge/${meta.slug}/`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: meta.title,
+    description: meta.summary,
+    url,
+    mainEntityOfPage: url,
+    datePublished: meta.publishedAt,
+    dateModified: meta.lastReviewedAt ?? meta.publishedAt,
+    author: { "@type": "Person", name: profile.name, url: `${siteUrl}/about/` },
     publisher: { "@type": "Organization", name: "SecurityCorp", url: siteUrl },
     image: `${siteUrl}/opengraph-image.png`,
   };

@@ -12,7 +12,13 @@
     "start": "serve out",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "check": "npm run lint && npm run typecheck && npm run build:pages"
+    "test": "node --test lib/*.test.ts",
+    "design:audit": "impeccable detect --json app components",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build:pages && npm run check:draft-isolation",
+    "check:draft-isolation": "node scripts/check-draft-isolation.ts",
+    "guard:release": "node scripts/check-release-guard.ts",
+    "audit:knowledge-tags": "node scripts/audit-knowledge-tags.ts",
+    "check:public-terms": "node scripts/check-prohibited-public-terms.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
@@ -29,6 +35,7 @@
     "@types/three": "^0.180.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.3",
+    "impeccable": "3.6.0",
     "serve": "^14.2.3",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3"

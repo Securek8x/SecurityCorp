@@ -316,7 +316,7 @@ nav a[aria-current="page"]{color:var(--acid)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
 
 /* ---- holographic-tiger-guardian (image edition): the actual supplied
-   artwork, a plain <img>, always visible — independent of the network's
+   artwork, a plain img element, always visible — independent of the network's
    opacity/visibility rules above so no fallback path (no-JS, reduced
    motion, coarse pointer, Save-Data, WebGL unavailable/failed) ever hides
    or dims it. Square source blended into the hero via a radial mask (face
@@ -679,6 +679,28 @@ a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
 .filter-chip[aria-pressed="true"]{border-color:var(--acid);color:var(--acid);background:color-mix(in srgb,var(--acid) 6%,transparent)}
 .filter-count{margin-left:auto;font:11px var(--font-mono);color:var(--muted)}
 .filter-empty{padding:60px clamp(22px,7vw,110px);color:var(--muted)}
+
+/* ---- knowledge-base catalog + universal article shell ---- */
+.knowledge-catalog{padding:0 clamp(22px,7vw,110px)}
+.knowledge-catalog-search{margin:40px 0 16px}
+.knowledge-catalog-search input{width:100%;max-width:480px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:11px 14px;font:14px var(--font-mono)}
+.knowledge-catalog-pillars{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.knowledge-catalog-toggle{margin-bottom:14px}
+.knowledge-catalog-panel{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;border:1px solid var(--line);padding:18px;margin-bottom:20px}
+.knowledge-catalog-panel label{display:flex;flex-direction:column;gap:6px;font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.knowledge-catalog-panel select{border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px;font:12px var(--font-mono)}
+.knowledge-catalog-active{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.knowledge-catalog-active .filter-chip{display:inline-flex;align-items:center;gap:6px}
+
+.knowledge-article{padding:70px clamp(22px,7vw,110px);max-width:760px}
+.knowledge-article-header h1{font:clamp(36px,5vw,60px)/1.1 var(--font-serif);margin:14px 0}
+.knowledge-article-facts{display:flex;flex-wrap:wrap;gap:24px;margin:24px 0 40px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.knowledge-article-facts dt{font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.knowledge-article-facts dd{margin:2px 0 0;font:14px var(--font-mono);color:var(--ink)}
+.knowledge-article section{margin:36px 0}
+.knowledge-article h2{font:22px var(--font-serif);margin:0 0 14px;color:var(--ink)}
+.knowledge-article table{width:100%;border-collapse:collapse;font-size:14px}
+.knowledge-article th,.knowledge-article td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
 
 /* ---- reading progress ---- */
 .reading-progress{position:sticky;top:0;height:3px;background:transparent;z-index:6}
