@@ -310,10 +310,35 @@ nav a[aria-current="page"]{color:var(--acid)}
 .hero-webgl-host[data-state="ready"]{opacity:1}
 .hero-visual:has(.hero-webgl-host[data-state="ready"]) .hero-network{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 48% 76% at 31% 66%,var(--paper) 0%,color-mix(in srgb,var(--paper) 85%,transparent) 33%,transparent 72%),radial-gradient(ellipse 42% 70% at 103% 54%,var(--paper) 0%,transparent 68%)}
-@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}}
-@media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}}
+@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}.hero-tiger-image{width:300px;height:300px;top:4%;right:1%}}
+@media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}}
 :root[data-theme="light"] .hero-webgl-host{opacity:.52;filter:saturate(.72) contrast(1.18)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
+
+/* ---- holographic-tiger-guardian (image edition): the actual supplied
+   artwork, a plain <img>, always visible — independent of the network's
+   opacity/visibility rules above so no fallback path (no-JS, reduced
+   motion, coarse pointer, Save-Data, WebGL unavailable/failed) ever hides
+   or dims it. Square source blended into the hero via a radial mask (face
+   stays sharp/saturated in the center, only the outer ring fades), an
+   atmospheric glow behind it, and restrained scan/eye-glow overlays. ---- */
+.hero-tiger-image{position:absolute;top:6%;right:2%;width:420px;height:420px;pointer-events:none}
+.hero-tiger-image::before{content:"";position:absolute;inset:-8%;border-radius:50%;background:transparent;opacity:0}
+.hero-tiger-glow{position:absolute;inset:-16%;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--acid) 32%,transparent) 0%,transparent 68%);filter:blur(20px)}
+.hero-tiger-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;border-radius:3%;-webkit-mask-image:radial-gradient(closest-side,#000 66%,transparent 100%);mask-image:radial-gradient(closest-side,#000 66%,transparent 100%)}
+.hero-tiger-scan{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;-webkit-mask-image:radial-gradient(closest-side,#000 66%,transparent 100%);mask-image:radial-gradient(closest-side,#000 66%,transparent 100%);background:linear-gradient(to bottom,transparent 44%,color-mix(in srgb,var(--acid) 55%,transparent) 50%,transparent 56%)}
+.hero-tiger-eyeglow{position:absolute;left:50%;top:38%;width:30%;height:16%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse,color-mix(in srgb,var(--warn) 65%,transparent) 0%,transparent 75%);opacity:.2;mix-blend-mode:screen;pointer-events:none}
+@media(prefers-reduced-motion:no-preference){
+  .hero-tiger-scan{animation:hero-tiger-scan-sweep 9s ease-in-out infinite}
+  .hero-tiger-eyeglow{animation:hero-tiger-eye-pulse 6.5s ease-in-out infinite}
+}
+@media(pointer:fine) and (prefers-reduced-motion:no-preference){
+  .hero-tiger-image{transition:transform 160ms linear;transform:translate(calc(var(--pointer-x,0) * 6px),calc(var(--pointer-y,0) * 4px))}
+}
+@keyframes hero-tiger-scan-sweep{0%,100%{transform:translateY(-52%);opacity:0}45%,55%{opacity:.5}50%{transform:translateY(52%);opacity:.5}}
+@keyframes hero-tiger-eye-pulse{0%,100%{opacity:.16}50%{opacity:.38}}
+:root[data-theme="light"] .hero-tiger-image::before{background:radial-gradient(circle,color-mix(in srgb,var(--paper) 92%,transparent) 0%,transparent 72%);opacity:1}
+:root[data-theme="light"] .hero-tiger-glow{opacity:.5}
 
 /* subtle pointer-driven depth on the scope card: --pointer-x/--pointer-y
    are set directly (no React state) on .hero by the same rAF loop that
