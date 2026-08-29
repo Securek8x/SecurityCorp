@@ -5,13 +5,18 @@ application secrets — the attack surface is small by design. Still, two
 things matter here: reporting a real vulnerability, and keeping this
 author's home lab private while writing about it.
 
+## Supported versions
+
+Only the latest commit on `main` (what's deployed to production) is
+supported. There are no maintained release branches.
+
 ## Reporting a vulnerability
 
-If you find a security issue with the site itself (header misconfiguration,
-XSS via content rendering, dependency vulnerability, etc.), open a GitHub
-issue or contact the author directly rather than filing a public exploit
-writeup first. There's no bug bounty — this is a personal publication — but
-real reports are welcome and will be fixed.
+Prefer [private vulnerability reporting](../../security/advisories/new) on
+this repository over a public issue — it goes straight to the maintainer
+without disclosing details publicly first. A GitHub issue or direct contact
+also works for lower-severity findings. There's no bug bounty — this is a
+personal publication — but real reports are welcome and will be fixed.
 
 Do not test against `securitycorp.net` in ways that could affect other
 visitors (no DoS testing, no scanning at volume). Fine to poke at headers,
