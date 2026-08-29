@@ -310,8 +310,8 @@ nav a[aria-current="page"]{color:var(--acid)}
 .hero-webgl-host[data-state="ready"]{opacity:1}
 .hero-visual:has(.hero-webgl-host[data-state="ready"]) .hero-network{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 48% 76% at 31% 66%,var(--paper) 0%,color-mix(in srgb,var(--paper) 85%,transparent) 33%,transparent 72%),radial-gradient(ellipse 42% 70% at 103% 54%,var(--paper) 0%,transparent 68%)}
-@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}.hero-tiger-image{width:300px;height:300px;top:4%;right:1%}}
-@media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}}
+@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}}
+@media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}}
 :root[data-theme="light"] .hero-webgl-host{opacity:.52;filter:saturate(.72) contrast(1.18)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
 
@@ -332,13 +332,24 @@ nav a[aria-current="page"]{color:var(--acid)}
   .hero-tiger-scan{animation:hero-tiger-scan-sweep 9s ease-in-out infinite}
   .hero-tiger-eyeglow{animation:hero-tiger-eye-pulse 6.5s ease-in-out infinite}
 }
-@media(pointer:fine) and (prefers-reduced-motion:no-preference){
+/* min-width:901px keeps this scoped to genuine desktop layouts (matching
+   the tablet/mobile breakpoints below) so a fine-pointer device at a
+   narrow viewport — e.g. a resized desktop browser — can never have its
+   transform collide with the mobile/tablet positioning further down. */
+@media(pointer:fine) and (prefers-reduced-motion:no-preference) and (min-width:901px){
   .hero-tiger-image{transition:transform 160ms linear;transform:translate(calc(var(--pointer-x,0) * 6px),calc(var(--pointer-y,0) * 4px))}
 }
 @keyframes hero-tiger-scan-sweep{0%,100%{transform:translateY(-52%);opacity:0}45%,55%{opacity:.5}50%{transform:translateY(52%);opacity:.5}}
 @keyframes hero-tiger-eye-pulse{0%,100%{opacity:.16}50%{opacity:.38}}
 :root[data-theme="light"] .hero-tiger-image::before{background:radial-gradient(circle,color-mix(in srgb,var(--paper) 92%,transparent) 0%,transparent 72%);opacity:1}
 :root[data-theme="light"] .hero-tiger-glow{opacity:.5}
+/* Responsive overrides last, deliberately: equal-specificity rules resolve
+   by source order, so every base/theme/motion/pointer rule above that can
+   set .hero-tiger-image dimensions, position, or transform must come
+   first, or a later unconditional desktop rule silently wins regardless of
+   which media query is actually active (the bug fixed here). */
+@media(max-width:900px){.hero-tiger-image{width:300px;height:300px;top:4%;right:1%}}
+@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}}
 
 /* subtle pointer-driven depth on the scope card: --pointer-x/--pointer-y
    are set directly (no React state) on .hero by the same rAF loop that
