@@ -15,6 +15,9 @@ import { article as secretsDetectionScannerLimits } from "./articles/secrets-det
 import { article as dnsSecurityAttackSurface } from "./articles/dns-security-control-and-attack-surface.ts";
 import { article as buildRunnersUntrusted } from "./articles/build-runners-untrusted.ts";
 import { article as dependencyConfusionPackageTrust } from "./articles/dependency-confusion-package-trust.ts";
+import { article as tlsCertificateValidation } from "./articles/tls-certificate-validation-explained.ts";
+import { article as sbomsWhatTheySolve } from "./articles/sboms-what-they-solve.ts";
+import { article as inputValidationNotComplete } from "./articles/input-validation-not-complete-control.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -127,6 +130,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   dnsSecurityAttackSurface,
   buildRunnersUntrusted,
   dependencyConfusionPackageTrust,
+  tlsCertificateValidation,
+  sbomsWhatTheySolve,
+  inputValidationNotComplete,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
