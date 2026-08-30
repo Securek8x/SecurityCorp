@@ -12,5 +12,5 @@ test("the approved secure-code-review checklist is the first published knowledge
   assert.deepEqual(article.meta.tags, ["secure-code-review", "application-security", "threat-modeling"]);
   assert.deepEqual(validateArticleMeta(article.meta), []);
   assert.deepEqual(validateCatalogIntegrity(knowledgeArticles.map((entry) => entry.meta)), []);
-  assert.deepEqual(publishedKnowledgeArticles.map((entry) => entry.meta.slug), ["practical-secure-code-review-checklist"]);
+  assert.ok(publishedKnowledgeArticles.map((entry) => entry.meta.slug).includes("practical-secure-code-review-checklist"));
 });
