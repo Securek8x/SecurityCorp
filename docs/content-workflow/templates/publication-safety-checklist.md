@@ -12,5 +12,6 @@
 - [ ] Reviewed body, code, links, metadata, RSS/social-preview text, diagrams,
   images, alt text, and generated output.
 - [ ] Claims distinguish observation from verification.
-- [ ] Recorded reviewer decision and date; human `approved-public` decision
-  still pending or attached.
+- [ ] Recorded reviewer decisions and dates; Ravi Teja Thota's standing
+  `approved-public` authorization is attached only after every mandatory gate
+  passes.

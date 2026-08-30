@@ -1,9 +1,10 @@
 # SecurityCorp content workflow
 
 Use this repository-local workflow for every new SecurityCorp article. It
-implements the publication-safety policy; it does not publish anything and
-does not replace human review. Working material lives in `content/drafts/`,
-outside the production content registry.
+implements the publication-safety policy. Working material lives in
+`content/drafts/` until it is ready for the article-module/registry workflow.
+For requested articles, Ravi Teja Thota's standing publication authorization
+applies only after every mandatory gate in the policy has passing evidence.
 
 ## Invocation
 
@@ -11,8 +12,8 @@ Use this prompt for a new request:
 
 > Use the SecurityCorp content workflow to develop an article about [topic]. Stop after the evidence-backed outline for approval.
 
-The requested stopping point is binding. No draft may move to
-`lib/knowledge-content.ts` until the human approval gate below is complete.
+The requested stopping point is binding. A draft may not become public until
+the mandatory publication gates below are complete.
 
 ## Stages and roles
 
@@ -42,9 +43,11 @@ The requested stopping point is binding. No draft may move to
 8. **Metadata, internal-link, and placeholder validation** — validate the
    schema, controlled tags, internal links, metadata, and placeholder policy
    with the repository checks.
-9. **Human approval** — the human owner reviews the whole publication
-   surface and records explicit `approved-public` approval. Automation cannot
-   grant it.
+9. **Standing authorization and release evidence** — after all prior gates
+   pass, record Ravi Teja Thota's standing publication authorization,
+   truthful review identities/dates, usable Ruflo/Impeccable evidence, and
+   required PR/production evidence. A pending or unusable workflow is not a
+   pass and blocks publication.
 10. **Publication** — only then add the approved article object to
     `lib/knowledge-content.ts` with `status: "published"`, completed review
     records, and the recorded evidence label; rerun checks before release.
@@ -53,8 +56,8 @@ The requested stopping point is binding. No draft may move to
 
 - `VALIDATED`: reproduced and supported by recorded evidence.
 - `DESIGN ONLY`: proposed architecture or procedure that was not reproduced.
-- `UNVERIFIED`: evidence is incomplete. It blocks publication unless the
-  human owner explicitly approves publication with that limitation visible.
+- `UNVERIFIED`: evidence is incomplete. It may be published only when all
+  mandatory gates pass and the limitation remains visible and accurate.
 
 These labels are exact values validated by `lib/knowledge-schema.ts`. Never
 silently upgrade a label. A technical or editorial rewrite does not turn a
@@ -76,8 +79,8 @@ actually approved to proceed; do not pre-create a content backlog:
 1. `Research and evidence-backed outline` (stages 1–3)
 2. `Draft and lab verification` (stages 4–5), depends on 1
 3. `Safety and editorial review` (stages 6–8), depends on 2
-4. `Human approved-public decision` (stage 9), depends on 3 and is marked
-   `blocked` until a human decision is recorded
+4. `Standing authorization and release evidence` (stage 9), depends on 3 and
+   is marked `blocked` until every mandatory gate has usable passing evidence
 5. `Publish approved article` (stage 10), depends on 4
 
 Record the dependencies with `bd dep add <dependent> <prerequisite>`. The
@@ -87,8 +90,9 @@ or add registry content while it remains blocked.
 
 ## Publication handoff
 
-For an approved article, the human owner supplies the explicit publication
-decision. The implementer then records it in `publicationApproval` and moves
-only the sanitized, reviewed article object into the registry. `npm run
-check` and `npm run check:draft-isolation` must pass; `npm run guard:release`
-is additionally required for a deployment candidate.
+For an approved article, the implementer records Ravi Teja Thota's standing
+authorization in `publicationApproval` and moves only the sanitized, reviewed
+article object into the registry. Run the policy's full QA and protected
+deployment workflow; `npm run check`, `npm run check:draft-isolation`, and
+`npm run guard:release` are required baseline checks for a deployment
+candidate.

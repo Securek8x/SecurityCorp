@@ -9,6 +9,7 @@
 - [ ] Metadata conforms to `KnowledgeArticleMeta`; tags are controlled.
 - [ ] Internal links are valid and the article is not linked before approval.
 - [ ] Evidence labels match the ledger and verification record without upgrade.
-- [ ] `VALIDATED` has recorded reproduced evidence; `UNVERIFIED` has explicit
-  human-owner approval if publication is requested.
-- [ ] Human approval has not been substituted with an automated check.
+- [ ] `VALIDATED` has recorded reproduced evidence; `UNVERIFIED` retains its
+  visible limitation and passes every mandatory publication gate.
+- [ ] Usable Ruflo editorial evidence and Ravi Teja Thota's standing
+  authorization are recorded only after every mandatory gate passes.

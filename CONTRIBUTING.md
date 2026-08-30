@@ -61,13 +61,26 @@ Routes are generated automatically from this array via
 `generateStaticParams()` — no other file needs to change to publish a new
 guide.
 
+## Publishing a knowledge-base article
+
+Follow [`docs/knowledge-base.md`](./docs/knowledge-base.md) and the mandatory
+gates in the [publication-safety policy](./docs/publication-safety-policy.md).
+Ravi Teja Thota's standing authorization applies only after recorded passing
+editorial, technical, security/privacy, visual, QA, and deployment evidence;
+`drafting` metadata and pending reviews are stages to complete, not reasons to
+abandon a requested article. Publish only through the focused Gitea branch →
+GitHub PR → checked `main` → Cloudflare Production workflow, then verify the
+live article and its catalog, route, sitemap, RSS, and metadata surfaces.
+
 ## Adding a project
 
 Same file, `projects` array. `status` should be one of `Validated`,
 `Operational`, or `Design` — matching reality, not aspiration. Don't mark
 something `Validated` because it ran once.
 
-## Before you open a PR (or push to `main`)
+## Before you open a PR
+
+Never push article changes directly to `main`.
 
 1. Read the diff against the privacy list in
    [`SECURITY.md`](./SECURITY.md). Grep for IPs, hostnames, and paths
@@ -78,3 +91,6 @@ something `Validated` because it ran once.
 4. If a section title, stat, or "we tested this against N attempts" style
    claim isn't backed by something you actually did, cut it or rewrite it
    as a generalization.
+5. Confirm the complete publication surface has `approved-public` status under
+   the publication-safety policy, including diagrams, screenshots, metadata,
+   feeds, and social previews.

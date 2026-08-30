@@ -9,8 +9,10 @@ how a future article actually gets added.
 Every rule here is governed by the
 [publication-safety policy](publication-safety-policy.md). The local
 [content workflow](content-workflow/README.md) defines the required research,
-verification, review, and human-approval stages before an article reaches
-this registry.
+verification, review, and publication stages before an article reaches this
+registry. The standing authorization and mandatory evidence gates are defined
+in the publication-safety policy; this document implements them for knowledge
+articles.
 
 ## Files
 
@@ -19,8 +21,8 @@ this registry.
 | `lib/taxonomy.ts` | The 6 pillars and 21 categories. Source of truth: Beads `securitycorp-source-4zl.54`–`.59` and their `.N` children. |
 | `lib/knowledge-schema.ts` | The `KnowledgeArticleMeta` type and all validation (`validateArticleMeta`, `validateCatalogIntegrity`, `isPubliclyVisible`). |
 | `lib/knowledge-content-types.ts` | The article body shape: universal optional sections + one content-type-specific module. |
-| `content/drafts/` | Private editorial workspace. Drafts and review records live here, never in the production registry. |
-| `lib/knowledge-content.ts` | The published catalog (`knowledgeArticles`). Add an article object only after human approval. |
+| `content/drafts/` | Private editorial workspace for material not ready to enter the article module/registry workflow. |
+| `lib/knowledge-content.ts` | The complete known article registry. Only schema-valid `published` entries become the public catalog. |
 | `lib/knowledge-catalog.ts` | Server-side card projection + filtering helpers used by pillar/category/catalog pages. |
 | `lib/knowledge-tags.ts` | The controlled tag vocabulary — canonical ids, display labels, groups, and known aliases. Source of truth for `meta.tags`; see "Tags" below. |
 | `components/knowledge-article-shell.tsx` | The one reusable article template. Renders whichever sections/module fields are present; empty ones don't render. |
@@ -29,17 +31,18 @@ this registry.
 ## Adding one article
 
 1. **Pick exactly one pillar and one primary category** from `lib/taxonomy.ts`. The primary category must belong to the chosen pillar — `validateArticleMeta` rejects a mismatch. A secondary category is optional and must differ from the primary one.
-2. **Develop the article in `content/drafts/<slug>/`** using the content-workflow templates. Drafts must not be added to `knowledgeArticles`, even with a non-public status.
-3. **Write the metadata and body** (`KnowledgeArticleMeta` and `UniversalSections`) only after the human approval gate. All 14 body sections are optional — only fill in the ones that apply.
+2. **Develop the article and metadata** (`KnowledgeArticleMeta` and `UniversalSections`) using the content-workflow templates. All 14 body sections are optional — only fill in the ones that apply. A draft module may be registered for integrity/static-path work, but must remain non-public until every mandatory gate passes.
+3. **Run the mandatory publication gates** in the publication-safety policy. `drafting`, missing dates, and pending reviews are stages: correct safe defects and rerun the affected gate instead of treating them as permanent blockers.
 4. **Add a content-type module if useful** — one of `GuideModule`, `LabModule`, `DetectionModule`, `PlaybookModule`, `FieldNoteModule`, `DeepDiveModule`, `ChecklistModule`, `CaseStudyModule`, `ToolReviewModule`, matching `meta.contentType`.
-5. **Set `status: "published"` only once all of the following are true** (enforced by `validateArticleMeta`, not just convention):
+5. **Set `status: "published"` only once all of the following are true** (enforced in part by `validateArticleMeta`, with the remaining evidence recorded in the PR and Bead):
    - `tags` has 2–4 entries, each a canonical id from `lib/knowledge-tags.ts` (see "Tags" below)
    - `publishedAt` and `lastReviewedAt` are set
    - `privacyReview.status === "approved"` and `technicalReview.status === "approved"`
-   - `publicationApproval.status === "approved"`, with a named human reviewer and valid review date
+   - `publicationApproval.status === "approved"`, recorded as `Ravi Teja Thota — standing publication authorization` with a valid review date after all mandatory gates pass
    - the exact evidence label remains accurate (`VALIDATED`, `DESIGN ONLY`, or `UNVERIFIED`)
-6. **Add the object to `knowledgeArticles`** in `lib/knowledge-content.ts` (next to the `STATIC_EXPORT_PLACEHOLDER` — leave that one alone; see the comment above it).
-7. **Run `npm run check`** (lint, typecheck, tests, static export, and draft isolation). `validateArticleMeta`/`validateCatalogIntegrity` catch most mistakes before the build does.
+6. **Record the usable Ruflo editorial/security/UI-UX workflow results and Impeccable visual evidence** in the PR and related Bead. The current schema has no editorial/visual review fields, so never imply that an absent field is evidence.
+7. **Run repository QA and the production build**: applicable formatting, lint, typecheck, tests, `npm run check:draft-isolation`, `npm run check:public-terms`, tag/integrity checks, link/citation review, and `npm run build:pages`. Inspect the generated real page, not only a route that returns 404.
+8. **Use the protected publication workflow** in `docs/cloudflare-pages.md`: focused branch, Gitea mirror, GitHub PR, all required checks, merge, Cloudflare Production confirmation, live-domain verification, then non-divergent Gitea/GitHub synchronization.
 
 The article then appears automatically at `/knowledge/<slug>/`, on its pillar and category pages, in `/knowledge` catalog filtering, in the sitemap, and in the RSS feed — nothing else needs to be touched by hand.
 
@@ -121,8 +124,9 @@ Defined in `lib/knowledge-schema.ts` (`EVIDENCE_STATES`), Bead
 - **`VALIDATED`** — reproduced and supported by the recorded evidence.
 - **`DESIGN ONLY`** — a proposed architecture or procedure that was not
   reproduced.
-- **`UNVERIFIED`** — incomplete evidence. It blocks publication unless the
-  human owner explicitly approves publication with the limitation retained.
+- **`UNVERIFIED`** — incomplete evidence. It may be published only when every
+  mandatory gate passes and the article accurately retains that limitation; it
+  must never be silently upgraded because a command or service succeeded.
 
 None of these may be inferred merely because a command exited zero, a
 service started, a container reported healthy, a log line said "success,"

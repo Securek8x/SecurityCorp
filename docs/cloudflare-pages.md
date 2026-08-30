@@ -2,8 +2,6 @@
 
 SecurityCorp is exported as a static Next.js site for Cloudflare Pages.
 GitHub is the source of truth; Cloudflare builds and deploys from it.
-Nothing below has been performed yet — this is the setup procedure to
-follow once the repository is pushed to GitHub.
 
 ## Pages project settings
 
@@ -31,6 +29,31 @@ Cloudflare builds every push to `main`. Pull requests receive preview
 deployments automatically once the project is connected — no extra
 configuration needed. No application secrets or runtime environment
 variables are required for this static site.
+
+## Protected article publication verification
+
+Only a merge into the production branch (`main`) is publication; a local build
+or pull-request Preview is not. For a publication-ready article:
+
+1. Verify current GitHub and Gitea histories without overwriting divergent
+   history, then branch from current approved GitHub `main`.
+2. Push the focused branch to Gitea, confirm the one-way mirror exposes it on
+   GitHub, and open a GitHub PR to `main`.
+3. Wait for every required GitHub check. Merge only through the approved PR
+   method—never by pushing article changes directly to `main`.
+4. Confirm the Cloudflare Pages check is successful for the resulting GitHub
+   `main` commit and identifies a Production deployment. Then verify the live
+   article on `https://securitycorp.net`, its catalog/topic navigation, direct
+   route, sitemap, RSS, metadata/social preview, responsive layout, and basic
+   production health.
+5. Because the mirror is one-way, fast-forward Gitea `main` to the GitHub
+   merge commit when needed. Never force divergent history. Record the PR,
+   merge commit, Cloudflare result, live URL, and residual limitations in the
+   related Bead and operational record without copying sensitive output.
+
+If Cloudflare fails, investigate and remediate through another focused branch
+and protected PR; do not claim publication from a successful local build or
+Preview deployment.
 
 ## Custom domain
 
