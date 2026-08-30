@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/site-shell";
 import { JsonLd } from "@/components/json-ld";
+import { ReadingProgress } from "@/components/reading-progress";
 import { KnowledgeArticleShell } from "@/components/knowledge-article-shell";
 import { knowledgeArticles, findKnowledgeArticle } from "@/lib/knowledge-content";
-import { knowledgeArticleJsonLd } from "@/lib/json-ld";
+import { knowledgeArticleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { ogImages, twitterImages } from "@/lib/seo";
 
 // Sourced from the full (not just published) list — see the
@@ -37,8 +38,16 @@ export default async function KnowledgeArticlePage({ params }: { params: Promise
 
   return (
     <Shell current="/topics">
-      <main className="inner-page">
-        <JsonLd data={knowledgeArticleJsonLd(article.meta)} />
+      <JsonLd data={knowledgeArticleJsonLd(article.meta)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Home", url: "https://securitycorp.net/" },
+          { name: "Knowledge", url: "https://securitycorp.net/knowledge/" },
+          { name: article.meta.title, url: `https://securitycorp.net/knowledge/${article.meta.slug}/` },
+        ])}
+      />
+      <ReadingProgress />
+      <main className="article-page">
         <KnowledgeArticleShell article={article} />
       </main>
     </Shell>
