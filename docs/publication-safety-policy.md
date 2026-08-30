@@ -74,11 +74,96 @@ Before an item can receive `approved-public` status, confirm all of the followin
 - Diagrams, screenshots, metadata, feeds, social previews, and generated output received the same review as body copy.
 - Technical and privacy reviewers recorded an explicit approval.
 
-## Human approval requirements
+## Standing publication authorization and mandatory gates
 
-Human approval is mandatory before a sanitized draft becomes `approved-public`. The approver must review the complete publication surface, including derived metadata and visuals. Automated checks can support review but cannot grant approval.
+Ravi Teja Thota grants agents standing authority to publish a **requested**
+SecurityCorp article without a second per-article approval only after every
+mandatory gate in this section has recorded passing evidence. This authority is
+the explicit human authorization required for `approved-public`; record it as
+`Ravi Teja Thota — standing publication authorization` with the truthful date.
+It never authorizes invented evidence, publication outside a requested scope,
+or bypassing a failed gate.
 
-For material based on real systems, incidents, or operational experience, a human must confirm that the lesson has been generalized sufficiently and that no unresolved real weakness is being disclosed.
+`drafting`, missing publication dates, and pending review records are workflow
+stages, not permanent blockers. Agents must correct safe, article-scoped
+defects and repeat the affected reviews. An article remains unpublished only
+when a mandatory gate has an unresolved failure or cannot produce usable
+evidence.
+
+Before publication, record all of the following:
+
+1. **Editorial review.** Use the registered Ruflo editorial capability and
+   obtain a usable passing result. It must cover substance, clarity, structure,
+   title and conclusion, qualifications, citations, grammar, terminology, and
+   the absence of filler, placeholders, repetition, and unsupported claims.
+2. **Technical review.** Explicitly pass the article's commands, code,
+   architectural and security claims, diagrams, and recommendations. Correct
+   safe defects and rerun the review rather than treating the first ordinary
+   defect as a terminal result.
+3. **Security and privacy review.** Use registered Ruflo security review when
+   available and run applicable repository safety/secret checks. Review the
+   article and relevant Git history for credentials, tokens, keys, `.env`
+   values, private IPs or hostnames, private infrastructure/repository detail,
+   confidential information, and unsafe instruction outside authorized,
+   bounded defensive context.
+4. **Visual review.** Use registered Ruflo UI/UX review and the project
+   Impeccable workflow when available. Reuse the shared article shell and
+   established visual system; inspect desktop, tablet, and mobile rendering,
+   semantics, labels, keyboard/focus behavior, diagrams, tables, callouts,
+   code blocks, navigation, overflow, and layout stability. Do not create a
+   parallel article template or unrelated design change.
+5. **Repository QA.** Run the applicable formatting, lint, typecheck, tests,
+   schema/registry integrity, tag/public-term or secret checks, link/citation
+   review, and production static build. Verify real rendered content—not a
+   draft 404—in the catalog, topic navigation, static route, sitemap, RSS,
+   metadata, and social preview surfaces.
+6. **Metadata.** Only after gates 1–5 pass, set `status: "published"`,
+   `publishedAt`, `lastReviewedAt`, approved privacy and technical review
+   records, and the standing publication authorization. The current schema has
+   no editorial/visual-review fields; retain those workflow IDs and pass
+   evidence in the PR and the related Bead until the schema gains fields.
+
+For material based on real systems, incidents, or operational experience, the
+review must still confirm it has been generalized sufficiently and contains no
+unresolved real weakness.
+
+### Capability evidence and remediation
+
+Agents must discover the registered Ruflo tools, templates, and schemas before
+invocation. A workflow that is pending, running at 0%, fails, times out, or
+returns no usable result is **not** approval. Native review may supplement
+Ruflo evidence but must never be represented as Ruflo evidence.
+
+If a mandatory Ruflo or Impeccable capability is unavailable, preserve work,
+record the exact failure, and retry safely when appropriate. Publication is
+blocked until that gate has usable passing evidence. Stop only for an
+unresolved accuracy concern, missing required capability or credential, policy
+conflict, destructive operation, ambiguous scope, or another condition that
+cannot be safely remediated. Independently passing articles may continue.
+
+### Article-production definition of done
+
+An article-production request is complete only when every mandatory gate has
+recorded passing evidence; the article has truthful published metadata; the
+protected PR is merged with required checks passing; Cloudflare Pages reports
+Production for that exact `main` commit; and the live catalog, route,
+navigation, sitemap, RSS, metadata, responsive layout, and production health
+have been verified. Update the relevant Bead and operational documentation
+without exposing sensitive information, and finish with Gitea and GitHub on
+the same non-divergent commit.
+
+### Protected publication workflow
+
+Publication-ready work must follow the protected branch workflow in
+`docs/knowledge-base.md` and `docs/cloudflare-pages.md`: start from compatible
+current GitHub and Gitea history; use a focused feature branch; push it to
+Gitea and confirm the GitHub mirror; open a GitHub PR to `main`; wait for all
+required checks; commit with Ravi Teja Thota's configured Git identity and no
+Codex or Claude attribution; merge by the approved method; confirm Cloudflare
+Pages deploys the resulting GitHub `main` commit to Production; verify the
+live article and all public surfaces; and fast-forward Gitea `main` when
+needed without overwriting or forcing divergent history. A Cloudflare Preview
+or local build is not publication.
 
 ## Handling ambiguous information
 
