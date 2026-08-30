@@ -9,6 +9,9 @@ import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-dia
 import { article as networkTrustBoundaries } from "./articles/network-trust-boundaries.ts";
 import { article as threatModelingCicdPipeline } from "./articles/threat-modeling-cicd-pipeline.ts";
 import { article as securingApiAuth } from "./articles/securing-api-authentication-authorization.ts";
+import { article as segmentationVsIsolation } from "./articles/segmentation-vs-isolation.ts";
+import { article as protectingMainBranch } from "./articles/protecting-main-branch-beyond-pr-approval.ts";
+import { article as secretsDetectionScannerLimits } from "./articles/secrets-detection-scanner-limits.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -115,6 +118,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   networkTrustBoundaries,
   threatModelingCicdPipeline,
   securingApiAuth,
+  segmentationVsIsolation,
+  protectingMainBranch,
+  secretsDetectionScannerLimits,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
