@@ -692,7 +692,7 @@ a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
 .knowledge-catalog-active{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .knowledge-catalog-active .filter-chip{display:inline-flex;align-items:center;gap:6px}
 
-.knowledge-article{padding:70px clamp(22px,7vw,110px);max-width:760px}
+.knowledge-article{padding:70px clamp(22px,7vw,110px);max-width:900px;margin:0 auto}
 .knowledge-article-header h1{font:clamp(36px,5vw,60px)/1.1 var(--font-serif);margin:14px 0}
 .knowledge-article-facts{display:flex;flex-wrap:wrap;gap:24px;margin:24px 0 40px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .knowledge-article-facts dt{font:10px var(--font-mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
