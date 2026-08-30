@@ -12,6 +12,9 @@ import { article as securingApiAuth } from "./articles/securing-api-authenticati
 import { article as segmentationVsIsolation } from "./articles/segmentation-vs-isolation.ts";
 import { article as protectingMainBranch } from "./articles/protecting-main-branch-beyond-pr-approval.ts";
 import { article as secretsDetectionScannerLimits } from "./articles/secrets-detection-scanner-limits.ts";
+import { article as dnsSecurityAttackSurface } from "./articles/dns-security-control-and-attack-surface.ts";
+import { article as buildRunnersUntrusted } from "./articles/build-runners-untrusted.ts";
+import { article as dependencyConfusionPackageTrust } from "./articles/dependency-confusion-package-trust.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -121,6 +124,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   segmentationVsIsolation,
   protectingMainBranch,
   secretsDetectionScannerLimits,
+  dnsSecurityAttackSurface,
+  buildRunnersUntrusted,
+  dependencyConfusionPackageTrust,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
