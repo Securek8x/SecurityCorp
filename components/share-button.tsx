@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Check, Share2 } from "lucide-react";
 
-export function ShareButton({ title }: { title: string }) {
+export function ShareButton({ title, label = "Share this guide" }: { title: string; label?: string }) {
   const [status, setStatus] = useState<"idle" | "copied">("idle");
 
   async function handleShare() {
@@ -27,7 +27,7 @@ export function ShareButton({ title }: { title: string }) {
   return (
     <button type="button" className="share-btn outline-link" onClick={handleShare}>
       {status === "copied" ? <Check size={14} aria-hidden="true" /> : <Share2 size={14} aria-hidden="true" />}
-      {status === "copied" ? "Link copied" : "Share this guide"}
+      {status === "copied" ? "Link copied" : label}
     </button>
   );
 }
