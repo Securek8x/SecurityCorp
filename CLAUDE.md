@@ -121,6 +121,38 @@ usable editorial output, whether native fallback was used, completed review
 stages, and whether standing authorization was eligible and recorded. Do not
 fabricate evidence.
 
+## Periodic trend research (start of session)
+
+Once per session, before starting other substantive work, check for current
+developments relevant to this site (static-site/Jamstack tooling, security
+content/education trends, SEO and AI-crawler conventions, privacy-respecting
+analytics, accessibility/performance practice) and file genuinely new
+findings as Beads issues. This is research-and-file, not research-and-build —
+do not implement anything from it without separate authorization.
+
+1. Attempt a real Ruflo research workflow: discover the current
+   `mcp__ruflo__...` schemas, invoke `workflow_run` with a research template
+   (or the closest verified one), record the workflow ID, and perform at
+   least one bounded `workflow_status` check.
+2. Known limitation: Ruflo has consistently stalled at 0% with a pending
+   Execute stage all session and returned no usable result (see "Current
+   Ruflo executor limitation" above). If that recurs, disclose the workflow
+   ID and last-known status, then fall back to native research (`WebSearch`/
+   `WebFetch`) for the same question. Never represent native findings as
+   Ruflo output.
+3. Before filing anything, run `bd search "<topic>"` for each candidate
+   finding — only file it if it is not already tracked, open or closed. Do
+   not create near-duplicate beads across sessions.
+4. File genuinely new findings as standalone `task`/`feature` beads (no
+   forced parent epic unless one clearly fits) with a concrete
+   `--description` and `--acceptance`, reasonable priority, and a
+   `site-feature` label alongside any other fitting label. A handful of
+   well-considered findings beats an exhaustive list — this is meant to
+   surface real opportunities, not generate busywork.
+5. Report what was checked, whether Ruflo returned usable output, and what
+   (if anything) was filed, in the session's final response — don't leave
+   this silent.
+
 ## Obsidian project-record policy (this project)
 
 This project's Obsidian record is `AI-Work/Projects/SecurityCorp.md`. Follow
