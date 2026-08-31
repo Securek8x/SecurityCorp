@@ -27,6 +27,9 @@ import { article as preventingPathTraversal } from "./articles/preventing-path-t
 import { article as validatingServiceNotReachable } from "./articles/validating-a-service-is-not-publicly-reachable.ts";
 import { article as preventingSecretsInBuildLogs } from "./articles/preventing-secrets-from-entering-build-logs.ts";
 import { article as designingSecurityTestsForFailure } from "./articles/designing-security-tests-for-failure-conditions.ts";
+import { article as commonCausesNetworkExposure } from "./articles/common-causes-of-unexpected-network-exposure.ts";
+import { article as humanApprovalGatesProductionChanges } from "./articles/designing-human-approval-gates-for-production-changes.ts";
+import { article as failClosedSecurityAutomation } from "./articles/designing-fail-closed-security-automation.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -151,6 +154,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   validatingServiceNotReachable,
   preventingSecretsInBuildLogs,
   designingSecurityTestsForFailure,
+  commonCausesNetworkExposure,
+  humanApprovalGatesProductionChanges,
+  failClosedSecurityAutomation,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
