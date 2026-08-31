@@ -33,9 +33,29 @@ const EVIDENCE_LABEL: Record<string, string> = {
  * content is simply never added, so no empty heading ever renders. */
 type Block = { id: string; heading: string; node: React.ReactNode };
 
+/** Article content is authored as plain strings with light Markdown emphasis
+ * (`**bold**`, `*italic*`) — this is the one place that emphasis actually
+ * gets turned into `<strong>`/`<em>`. Every other renderer in this file
+ * calls through here rather than printing a raw string, so authored
+ * emphasis never surfaces as literal asterisks. */
+function renderInline(text: string): React.ReactNode {
+  const pattern = /\*\*(.+?)\*\*|\*(.+?)\*/g;
+  const nodes: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) nodes.push(text.slice(lastIndex, match.index));
+    nodes.push(match[1] !== undefined ? <strong key={key++}>{match[1]}</strong> : <em key={key++}>{match[2]}</em>);
+    lastIndex = pattern.lastIndex;
+  }
+  if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+  return nodes;
+}
+
 function textBlock(id: string, heading: string, paragraphs: string[] | undefined): Block | null {
   if (!paragraphs || paragraphs.length === 0) return null;
-  return { id, heading, node: paragraphs.map((p) => <p key={p}>{p}</p>) };
+  return { id, heading, node: paragraphs.map((p) => <p key={p}>{renderInline(p)}</p>) };
 }
 
 function listBlock(id: string, heading: string, items: string[] | undefined): Block | null {
@@ -46,7 +66,7 @@ function listBlock(id: string, heading: string, items: string[] | undefined): Bl
     node: (
       <ul>
         {items.map((item) => (
-          <li key={item}>{item}</li>
+          <li key={item}>{renderInline(item)}</li>
         ))}
       </ul>
     ),
@@ -127,10 +147,10 @@ function moduleBlocks(module: ContentModule | undefined): Block[] {
               <tbody>
                 {module.items.map((item) => (
                   <tr key={item.control}>
-                    <td>{item.control}</td>
-                    <td>{item.verificationMethod}</td>
-                    <td>{item.requiredEvidence}</td>
-                    <td>{item.result}</td>
+                    <td>{renderInline(item.control)}</td>
+                    <td>{renderInline(item.verificationMethod)}</td>
+                    <td>{renderInline(item.requiredEvidence)}</td>
+                    <td>{renderInline(item.result)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -169,7 +189,9 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
   const [lead, ...restOfSummary] = sections.executiveSummary ?? [];
 
   const blocks: Block[] = [
-    restOfSummary.length > 0 ? { id: "sec-executive-summary", heading: "Executive summary", node: restOfSummary.map((p) => <p key={p}>{p}</p>) } : null,
+    restOfSummary.length > 0
+      ? { id: "sec-executive-summary", heading: "Executive summary", node: restOfSummary.map((p) => <p key={p}>{renderInline(p)}</p>) }
+      : null,
     listBlock("sec-what-you-will-learn", "What you will learn", sections.whatYouWillLearn),
     listBlock("sec-intended-audience", "Intended audience", sections.intendedAudience),
     textBlock("sec-problem", "Problem or security question", sections.problem),
@@ -217,14 +239,14 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
           <ShareButton title={meta.title} label="Share this article" />
         </header>
 
-        {lead && <p className="lead">{lead}</p>}
+        {lead && <p className="lead">{renderInline(lead)}</p>}
 
         {sections.prerequisites && sections.prerequisites.length > 0 && (
           <aside className="prereq-box" aria-labelledby="prereq-heading">
             <strong id="prereq-heading">What you should know first</strong>
             <ul>
               {sections.prerequisites.map((p) => (
-                <li key={p}>{p}</li>
+                <li key={p}>{renderInline(p)}</li>
               ))}
             </ul>
           </aside>
@@ -267,7 +289,7 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             {related.map((a) => (
               <Link href={`/knowledge/${a.meta.slug}`} className="related-card" key={a.meta.slug}>
                 <h3>{a.meta.title}</h3>
-                <p>{a.meta.summary}</p>
+                <p>{renderInline(a.meta.summary)}</p>
               </Link>
             ))}
           </div>
