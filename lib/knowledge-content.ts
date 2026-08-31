@@ -21,6 +21,9 @@ import { article as inputValidationNotComplete } from "./articles/input-validati
 import { article as buildingFirewallRules } from "./articles/building-firewall-rules-from-documented-requirements.ts";
 import { article as leastPrivilegePipelineIdentities } from "./articles/least-privilege-for-pipeline-identities.ts";
 import { article as sastVsDastVsSca } from "./articles/sast-vs-dast-vs-software-composition-analysis.ts";
+import { article as safelyAnalyzingPacketCaptures } from "./articles/safely-analyzing-packet-captures.ts";
+import { article as verifyingBuildArtifacts } from "./articles/verifying-build-artifacts-before-deployment.ts";
+import { article as preventingPathTraversal } from "./articles/preventing-path-traversal-through-boundary-validation.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -139,6 +142,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   buildingFirewallRules,
   leastPrivilegePipelineIdentities,
   sastVsDastVsSca,
+  safelyAnalyzingPacketCaptures,
+  verifyingBuildArtifacts,
+  preventingPathTraversal,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
