@@ -24,6 +24,9 @@ import { article as sastVsDastVsSca } from "./articles/sast-vs-dast-vs-software-
 import { article as safelyAnalyzingPacketCaptures } from "./articles/safely-analyzing-packet-captures.ts";
 import { article as verifyingBuildArtifacts } from "./articles/verifying-build-artifacts-before-deployment.ts";
 import { article as preventingPathTraversal } from "./articles/preventing-path-traversal-through-boundary-validation.ts";
+import { article as validatingServiceNotReachable } from "./articles/validating-a-service-is-not-publicly-reachable.ts";
+import { article as preventingSecretsInBuildLogs } from "./articles/preventing-secrets-from-entering-build-logs.ts";
+import { article as designingSecurityTestsForFailure } from "./articles/designing-security-tests-for-failure-conditions.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -145,6 +148,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   safelyAnalyzingPacketCaptures,
   verifyingBuildArtifacts,
   preventingPathTraversal,
+  validatingServiceNotReachable,
+  preventingSecretsInBuildLogs,
+  designingSecurityTestsForFailure,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
