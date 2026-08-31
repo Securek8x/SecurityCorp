@@ -18,6 +18,9 @@ import { article as dependencyConfusionPackageTrust } from "./articles/dependenc
 import { article as tlsCertificateValidation } from "./articles/tls-certificate-validation-explained.ts";
 import { article as sbomsWhatTheySolve } from "./articles/sboms-what-they-solve.ts";
 import { article as inputValidationNotComplete } from "./articles/input-validation-not-complete-control.ts";
+import { article as buildingFirewallRules } from "./articles/building-firewall-rules-from-documented-requirements.ts";
+import { article as leastPrivilegePipelineIdentities } from "./articles/least-privilege-for-pipeline-identities.ts";
+import { article as sastVsDastVsSca } from "./articles/sast-vs-dast-vs-software-composition-analysis.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -133,6 +136,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   tlsCertificateValidation,
   sbomsWhatTheySolve,
   inputValidationNotComplete,
+  buildingFirewallRules,
+  leastPrivilegePipelineIdentities,
+  sastVsDastVsSca,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
