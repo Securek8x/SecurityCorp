@@ -50,3 +50,6 @@ jobs:
 
       - name: Knowledge-base release guard
         run: npm run guard:release
+
+      - name: Privacy leak gate
+        run: npm run check:privacy-leak-gate

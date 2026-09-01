@@ -14,6 +14,7 @@ Thumbs.db
 *.tsbuildinfo
 coverage/
 .claude/settings.local.json
+.privacy-denylist.json
 
 # impeccable-ignore-start
 # Ephemeral detector, hook, screenshot, live-session, and per-developer state.
