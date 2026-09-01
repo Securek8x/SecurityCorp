@@ -6,6 +6,7 @@ import type { KnowledgeArticleMeta } from "./knowledge-schema.ts";
 import { isPubliclyVisible } from "./knowledge-schema.ts";
 import type { UniversalSections, ContentModule } from "./knowledge-content-types.ts";
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
+import type { ArticleClaim } from "./claim-ledger.ts";
 import { article as networkTrustBoundaries } from "./articles/network-trust-boundaries.ts";
 import { article as threatModelingCicdPipeline } from "./articles/threat-modeling-cicd-pipeline.ts";
 import { article as securingApiAuth } from "./articles/securing-api-authentication-authorization.ts";
@@ -40,6 +41,12 @@ export type KnowledgeArticle = {
    * drives the same hover-explore/mode-toggle/replay renderer already used
    * by the three guide pages, so no second diagram system exists. */
   diagram?: FlowDiagramSpec;
+  /** Claim-level evidence ledger (lib/claim-ledger.ts, Bead
+   * securitycorp-source-5q3) — optional. Absent on every article in this
+   * catalog today; new/updated articles that make a material externally
+   * verifiable claim should populate it rather than relying solely on the
+   * free-text `sections.references` list. */
+  claims?: ArticleClaim[];
 };
 
 export const knowledgeArticles: KnowledgeArticle[] = [

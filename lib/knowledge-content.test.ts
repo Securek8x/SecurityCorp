@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { findKnowledgeArticle, knowledgeArticles, publishedKnowledgeArticles } from "./knowledge-content.ts";
 import { validateArticleMeta, validateCatalogIntegrity } from "./knowledge-schema.ts";
+import { validateArticleClaims } from "./claim-ledger.ts";
 
 test("the approved secure-code-review checklist is the first published knowledge article", () => {
   const article = findKnowledgeArticle("practical-secure-code-review-checklist");
@@ -13,4 +14,11 @@ test("the approved secure-code-review checklist is the first published knowledge
   assert.deepEqual(validateArticleMeta(article.meta), []);
   assert.deepEqual(validateCatalogIntegrity(knowledgeArticles.map((entry) => entry.meta)), []);
   assert.ok(publishedKnowledgeArticles.map((entry) => entry.meta.slug).includes("practical-secure-code-review-checklist"));
+});
+
+test("every article's claim ledger (if any) and every [[claim:ID]] reference resolve cleanly", () => {
+  for (const article of knowledgeArticles) {
+    const errors = validateArticleClaims(article.sections, article.claims);
+    assert.deepEqual(errors, [], `${article.meta.slug}: ${errors.join("; ")}`);
+  }
 });
