@@ -23,7 +23,6 @@
 // verdict is diffed against, not disposable local state) so a transient
 // network failure doesn't wipe out prior good data, and so the tool can
 // report "changed since it was cited" rather than just "reachable today".
-import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { knowledgeArticles } from "../lib/knowledge-content.ts";
@@ -164,8 +163,17 @@ async function checkUrl(url: string, cache: Cache): Promise<Result & { newEntry?
   return { url, verdict: "ok", detail: `unchanged since ${previous.firstCheckedAt}`, citedBy: [], newEntry };
 }
 
+async function loadCache(): Promise<Cache> {
+  try {
+    return JSON.parse(await readFile(CACHE_PATH, "utf8"));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return {};
+    throw error;
+  }
+}
+
 async function main() {
-  const cache: Cache = existsSync(CACHE_PATH) ? JSON.parse(await readFile(CACHE_PATH, "utf8")) : {};
+  const cache = await loadCache();
 
   const citedBy = new Map<string, Set<string>>();
   for (const article of knowledgeArticles) {
