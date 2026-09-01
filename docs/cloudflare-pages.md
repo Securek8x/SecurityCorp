@@ -45,7 +45,13 @@ or pull-request Preview is not. For a publication-ready article:
    `main` commit and identifies a Production deployment. Then verify the live
    article on `https://securitycorp.net`, its catalog/topic navigation, direct
    route, sitemap, RSS, metadata/social preview, responsive layout, and basic
-   production health.
+   production health. **Confirm the exact deployed commit**: fetch
+   `https://securitycorp.net/build-info.json` and check `commitSha` matches
+   the GitHub merge commit SHA exactly (poll briefly — Cloudflare's
+   deploy-on-push isn't instant, see "Continuous deployment" below). This is
+   the authoritative provenance check (`lib/build-info.ts`) — don't rely on
+   an indirect signal (an asset fingerprint, "the page looks updated") as
+   proof of deployment; those can be stale or coincidental.
 5. Because the mirror is one-way, fast-forward Gitea `main` to the GitHub
    merge commit when needed. Never force divergent history. Record the PR,
    merge commit, Cloudflare result, live URL, and residual limitations in the

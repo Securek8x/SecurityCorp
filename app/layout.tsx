@@ -4,6 +4,7 @@ import "./globals.css";
 import { ogImages, twitterImages } from "@/lib/seo";
 import { websiteJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/json-ld";
+import { getBuildInfo } from "@/lib/build-info";
 
 // Self-hosted at build time by next/font — no runtime request to Google Fonts,
 // no render-blocking network dependency, subset to latin to keep payload small.
@@ -31,6 +32,11 @@ const siteUrl = "https://securitycorp.net";
 const siteDescription =
   "Practical cybersecurity guides, hands-on lab projects, and field notes by security engineer Ravi Teja Thota.";
 
+// Public source revision this build was produced from — see /build-info.json
+// (lib/build-info.ts) for the full provenance record and
+// docs/cloudflare-pages.md's post-deployment verification step.
+const buildCommitSha = getBuildInfo().commitSha;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: { default: "SecurityCorp — Security is a practice", template: "%s | SecurityCorp" },
@@ -40,6 +46,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   robots: { index: true, follow: true },
+  other: { "build-commit": buildCommitSha },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
