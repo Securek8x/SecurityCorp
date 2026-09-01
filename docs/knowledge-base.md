@@ -150,6 +150,34 @@ deliberately **not** wired into `.github/workflows/ci.yml` — a temporarily
 unreachable third-party site should never block an unrelated PR. Run it on
 demand, or before publishing a batch, alongside privacy/technical review.
 
+## Claim-level evidence ledger (optional, `lib/claim-ledger.ts`)
+
+`scripts/check-citations.ts` (above) proves a cited URL is reachable and
+unchanged — it never proves the source actually supports what the article
+says it supports. `claims?: ArticleClaim[]` on `KnowledgeArticle` (Bead
+`securitycorp-source-5q3`) is the mechanism for that stronger, human-
+reviewed claim: every material externally verifiable claim gets a stable
+`claimId`, one or more `sources` (each recording `publisher`,
+`accessedAt`, and optionally `version`/`locator`/`url`), and a
+`semanticReview` state tracked independently of any automated status
+(`reviewed` requires a named `reviewer` and `reviewedAt`; `unreviewed` is
+the honest default while a claim is still pending human sign-off).
+
+To link a specific sentence in an article's prose to a ledger entry,
+embed a `[[claim:<claimId>]]` marker immediately after it in the relevant
+`UniversalSections` string. `validateClaimReferences` scans every prose
+field for these markers and fails if one doesn't resolve to a real
+`claimId` — this is what stops a claim from silently going stale if its
+ledger entry is ever removed or renamed. `validateArticleClaims` runs
+both checks together and is exercised in `lib/knowledge-content.test.ts`
+for every article in the catalog.
+
+**Deliberately optional and not retrofitted**: no article in this catalog
+currently populates `claims` — this establishes the mechanism and its
+validation for new or updated articles going forward, not a mandate to
+immediately re-author all 24+ existing articles. An article with no
+`claims` array is unaffected by any of this.
+
 ## Editorial statuses (internal only)
 
 `idea → planned → drafting → technical-review → privacy-review → ready →
