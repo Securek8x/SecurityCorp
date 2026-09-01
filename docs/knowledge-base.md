@@ -133,6 +133,23 @@ service started, a container reported healthy, a log line said "success,"
 or a page returned HTTP 200. Never silently upgrade a label. See the
 publication-safety policy's note on separating observation from verification.
 
+## Citation verification (review-time, not a CI gate)
+
+`scripts/check-citations.ts` (`npm run check:citations`) checks that every
+cited URL in `lib/articles/*.ts`'s `references` sections is still reachable
+and whether its recorded metadata (final URL, content fingerprint, page
+title) has changed since it was first checked. Results are cached in
+`.citations-cache.json` (committed — it's the baseline a later "changed"
+verdict is diffed against, not disposable state).
+
+**A passing result means the source is reachable and unchanged since it was
+cited — it does not mean the source supports the article's claim.** That is
+semantic claim verification, a separate human-reviewed process (see Bead
+`securitycorp-source-5q3`, the claim-level evidence ledger). This tool is
+deliberately **not** wired into `.github/workflows/ci.yml` — a temporarily
+unreachable third-party site should never block an unrelated PR. Run it on
+demand, or before publishing a batch, alongside privacy/technical review.
+
 ## Editorial statuses (internal only)
 
 `idea → planned → drafting → technical-review → privacy-review → ready →
