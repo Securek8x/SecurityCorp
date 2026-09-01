@@ -101,7 +101,7 @@ const sections: UniversalSections = {
     "OWASP Top 10 CI/CD Security Risks (CICD-SEC-6: Insufficient Credential Hygiene): https://owasp.org/www-project-top-10-ci-cd-security-risks/",
     "OWASP Secrets Management Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
     "NIST SP 800-53 Rev. 5, control IA-5, Authenticator Management: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
-    "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/resources-tools/resources/defending-continuous-integrationcontinuous-delivery-cicd-environments",
+    "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     "GitHub Docs, Using secrets in GitHub Actions (masking behavior and limits): https://docs.github.com/actions/security-guides/using-secrets-in-github-actions",
   ],
   relatedSlugs: ["secrets-detection-scanner-limits", "least-privilege-for-pipeline-identities", "verifying-build-artifacts-before-deployment"],

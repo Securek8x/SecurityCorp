@@ -97,7 +97,7 @@ const sections: UniversalSections = {
   references: [
     "NIST SP 800-53 Rev. 5, control CM-3, Configuration Change Control: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     "NIST SP 800-53 Rev. 5, control AC-5, Separation of Duties: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
-    "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/resources-tools/resources/defending-continuous-integrationcontinuous-delivery-cicd-environments",
+    "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     "DORA (DevOps Research and Assessment), change failure rate and lead-time-for-changes research: https://dora.dev/",
   ],
   relatedSlugs: [

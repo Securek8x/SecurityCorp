@@ -1,0 +1,659 @@
+{
+  "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Code_Review_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:58:55.101Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.101Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Code_Review_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "9d35a5d4b6b30278",
+    "title": "Secure Code Review - OWASP Cheat Sheet Series"
+  },
+  "https://owasp.org/www-project-code-review-guide/": {
+    "firstCheckedAt": "2026-09-01T19:58:55.266Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.266Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-project-code-review-guide/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "e2768e3ac4c6fffb",
+    "title": "OWASP Code Review Guide | OWASP Foundation"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/218/final": {
+    "firstCheckedAt": "2026-09-01T19:58:55.383Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.383Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/218/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "21ddb20a311e0e9a",
+    "title": "SP 800-218, Secure Software Development Framework (SSDF) Version 1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities | CSRC"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/207/final": {
+    "firstCheckedAt": "2026-09-01T19:58:55.674Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.674Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/207/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "0fbbb95171089309",
+    "title": "SP 800-207, Zero Trust Architecture | CSRC"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/41/r1/final": {
+    "firstCheckedAt": "2026-09-01T19:58:55.750Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.750Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/41/r1/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "fb72cb16b512c851",
+    "title": "SP 800-41 Rev. 1, Guidelines on Firewalls and Firewall Policy | CSRC"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final": {
+    "firstCheckedAt": "2026-09-01T19:58:55.822Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.822Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "8bc063c612d20c10",
+    "title": "SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations | CSRC"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:58:55.891Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.891Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "57812d919169ad92",
+    "title": "Threat Modeling - OWASP Cheat Sheet Series"
+  },
+  "https://slsa.dev/": {
+    "firstCheckedAt": "2026-09-01T19:58:55.950Z",
+    "lastCheckedAt": "2026-09-01T19:58:55.950Z",
+    "status": 200,
+    "finalUrl": "https://slsa.dev/",
+    "contentType": "text/html; charset=UTF-8",
+    "contentHash": "42a51e7a7b21ac59",
+    "title": "SLSA • Supply-chain Levels for Software Artifacts"
+  },
+  "https://owasp.org/www-project-top-10-ci-cd-security-risks/": {
+    "firstCheckedAt": "2026-09-01T19:58:56.071Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.071Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-project-top-10-ci-cd-security-risks/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "d62b7fa48a2c6b24",
+    "title": "OWASP Top 10 CI/CD Security Risks | OWASP Foundation"
+  },
+  "https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd": {
+    "firstCheckedAt": "2026-09-01T19:58:56.124Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.124Z",
+    "status": 200,
+    "finalUrl": "https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "f83c7ceab4c7e792",
+    "title": "CISA and NSA Release Joint Guidance on Defending Continuous Integration/Continuous Delivery (CI/CD) Environments | CISA"
+  },
+  "https://owasp.org/www-project-api-security/": {
+    "firstCheckedAt": "2026-09-01T19:58:56.215Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.215Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-project-api-security/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "03c5270b29a90b5e",
+    "title": "OWASP API Security Project | OWASP Foundation"
+  },
+  "https://www.rfc-editor.org/rfc/rfc6749": {
+    "firstCheckedAt": "2026-09-01T19:58:56.268Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.268Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc6749/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "a0e5fa1006eb8b3c",
+    "title": "RFC 6749: The OAuth 2.0 Authorization Framework | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc6750": {
+    "firstCheckedAt": "2026-09-01T19:58:56.455Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.455Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc6750/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "73684adaaf7b6303",
+    "title": "RFC 6750: The OAuth 2.0 Authorization Framework: Bearer Token Usage | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc7519": {
+    "firstCheckedAt": "2026-09-01T19:58:56.579Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.579Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc7519/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "98c836427b20aaf7",
+    "title": "RFC 7519: JSON Web Token (JWT) | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc9068": {
+    "firstCheckedAt": "2026-09-01T19:58:56.669Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.669Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc9068/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "689200872dd0dba1",
+    "title": "RFC 9068: JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens | RFC Editor"
+  },
+  "https://pages.nist.gov/800-63-3/sp800-63b.html": {
+    "firstCheckedAt": "2026-09-01T19:58:56.754Z",
+    "lastCheckedAt": "2026-09-01T19:58:56.754Z",
+    "status": 200,
+    "finalUrl": "https://pages.nist.gov/800-63-3/sp800-63b.html",
+    "contentType": "text/html",
+    "contentHash": "348917efae3476d6",
+    "title": "NIST Special Publication 800-63B"
+  },
+  "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches": {
+    "firstCheckedAt": "2026-09-01T19:58:57.027Z",
+    "lastCheckedAt": "2026-09-01T19:58:57.027Z",
+    "status": 200,
+    "finalUrl": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "0bb3bda18c2fd20b",
+    "title": "About protected branches - GitHub Docs"
+  },
+  "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets": {
+    "firstCheckedAt": "2026-09-01T19:58:57.109Z",
+    "lastCheckedAt": "2026-09-01T19:58:57.109Z",
+    "status": 200,
+    "finalUrl": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "28127b4c839e572c",
+    "title": "About rulesets - GitHub Docs"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:58:57.175Z",
+    "lastCheckedAt": "2026-09-01T19:58:57.175Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "278d8c1cb0225778",
+    "title": "Secrets Management - OWASP Cheat Sheet Series"
+  },
+  "https://cwe.mitre.org/data/definitions/798.html": {
+    "firstCheckedAt": "2026-09-01T19:58:57.304Z",
+    "lastCheckedAt": "2026-09-01T19:58:57.304Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/798.html",
+    "contentType": "text/html",
+    "contentHash": "e3f7b7d0ea93e62c",
+    "title": "CWE - CWE-798: Use of Hard-coded Credentials (4.20)"
+  },
+  "https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning": {
+    "firstCheckedAt": "2026-09-01T19:58:57.492Z",
+    "lastCheckedAt": "2026-09-01T19:58:57.492Z",
+    "status": 200,
+    "finalUrl": "https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "0d69e5103f6357c0",
+    "title": "Secret scanning - GitHub Docs"
+  },
+  "https://github.com/trufflesecurity/trufflehog": {
+    "firstCheckedAt": "2026-09-01T19:58:57.635Z",
+    "lastCheckedAt": "2026-09-01T19:58:57.635Z",
+    "status": 200,
+    "finalUrl": "https://github.com/trufflesecurity/trufflehog",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "3c9f3a031d663de8",
+    "title": "GitHub - trufflesecurity/trufflehog: Find, verify, and analyze leaked credentials · GitHub"
+  },
+  "https://github.com/gitleaks/gitleaks": {
+    "firstCheckedAt": "2026-09-01T19:58:58.363Z",
+    "lastCheckedAt": "2026-09-01T19:58:58.363Z",
+    "status": 200,
+    "finalUrl": "https://github.com/gitleaks/gitleaks",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "98159bd21d694fd6",
+    "title": "GitHub - gitleaks/gitleaks: Find secrets with Gitleaks 🔑 · GitHub"
+  },
+  "https://www.rfc-editor.org/rfc/rfc1035": {
+    "firstCheckedAt": "2026-09-01T19:58:59.038Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.038Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc1035/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "8e0298b4b4d4a881",
+    "title": "RFC 1035: Domain names - implementation and specification | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc4033": {
+    "firstCheckedAt": "2026-09-01T19:58:59.115Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.115Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc4033/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "c19933d09960cb59",
+    "title": "RFC 4033: DNS Security Introduction and Requirements | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc7858": {
+    "firstCheckedAt": "2026-09-01T19:58:59.213Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.213Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc7858/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "4aa954d35af85623",
+    "title": "RFC 7858: Specification for DNS over Transport Layer Security (TLS) | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc8484": {
+    "firstCheckedAt": "2026-09-01T19:58:59.291Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.291Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc8484/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "86446324dd6f586d",
+    "title": "RFC 8484: DNS Queries over HTTPS (DoH) | RFC Editor"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/81/r3/final": {
+    "firstCheckedAt": "2026-09-01T19:58:59.368Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.368Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/81/r3/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "9113bff1751a8f0f",
+    "title": "SP 800-81 Rev. 3, Secure Domain Name System (DNS) Deployment Guide | CSRC"
+  },
+  "https://docs.npmjs.com/cli/v10/using-npm/scope": {
+    "firstCheckedAt": "2026-09-01T19:58:59.572Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.572Z",
+    "status": 200,
+    "finalUrl": "https://docs.npmjs.com/cli/v10/using-npm/scope/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "b2dbc3112727a54d",
+    "title": "scope | npm Docs"
+  },
+  "https://pip.pypa.io/en/stable/cli/pip_install/#cmdoption-extra-index-url": {
+    "firstCheckedAt": "2026-09-01T19:58:59.763Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.763Z",
+    "status": 200,
+    "finalUrl": "https://pip.pypa.io/en/stable/cli/pip_install/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "3111024d45015beb",
+    "title": "pip install - pip documentation v26.2.1"
+  },
+  "https://cwe.mitre.org/data/definitions/1357.html": {
+    "firstCheckedAt": "2026-09-01T19:58:59.876Z",
+    "lastCheckedAt": "2026-09-01T19:58:59.876Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/1357.html",
+    "contentType": "text/html",
+    "contentHash": "15dbaad8b5851a5d",
+    "title": "CWE - CWE-1357: Reliance on Insufficiently Trustworthy Component (4.20)"
+  },
+  "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/": {
+    "firstCheckedAt": "2026-09-01T19:59:00.083Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.083Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "0fda5443f493d897",
+    "title": "Redirecting..."
+  },
+  "https://www.rfc-editor.org/rfc/rfc5280": {
+    "firstCheckedAt": "2026-09-01T19:59:00.135Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.135Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc5280/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "f3a79425f7b8917f",
+    "title": "RFC 5280: Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc9525": {
+    "firstCheckedAt": "2026-09-01T19:59:00.225Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.225Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc9525/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "fe7307bcdc23c20b",
+    "title": "RFC 9525: Service Identity in TLS | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc6960": {
+    "firstCheckedAt": "2026-09-01T19:59:00.316Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.316Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc6960/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "16f8db42f4a04723",
+    "title": "RFC 6960: X.509 Internet Public Key Infrastructure Online Certificate Status Protocol - OCSP | RFC Editor"
+  },
+  "https://www.rfc-editor.org/rfc/rfc6066": {
+    "firstCheckedAt": "2026-09-01T19:59:00.391Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.391Z",
+    "status": 200,
+    "finalUrl": "https://www.rfc-editor.org/info/rfc6066/",
+    "contentType": "text/html;charset=utf-8",
+    "contentHash": "b30846bbd563913f",
+    "title": "RFC 6066: Transport Layer Security (TLS) Extensions: Extension Definitions | RFC Editor"
+  },
+  "https://cabforum.org/baseline-requirements/": {
+    "firstCheckedAt": "2026-09-01T19:59:00.473Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.473Z",
+    "status": 200,
+    "finalUrl": "https://cabforum.org/baseline-requirements/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "4deae1a7e8847b27",
+    "title": "https://cabforum.org/working-groups/server/baseline-requirements/"
+  },
+  "https://www.cisa.gov/resources-tools/resources/2026-minimum-elements-software-bill-materials-sbom": {
+    "firstCheckedAt": "2026-09-01T19:59:00.614Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.614Z",
+    "status": 200,
+    "finalUrl": "https://www.cisa.gov/resources-tools/resources/2026-minimum-elements-software-bill-materials-sbom",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "9129fbb184c51682",
+    "title": "2026 Minimum Elements for a Software Bill of Materials (SBOM) | CISA"
+  },
+  "https://spdx.dev/": {
+    "firstCheckedAt": "2026-09-01T19:59:00.767Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.767Z",
+    "status": 200,
+    "finalUrl": "https://spdx.dev/",
+    "contentType": "text/html; charset=UTF-8",
+    "contentHash": "d86d47fc3281776f",
+    "title": null
+  },
+  "https://cyclonedx.org/": {
+    "firstCheckedAt": "2026-09-01T19:59:00.860Z",
+    "lastCheckedAt": "2026-09-01T19:59:00.860Z",
+    "status": 200,
+    "finalUrl": "https://cyclonedx.org/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "1184b61efcd0730e",
+    "title": "CycloneDX Bill of Materials Standard | CycloneDX"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:59:01.614Z",
+    "lastCheckedAt": "2026-09-01T19:59:01.614Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "dc6d89ed98e77441",
+    "title": "Input Validation - OWASP Cheat Sheet Series"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:59:01.780Z",
+    "lastCheckedAt": "2026-09-01T19:59:01.780Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "0c48a7adec64b416",
+    "title": "Cross Site Scripting Prevention - OWASP Cheat Sheet Series"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:59:01.846Z",
+    "lastCheckedAt": "2026-09-01T19:59:01.846Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "ab7ac24e15e025dc",
+    "title": "SQL Injection Prevention - OWASP Cheat Sheet Series"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:59:01.905Z",
+    "lastCheckedAt": "2026-09-01T19:59:01.905Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "76d36288dc6fad7b",
+    "title": "Authorization - OWASP Cheat Sheet Series"
+  },
+  "https://owasp.org/Top10/A01_2021-Broken_Access_Control/": {
+    "firstCheckedAt": "2026-09-01T19:59:01.972Z",
+    "lastCheckedAt": "2026-09-01T19:59:01.972Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "fb892998a8b68c18",
+    "title": "Redirecting..."
+  },
+  "https://owasp.org/Top10/A03_2021-Injection/": {
+    "firstCheckedAt": "2026-09-01T19:59:02.017Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.017Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/Top10/A03_2021-Injection/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "27445825dcbe390c",
+    "title": "Redirecting..."
+  },
+  "https://cwe.mitre.org/data/definitions/20.html": {
+    "firstCheckedAt": "2026-09-01T19:59:02.096Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.096Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/20.html",
+    "contentType": "text/html",
+    "contentHash": "1307ef07c55ba31b",
+    "title": "CWE - CWE-20: Improper Input Validation (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/79.html": {
+    "firstCheckedAt": "2026-09-01T19:59:02.303Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.303Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/79.html",
+    "contentType": "text/html",
+    "contentHash": "fae6e4ef33332ff3",
+    "title": "CWE - CWE-79: Improper Neutralization of Input During Web Page Generation (&#39;Cross-site Scripting&#39;) (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/89.html": {
+    "firstCheckedAt": "2026-09-01T19:59:02.528Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.528Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/89.html",
+    "contentType": "text/html",
+    "contentHash": "c69cf0f2138e7a6a",
+    "title": "CWE - CWE-89: Improper Neutralization of Special Elements used in an SQL Command (&#39;SQL Injection&#39;) (4.20)"
+  },
+  "https://owasp.org/www-community/Source_Code_Analysis_Tools": {
+    "firstCheckedAt": "2026-09-01T19:59:02.762Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.762Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-community/Source_Code_Analysis_Tools",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "2b33b41a1465341a",
+    "title": "Source Code Analysis Tools | OWASP Foundation"
+  },
+  "https://owasp.org/www-project-devsecops-guideline/latest/02b-Dynamic-Application-Security-Testing": {
+    "firstCheckedAt": "2026-09-01T19:59:02.819Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.819Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-project-devsecops-guideline/latest/02b-Dynamic-Application-Security-Testing",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "f446c5c341232caf",
+    "title": "OWASP DevSecOps Guideline - v-0.2 | OWASP Foundation"
+  },
+  "https://cwe.mitre.org/": {
+    "firstCheckedAt": "2026-09-01T19:59:02.977Z",
+    "lastCheckedAt": "2026-09-01T19:59:02.977Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/",
+    "contentType": "text/html",
+    "contentHash": "25e40231080a6d9e",
+    "title": "CWE - Common Weakness Enumeration"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/86/final": {
+    "firstCheckedAt": "2026-09-01T19:59:03.162Z",
+    "lastCheckedAt": "2026-09-01T19:59:03.162Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/86/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "193769be5cc07692",
+    "title": "SP 800-86, Guide to Integrating Forensic Techniques into Incident Response | CSRC"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/61/r2/final": {
+    "firstCheckedAt": "2026-09-01T19:59:03.304Z",
+    "lastCheckedAt": "2026-09-01T19:59:03.304Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/61/r2/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "161893643f350d5a",
+    "title": "SP 800-61 Rev. 2, Computer Security Incident Handling Guide | CSRC"
+  },
+  "https://slsa.dev/spec/v1.0/provenance": {
+    "firstCheckedAt": "2026-09-01T19:59:03.400Z",
+    "lastCheckedAt": "2026-09-01T19:59:03.400Z",
+    "status": 200,
+    "finalUrl": "https://slsa.dev/spec/v1.0/provenance",
+    "contentType": "text/html; charset=UTF-8",
+    "contentHash": "ef8f262f0c669c61",
+    "title": "SLSA • Provenance"
+  },
+  "https://in-toto.io/": {
+    "firstCheckedAt": "2026-09-01T19:59:03.693Z",
+    "lastCheckedAt": "2026-09-01T19:59:03.693Z",
+    "status": 200,
+    "finalUrl": "https://in-toto.io/",
+    "contentType": "text/html; charset=UTF-8",
+    "contentHash": "fe3ea3905923930e",
+    "title": "in-toto"
+  },
+  "https://owasp.org/www-community/attacks/Path_Traversal": {
+    "firstCheckedAt": "2026-09-01T19:59:03.796Z",
+    "lastCheckedAt": "2026-09-01T19:59:03.796Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-community/attacks/Path_Traversal",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "d654ba658566c210",
+    "title": "Path Traversal | OWASP Foundation"
+  },
+  "https://cwe.mitre.org/data/definitions/22.html": {
+    "firstCheckedAt": "2026-09-01T19:59:03.927Z",
+    "lastCheckedAt": "2026-09-01T19:59:03.927Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/22.html",
+    "contentType": "text/html",
+    "contentHash": "a853348c24ecf8b8",
+    "title": "CWE - CWE-22: Improper Limitation of a Pathname to a Restricted Directory (&#39;Path Traversal&#39;) (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/23.html": {
+    "firstCheckedAt": "2026-09-01T19:59:04.009Z",
+    "lastCheckedAt": "2026-09-01T19:59:04.009Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/23.html",
+    "contentType": "text/html",
+    "contentHash": "02bf20358b07be34",
+    "title": "CWE - CWE-23: Relative Path Traversal (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/36.html": {
+    "firstCheckedAt": "2026-09-01T19:59:04.215Z",
+    "lastCheckedAt": "2026-09-01T19:59:04.215Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/36.html",
+    "contentType": "text/html",
+    "contentHash": "7817b003216c75a6",
+    "title": "CWE - CWE-36: Absolute Path Traversal (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/59.html": {
+    "firstCheckedAt": "2026-09-01T19:59:04.452Z",
+    "lastCheckedAt": "2026-09-01T19:59:04.452Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/59.html",
+    "contentType": "text/html",
+    "contentHash": "d6dc3d2259da4cf0",
+    "title": "CWE - CWE-59: Improper Link Resolution Before File Access (&#39;Link Following&#39;) (4.20)"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/115/final": {
+    "firstCheckedAt": "2026-09-01T19:59:04.680Z",
+    "lastCheckedAt": "2026-09-01T19:59:04.680Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/115/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "f18eadcee654eef0",
+    "title": "SP 800-115, Technical Guide to Information Security Testing and Assessment | CSRC"
+  },
+  "https://docs.github.com/actions/security-guides/using-secrets-in-github-actions": {
+    "firstCheckedAt": "2026-09-01T19:59:04.805Z",
+    "lastCheckedAt": "2026-09-01T19:59:04.805Z",
+    "status": 200,
+    "finalUrl": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "b67cf6e8f2a3bc27",
+    "title": "Using secrets in GitHub Actions - GitHub Docs"
+  },
+  "https://cwe.mitre.org/data/definitions/636.html": {
+    "firstCheckedAt": "2026-09-01T19:59:04.947Z",
+    "lastCheckedAt": "2026-09-01T19:59:04.947Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/636.html",
+    "contentType": "text/html",
+    "contentHash": "6e1146adabccd572",
+    "title": "CWE - CWE-636: Not Failing Securely (&#39;Failing Open&#39;) (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/703.html": {
+    "firstCheckedAt": "2026-09-01T19:59:05.159Z",
+    "lastCheckedAt": "2026-09-01T19:59:05.159Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/703.html",
+    "contentType": "text/html",
+    "contentHash": "4e1e954cd07c542b",
+    "title": "CWE - CWE-703: Improper Check or Handling of Exceptional Conditions (4.20)"
+  },
+  "https://cwe.mitre.org/data/definitions/754.html": {
+    "firstCheckedAt": "2026-09-01T19:59:05.415Z",
+    "lastCheckedAt": "2026-09-01T19:59:05.415Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/754.html",
+    "contentType": "text/html",
+    "contentHash": "ad9cde3aa534d334",
+    "title": "CWE - CWE-754: Improper Check for Unusual or Exceptional Conditions (4.20)"
+  },
+  "https://owasp.org/Top10/A04_2021-Insecure_Design/": {
+    "firstCheckedAt": "2026-09-01T19:59:05.640Z",
+    "lastCheckedAt": "2026-09-01T19:59:05.640Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/Top10/A04_2021-Insecure_Design/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "96dd1647ad1d59fd",
+    "title": "Redirecting..."
+  },
+  "https://owasp.org/www-project-web-security-testing-guide/": {
+    "firstCheckedAt": "2026-09-01T19:59:05.695Z",
+    "lastCheckedAt": "2026-09-01T19:59:05.695Z",
+    "status": 200,
+    "finalUrl": "https://owasp.org/www-project-web-security-testing-guide/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "2bb7834e71add029",
+    "title": "OWASP Web Security Testing Guide | OWASP Foundation"
+  },
+  "https://www.cisecurity.org/controls": {
+    "firstCheckedAt": "2026-09-01T19:59:05.750Z",
+    "lastCheckedAt": "2026-09-01T19:59:05.750Z",
+    "status": 200,
+    "finalUrl": "https://www.cisecurity.org/controls",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "d8c062d6e5c82a19",
+    "title": "CIS Critical Security Controls"
+  },
+  "https://dora.dev/": {
+    "firstCheckedAt": "2026-09-01T19:59:06.334Z",
+    "lastCheckedAt": "2026-09-01T19:59:06.334Z",
+    "status": 200,
+    "finalUrl": "https://dora.dev/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "d23da56ac392b5f7",
+    "title": "DORA | Get Better at Getting Better"
+  },
+  "https://www.cs.virginia.edu/~evans/cs551/saltzer/": {
+    "firstCheckedAt": "2026-09-01T19:59:06.413Z",
+    "lastCheckedAt": "2026-09-01T19:59:06.413Z",
+    "status": 200,
+    "finalUrl": "https://www.cs.virginia.edu/~evans/cs551/saltzer/",
+    "contentType": "text/html",
+    "contentHash": "34881e03ff87b21d",
+    "title": "Saltzer and Schroeder, The Protection of Information in Computer Systems"
+  },
+  "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Product_Design_Cheat_Sheet.html": {
+    "firstCheckedAt": "2026-09-01T19:59:06.602Z",
+    "lastCheckedAt": "2026-09-01T19:59:06.602Z",
+    "status": 200,
+    "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Product_Design_Cheat_Sheet.html",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "25a4e1852b021155",
+    "title": "Secure Product Design - OWASP Cheat Sheet Series"
+  },
+  "https://martinfowler.com/bliki/CircuitBreaker.html": {
+    "firstCheckedAt": "2026-09-01T19:59:06.714Z",
+    "lastCheckedAt": "2026-09-01T19:59:06.714Z",
+    "status": 200,
+    "finalUrl": "https://martinfowler.com/bliki/CircuitBreaker.html",
+    "contentType": "text/html",
+    "contentHash": "73239948ec038874",
+    "title": "Circuit Breaker"
+  }
+}

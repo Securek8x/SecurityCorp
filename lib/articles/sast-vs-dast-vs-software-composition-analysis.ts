@@ -84,7 +84,7 @@ const sections: UniversalSections = {
   ],
   references: [
     "OWASP — Static Application Security Testing: https://owasp.org/www-community/Source_Code_Analysis_Tools",
-    "OWASP — Dynamic Application Security Testing: https://owasp.org/www-community/controls/Dynamic_Application_Security_Testing",
+    "OWASP DevSecOps Guideline — Dynamic Application Security Testing: https://owasp.org/www-project-devsecops-guideline/latest/02b-Dynamic-Application-Security-Testing",
     "OWASP Top 10:2021 — A06: Vulnerable and Outdated Components: https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/",
     "NIST SP 800-218 (Secure Software Development Framework): https://csrc.nist.gov/pubs/sp/800/218/final",
     "CWE — Common Weakness Enumeration: https://cwe.mitre.org/",

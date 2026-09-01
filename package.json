@@ -19,7 +19,8 @@
     "guard:release": "node scripts/check-release-guard.ts",
     "audit:knowledge-tags": "node scripts/audit-knowledge-tags.ts",
     "check:public-terms": "node scripts/check-prohibited-public-terms.ts",
-    "check:privacy-leak-gate": "node scripts/check-privacy-leak-gate.ts"
+    "check:privacy-leak-gate": "node scripts/check-privacy-leak-gate.ts",
+    "check:citations": "node scripts/check-citations.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

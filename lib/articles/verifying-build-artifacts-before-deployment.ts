@@ -87,7 +87,7 @@ const sections: UniversalSections = {
     "NIST SP 800-218, Secure Software Development Framework (SSDF): https://csrc.nist.gov/pubs/sp/800/218/final",
     "SLSA (Supply-chain Levels for Software Artifacts) specification, build provenance requirements: https://slsa.dev/spec/v1.0/provenance",
     "in-toto framework, for cryptographically linking build steps and attestations to a supply chain: https://in-toto.io/",
-    "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/resources-tools/resources/defending-continuous-integrationcontinuous-delivery-cicd-environments",
+    "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     "NIST SP 800-53 Rev. 5, control SI-7, Software, Firmware, and Information Integrity: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
   ],
   relatedSlugs: ["least-privilege-for-pipeline-identities", "build-runners-untrusted", "sboms-what-they-solve", "dependency-confusion-package-trust"],
