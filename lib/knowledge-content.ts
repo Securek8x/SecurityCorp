@@ -7,6 +7,7 @@ import { isPubliclyVisible } from "./knowledge-schema.ts";
 import type { UniversalSections, ContentModule } from "./knowledge-content-types.ts";
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
 import type { ArticleClaim } from "./claim-ledger.ts";
+import type { FreshnessMeta } from "./content-freshness.ts";
 import { article as networkTrustBoundaries } from "./articles/network-trust-boundaries.ts";
 import { article as threatModelingCicdPipeline } from "./articles/threat-modeling-cicd-pipeline.ts";
 import { article as securingApiAuth } from "./articles/securing-api-authentication-authorization.ts";
@@ -47,6 +48,10 @@ export type KnowledgeArticle = {
    * verifiable claim should populate it rather than relying solely on the
    * free-text `sections.references` list. */
   claims?: ArticleClaim[];
+  /** Freshness and applicability metadata (lib/content-freshness.ts, Bead
+   * securitycorp-source-9vn) — optional. Absent on every article in this
+   * catalog today; new/updated articles should populate it going forward. */
+  freshness?: FreshnessMeta;
 };
 
 export const knowledgeArticles: KnowledgeArticle[] = [

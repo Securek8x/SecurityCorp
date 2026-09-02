@@ -5,6 +5,7 @@ import { findKnowledgeArticle } from "@/lib/knowledge-content";
 import { pillarById, categoryById } from "@/lib/taxonomy";
 import { tagLabel } from "@/lib/knowledge-tags";
 import type { ContentModule } from "@/lib/knowledge-content-types";
+import { computeReviewDue, getFreshnessStatus } from "@/lib/content-freshness";
 import { InteractiveFlowDiagram } from "@/components/diagrams/interactive-flow-diagram";
 import { ArticleToc } from "@/components/article-toc";
 import { HeadingLink } from "@/components/heading-link";
@@ -26,6 +27,13 @@ const EVIDENCE_LABEL: Record<string, string> = {
   VALIDATED: "VALIDATED",
   "DESIGN ONLY": "DESIGN ONLY",
   UNVERIFIED: "UNVERIFIED",
+};
+
+// Only "stale"/"overdue" surface to readers — "fresh" and "due-soon" are
+// not worth a visible label (see knowledge-article-shell rendering below).
+const FRESHNESS_LABEL: Record<string, string> = {
+  stale: "Review due",
+  overdue: "Review overdue",
 };
 
 /** One entry in the numbered section list — same shell/typography the guide
@@ -180,7 +188,10 @@ function moduleBlocks(module: ContentModule | undefined): Block[] {
 }
 
 export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }) {
-  const { meta, sections, module } = article;
+  const { meta, sections, module, freshness } = article;
+  const freshnessStatus = freshness
+    ? getFreshnessStatus(freshness, computeReviewDue(freshness, meta.lastReviewedAt, meta.publishedAt))
+    : undefined;
   const pillar = pillarById.get(meta.pillar);
   const category = categoryById.get(meta.primaryCategory);
   const related = (sections.relatedSlugs ?? []).map(findKnowledgeArticle).filter((a): a is KnowledgeArticle => Boolean(a));
@@ -228,7 +239,15 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             <span>{meta.estimatedReadingMinutes} min read</span>
             <span>{meta.difficulty}</span>
             <span>{EVIDENCE_LABEL[meta.evidenceState]}</span>
+            {freshnessStatus && FRESHNESS_LABEL[freshnessStatus] && <span>{FRESHNESS_LABEL[freshnessStatus]}</span>}
           </div>
+          {freshness && (freshness.appliesTo?.length || freshness.testedWith?.length) ? (
+            <p className="section-label">
+              {freshness.appliesTo?.length ? `Applies to: ${freshness.appliesTo.join(", ")}` : null}
+              {freshness.appliesTo?.length && freshness.testedWith?.length ? " · " : null}
+              {freshness.testedWith?.length ? `Tested with: ${freshness.testedWith.join(", ")}` : null}
+            </p>
+          ) : null}
           {meta.tags.length > 0 && (
             <div className="tags">
               {meta.tags.map((t) => (
