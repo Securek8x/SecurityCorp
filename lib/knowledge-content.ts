@@ -38,6 +38,7 @@ import { article as dockerToK3sMigrationZeroChange } from "./articles/docker-to-
 import { article as dockerSockMountingSecurityRisks } from "./articles/docker-sock-mounting-security-risks.ts";
 import { article as secureInternalReverseProxyDesign } from "./articles/secure-internal-reverse-proxy-design.ts";
 import { article as logsAreNotProofVerifyingAutomatedActions } from "./articles/logs-are-not-proof-verifying-automated-actions.ts";
+import { article as hardeningPrivateGiteaServer } from "./articles/hardening-a-private-gitea-server.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -181,6 +182,7 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   secureInternalReverseProxyDesign,
   dockerSockMountingSecurityRisks,
   logsAreNotProofVerifyingAutomatedActions,
+  hardeningPrivateGiteaServer,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
