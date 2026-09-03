@@ -5,6 +5,60 @@
 // review, per docs/knowledge-base.md.
 import type { KnowledgeArticle } from "../knowledge-content.ts";
 import type { UniversalSections, GuideModule } from "../knowledge-content-types.ts";
+import type { ArticleVisual } from "../article-visuals.ts";
+
+// Cover visual brief (Bead s41.9 pilot) — generation-ready, not yet an
+// asset (no image-generation capability installed; see docs/article-
+// visual-guidelines.md). This article is already status:"published"
+// (reviewed 2026-08-30) — this brief only adds cover-visual infrastructure
+// to it, it does not touch content or review state. Specific to the
+// article's actual thesis (detectable vs. context-dependent/derived
+// secrets), not a generic "secrets scanning" or padlock image.
+const coverImage: ArticleVisual = {
+  stage: "brief",
+  visualType: "cover",
+  alt: "A grid of small glyphs in cyan, most rendered sharp and flagged with a thin bracket, a few rendered refracted and unbracketed among them, indistinguishable in shape from the flagged ones at a glance",
+  caption: "Some of these were caught. Some were never shaped like something a scanner recognizes.",
+  purpose: "Make the false-negative gap (a real secret the scanner never flags) visually felt before the prose defines it — the two categories must look genuinely hard to tell apart, not obviously different.",
+  width: 1600,
+  height: 900,
+  brief: {
+    articleSlug: "secrets-detection-scanner-limits",
+    readerTakeaway: "A scanner catches recognizable, high-entropy formats — it does not catch a secret that's context-dependent, derived at runtime, or otherwise shaped differently, and those look the same as safe values at a glance.",
+    whyThisHelps: "The article's core distinction (false negative vs. false positive, and why fixing one doesn't fix the other) is abstract in prose — a grid where the \"missed\" items are deliberately NOT visually obvious makes the actual risk (you can't eyeball which is which) concrete.",
+    visualType: "cover",
+    placement: "After the lead paragraph, before the prerequisites box — the shared article-shell cover slot.",
+    mustShow: [
+      "A grid or loose scatter of 15-25 small abstract glyph/token shapes, uniform in general size",
+      "Most glyphs rendered sharp/solid with a thin bracket or tick mark beside them (representing scanner-flagged)",
+      "A minority of glyphs (roughly 3-5) rendered with a subtle refraction/distortion effect and NO bracket — but critically, similar enough in base shape to the flagged ones that they don't visually announce themselves",
+      "Deep-navy field, restrained cyan for flagged glyphs, a muted violet for the unflagged/refracted ones",
+    ],
+    mustNotShow: [
+      "Any text, actual credential-shaped strings, code syntax, or recognizable token formats (no 'sk-', 'AKIA', or similar real-looking prefixes)",
+      "A padlock, shield, magnifying glass, or checkmark/X icon set used as literal scanner-result shorthand",
+      "A hooded figure, terminal window, or stock hacker imagery",
+      "Any real credential, API key format, or infrastructure identifier — this is the one brief in this pilot where that risk is most literal, given the subject matter",
+    ],
+    factualClaims: [
+      {
+        claim: "Regex/entropy-based scanners reliably catch recognizable, high-entropy secret formats and reliably miss context-dependent or low-entropy secrets — a false negative and a false positive are different failure modes requiring different fixes.",
+        source: "This article's own executiveSummary and whatYouWillLearn (lib/articles/secrets-detection-scanner-limits.ts), already published and reviewed 2026-08-30.",
+      },
+    ],
+    compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Grid or loose scatter, not a strict rigid table — should read as texture/field at a glance, not as a literal spreadsheet.",
+    mobileCropNotes: "Center-crop to a denser sub-cluster of ~8-10 glyphs under 480px, keeping at least one unflagged glyph visible and non-obvious in the crop.",
+    exportFormats: ["avif", "webp"],
+    sizeBudgetKb: 200,
+  },
+  provenance: {
+    source: "brief-only",
+    createdAt: "2026-09-03",
+    license: "site-original-all-rights-reserved",
+    editableSourceRef: "this coverImage.brief record",
+    reviewStatus: "pending",
+  },
+};
 
 const sections: UniversalSections = {
   executiveSummary: [
@@ -233,4 +287,5 @@ export const article: KnowledgeArticle = {
   sections,
   module: module_,
   diagram,
+  coverImage,
 };

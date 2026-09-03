@@ -14,6 +14,60 @@
 import type { KnowledgeArticle } from "../knowledge-content.ts";
 import type { GuideModule } from "../knowledge-content-types.ts";
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
+import type { ArticleVisual } from "../article-visuals.ts";
+
+// Cover visual brief (Bead s41.9 pilot) — generation-ready, not yet an
+// asset (no image-generation capability installed; see docs/article-
+// visual-guidelines.md). Specific to this article's actual thesis
+// (layered gates, not one approval) rather than a generic "code review"
+// or "git" image — the multi-layer-then-trunk composition is the one
+// required idea, deliberately distinct from the existing diagram's
+// precise technical layer labels.
+const coverImage: ArticleVisual = {
+  stage: "brief",
+  visualType: "cover",
+  alt: "Several converging paths passing through three sequential translucent gates before reaching a single cyan trunk line, with one shortcut path visibly stopped at the final gate",
+  caption: "One approval is a layer. It is not the whole gate.",
+  purpose: "Establish, before the prose, that this article is about a layered gate — not a single checkbox — so the 'required review is necessary but not sufficient' thesis lands with less friction.",
+  width: 1600,
+  height: 900,
+  brief: {
+    articleSlug: "protecting-main-branch-beyond-pr-approval",
+    readerTakeaway: "A defensible main-branch control is several layers working together, not any single one of them — including the review-approval layer alone.",
+    whyThisHelps: "The article's own framing (\"required review is necessary but not sufficient\") is easy to nod along to in prose without feeling why — a visual showing a shortcut genuinely failing at a specific later layer makes the gap concrete.",
+    visualType: "cover",
+    placement: "After the lead paragraph, before the prerequisites box — the shared article-shell cover slot.",
+    mustShow: [
+      "Multiple (three or four) converging paths, representing different proposed changes",
+      "A sequence of at least two distinct translucent/geometric gate structures the paths must pass through in order, before reaching one trunk line",
+      "One path shown diverging toward a shortcut around the gates, visibly intercepted/stopped at the last gate rather than reaching the trunk",
+      "Deep-navy field with restrained cyan for the successful trunk path and a muted violet or amber for the intercepted shortcut",
+    ],
+    mustNotShow: [
+      "Any text, labels, GitHub/GitLab/platform logos, or literal UI chrome (buttons, checkmarks, PR numbers)",
+      "A padlock, shield, or checkmark icon used as shorthand for \"security\"",
+      "A hooded figure or any stock hacker imagery",
+      "Any real repository name, username, or organization identifier",
+    ],
+    factualClaims: [
+      {
+        claim: "Required review alone does not prevent a later commit, a force-push history rewrite, or a privileged bypass — a layered combination (required review, required status checks bound to the exact commit, and ruleset enforcement with no bypass list) is what actually closes those gaps.",
+        source: "This article's own keyTakeaways and mainContent (lib/articles/protecting-main-branch-beyond-pr-approval.ts), citing GitHub Docs on protected branches and rulesets.",
+      },
+    ],
+    compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Read left-to-right like the site's existing interactive diagrams, but purely atmospheric/geometric — no node labels, distinct from the article's own precise technical diagram further down the page.",
+    mobileCropNotes: "Center-crop to the final gate and the trunk/intercepted-shortcut split under 480px — that's the one moment the composition can't lose.",
+    exportFormats: ["avif", "webp"],
+    sizeBudgetKb: 200,
+  },
+  provenance: {
+    source: "brief-only",
+    createdAt: "2026-09-03",
+    license: "site-original-all-rights-reserved",
+    editableSourceRef: "this coverImage.brief record",
+    reviewStatus: "pending",
+  },
+};
 
 const diagram: FlowDiagramSpec = {
   titleId: "main-branch-protection-diagram",
@@ -253,4 +307,5 @@ export const article: KnowledgeArticle = {
   },
   module: module_,
   diagram,
+  coverImage,
 };

@@ -3,8 +3,8 @@
 // needs. Keeps full article bodies out of the catalog/browser payload and
 // keeps filtering logic in one place shared by /knowledge, pillar pages,
 // and category pages.
-import { publishedKnowledgeArticles } from "./knowledge-content.ts";
-import type { KnowledgeArticleMeta, ContentType, Difficulty, EvidenceState, Audience } from "./knowledge-schema.ts";
+import { publishedKnowledgeArticles, type KnowledgeArticle } from "./knowledge-content.ts";
+import type { ContentType, Difficulty, EvidenceState, Audience } from "./knowledge-schema.ts";
 import type { CategoryId, PillarId } from "./taxonomy.ts";
 
 export type KnowledgeCatalogCard = {
@@ -19,9 +19,14 @@ export type KnowledgeCatalogCard = {
   audience: Audience[];
   tags: string[];
   estimatedReadingMinutes: number;
+  /** Only set once the article's coverImage has a real asset (stage
+   * "asset"/"reviewed") — a "brief"-stage cover has no file to show yet,
+   * so the card renders exactly as it does today (Bead s41.9-12 pilot). */
+  thumbnail?: { src: string; alt: string };
 };
 
-function toCard(meta: KnowledgeArticleMeta): KnowledgeCatalogCard {
+function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
+  const { meta, coverImage } = article;
   return {
     slug: meta.slug,
     title: meta.title,
@@ -34,11 +39,12 @@ function toCard(meta: KnowledgeArticleMeta): KnowledgeCatalogCard {
     audience: meta.audience,
     tags: meta.tags,
     estimatedReadingMinutes: meta.estimatedReadingMinutes,
+    thumbnail: coverImage && coverImage.stage !== "brief" && coverImage.src ? { src: coverImage.src, alt: coverImage.alt } : undefined,
   };
 }
 
 export function allCatalogCards(): KnowledgeCatalogCard[] {
-  return publishedKnowledgeArticles.map((a) => toCard(a.meta));
+  return publishedKnowledgeArticles.map(toCard);
 }
 
 export function cardsForPillar(pillar: PillarId): KnowledgeCatalogCard[] {

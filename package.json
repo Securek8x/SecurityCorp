@@ -22,7 +22,8 @@
     "check:privacy-leak-gate": "node scripts/check-privacy-leak-gate.ts",
     "check:citations": "node scripts/check-citations.ts",
     "check:security-txt": "node scripts/check-security-txt-expiry.ts",
-    "check:route-integrity": "node scripts/check-route-integrity.ts"
+    "check:route-integrity": "node scripts/check-route-integrity.ts",
+    "check:article-visuals": "node scripts/check-article-visuals.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

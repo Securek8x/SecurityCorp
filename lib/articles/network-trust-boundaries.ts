@@ -7,6 +7,61 @@
 // port, topology, or configuration appears anywhere in this file.
 import type { KnowledgeArticle } from "../knowledge-content.ts";
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
+import type { ArticleVisual } from "../article-visuals.ts";
+
+// Cover visual brief (Bead s41.9 pilot) — generation-ready, not yet an
+// asset: this repo has no working image-generation capability installed
+// (see docs/article-visual-guidelines.md). Specific to this article's own
+// thesis (segmentation vs. isolation as materially different boundary
+// strengths), not a generic "network security" image — the differential
+// boundary treatment IS the brief's one required idea.
+const coverImage: ArticleVisual = {
+  stage: "brief",
+  visualType: "cover",
+  alt: "Four adjacent zones in a deep-navy field, connected by cyan paths of varying visible strength — one zone sealed behind a solid violet ring with no path reaching it directly",
+  caption: "Not every boundary here is the same strength — one path never exists at all.",
+  purpose:
+    "Let a reader register, before reading a word, that not every boundary in this article is the same strength — foreshadowing the segmentation-vs-isolation distinction the article's thesis depends on.",
+  width: 1600,
+  height: 900,
+  brief: {
+    articleSlug: "understanding-network-trust-boundaries",
+    readerTakeaway: "Boundaries between zones are not uniform — some permit controlled traffic, one permits none at all, and the difference is deliberate, not decorative.",
+    whyThisHelps:
+      "The article's central move is distinguishing segmentation (controlled paths) from isolation (no path) — a purely textual intro doesn't let a reader feel that difference before the prose explains it.",
+    visualType: "cover",
+    placement: "After the lead paragraph, before the prerequisites box — the shared article-shell cover slot.",
+    mustShow: [
+      "Four distinct zones/nodes, arranged left-to-right or in a simple flow, each visually equal in size/weight (no zone drawn as more \"important\" than another)",
+      "Cyan connecting paths between three of the zones, varying in visible thickness/opacity to suggest different traffic volumes",
+      "One zone (representing the admin plane) fully enclosed by a solid violet/purple boundary ring with zero connecting paths crossing it",
+      "Deep-navy background consistent with the site's existing hero/diagram palette",
+    ],
+    mustNotShow: [
+      "Any text, labels, tier names, or protocol/port numbers",
+      "A literal firewall icon, padlock, or shield — those are the generic imagery this brief exists to avoid",
+      "A hooded figure, screen-full-of-code, or any stock hacker imagery",
+      "Any real hostname, IP address, or company/product identifier",
+    ],
+    factualClaims: [
+      {
+        claim: "Segmentation permits controlled paths between zones; isolation removes the path entirely — these are materially different, not degrees of the same control.",
+        source: "This article's own \"Segmentation versus isolation\" section (lib/articles/network-trust-boundaries.ts mainContent).",
+      },
+    ],
+    compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Horizontal flow, generous negative space — calm operations-console feel, not busy or noisy. Restrained cyan/violet accents only, per DESIGN.md.",
+    mobileCropNotes: "Center-crop to the two rightmost zones (including the sealed one) under 480px — the sealed-zone contrast is the one idea that must survive any crop.",
+    exportFormats: ["avif", "webp"],
+    sizeBudgetKb: 200,
+  },
+  provenance: {
+    source: "brief-only",
+    createdAt: "2026-09-03",
+    license: "site-original-all-rights-reserved",
+    editableSourceRef: "this coverImage.brief record",
+    reviewStatus: "pending",
+  },
+};
 
 export const article: KnowledgeArticle = {
   meta: {
@@ -128,6 +183,7 @@ export const article: KnowledgeArticle = {
     ],
   },
   diagram: buildDiagram(),
+  coverImage,
 };
 
 function buildDiagram(): FlowDiagramSpec {

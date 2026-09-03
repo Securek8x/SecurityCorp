@@ -10,6 +10,7 @@ import { InteractiveFlowDiagram } from "@/components/diagrams/interactive-flow-d
 import { ArticleToc } from "@/components/article-toc";
 import { HeadingLink } from "@/components/heading-link";
 import { ShareButton } from "@/components/share-button";
+import { ArticleFigure } from "@/components/article-figure";
 
 const CONTENT_TYPE_LABEL: Record<string, string> = {
   guide: "Guide",
@@ -259,6 +260,18 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
         </header>
 
         {lead && <p className="lead">{renderInline(lead)}</p>}
+
+        {article.coverImage && article.coverImage.stage !== "brief" && article.coverImage.src && (
+          <ArticleFigure
+            src={article.coverImage.src}
+            alt={article.coverImage.alt}
+            caption={article.coverImage.caption}
+            credit={article.coverImage.credit}
+            width={article.coverImage.width}
+            height={article.coverImage.height}
+            presentation="wide"
+          />
+        )}
 
         {sections.prerequisites && sections.prerequisites.length > 0 && (
           <aside className="prereq-box" aria-labelledby="prereq-heading">

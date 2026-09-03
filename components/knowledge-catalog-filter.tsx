@@ -190,6 +190,9 @@ export function KnowledgeCatalogFilter({ cards }: { cards: KnowledgeCatalogCard[
         <section className="guide-index">
           {filtered.map((c) => (
             <Link href={`/knowledge/${c.slug}/`} className="guide-card record-trace clip-corner-sm" key={c.slug}>
+              {/* alt="" deliberately: the card's own <h2> already gives the same link an accessible name, so the thumbnail here is redundant/decorative — the meaningful alt text lives on the full-size cover (ArticleFigure) in the article itself. */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- next.config.ts sets images.unoptimized:true (static export); matches the plain-<img> convention used throughout this codebase. */}
+              {c.thumbnail && <img src={c.thumbnail.src} alt="" className="guide-card-thumb" width={400} height={225} loading="lazy" decoding="async" />}
               <div className="article-meta">
                 <span>{CONTENT_TYPE_LABEL[c.contentType]}</span>
                 <span>{categoryById.get(c.category)?.name}</span>

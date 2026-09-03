@@ -8,6 +8,7 @@ import type { UniversalSections, ContentModule } from "./knowledge-content-types
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
 import type { ArticleClaim } from "./claim-ledger.ts";
 import type { FreshnessMeta } from "./content-freshness.ts";
+import type { ArticleVisual } from "./article-visuals.ts";
 import { article as networkTrustBoundaries } from "./articles/network-trust-boundaries.ts";
 import { article as threatModelingCicdPipeline } from "./articles/threat-modeling-cicd-pipeline.ts";
 import { article as securingApiAuth } from "./articles/securing-api-authentication-authorization.ts";
@@ -65,6 +66,14 @@ export type KnowledgeArticle = {
    * securitycorp-source-9vn) — optional. Absent on every article in this
    * catalog today; new/updated articles should populate it going forward. */
   freshness?: FreshnessMeta;
+  /** Cover/hero visual and its full provenance record (lib/article-
+   * visuals.ts, Bead securitycorp-source-s41.9-12 pilot) — optional
+   * during the migration period (VISUAL_GATE_ENABLED is false). May sit
+   * at stage "brief" (a complete generation-ready brief, no asset file
+   * yet — this repo has no working image-generation capability
+   * installed; see docs/article-visual-guidelines.md) or "asset"/
+   * "reviewed" once a real file exists. */
+  coverImage?: ArticleVisual;
 };
 
 export const knowledgeArticles: KnowledgeArticle[] = [
