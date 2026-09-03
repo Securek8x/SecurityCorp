@@ -814,3 +814,33 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
   .hero::before{animation:none}
   .project-card:hover,.project-card:focus-within{transform:none}
 }
+/* Print stylesheet (securitycorp-source-1ng). Scoped to article/guide pages
+   (.article-page) — the rest of the site (homepage, catalog) has no
+   printable-content requirement. Forces the light monochrome palette
+   regardless of the active theme, since --diagram-* tokens derive from the
+   base palette via var() and cascade automatically once the base tokens
+   are overridden here — no separate diagram-color rules needed. */
+@media print{
+  :root{
+    --paper:#fff;--ink:#000;--muted:#333;--line:#999;--surface-raised:#fff;
+    --acid:#000;--primary-hover:#000;--accent2:#333;--go:#333;--warn:#333;--danger:#333;
+    --code-background:#fff;--code-foreground:#000;
+  }
+  body{background:#fff;color:#000}
+  .site-header,#site-nav,.nav-toggle-input,.nav-toggle-label,.skip-link,footer,
+  .toc,.heading-link-btn,.share-btn,.article-pager,.diagram-controls,
+  .diagram-explore-panel,.theme-toggle,.article-page>.back,.related-grid,
+  .flow-packet{display:none!important}
+  .article-page{padding:0;max-width:none}
+  .article-page article{max-width:none}
+  .article-page header{border-top-color:#000}
+  .article-page h1{font-size:28px;margin:12px 0}
+  .article-page article>section{grid-template-columns:1fr;gap:8px;margin:24px 0;break-inside:avoid-page}
+  .article-page section h2{font-size:19px;margin:0 0 10px;break-after:avoid-page}
+  .article-page section p{font-size:12px;line-height:1.5}
+  .article-page pre{white-space:pre-wrap;border:1px solid #999;background:#f5f5f5;color:#000;break-inside:avoid-page}
+  .article-page article table{break-inside:avoid-page}
+  .article-page article th,.article-page article td{border-color:#999}
+  .byline{border-color:#999;color:#333}
+  a{color:#000;text-decoration:underline}
+}
