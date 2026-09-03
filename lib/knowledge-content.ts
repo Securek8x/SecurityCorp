@@ -32,6 +32,9 @@ import { article as designingSecurityTestsForFailure } from "./articles/designin
 import { article as commonCausesNetworkExposure } from "./articles/common-causes-of-unexpected-network-exposure.ts";
 import { article as humanApprovalGatesProductionChanges } from "./articles/designing-human-approval-gates-for-production-changes.ts";
 import { article as failClosedSecurityAutomation } from "./articles/designing-fail-closed-security-automation.ts";
+import { article as backupRestorationVerification } from "./articles/backup-restoration-verification.ts";
+import { article as humanApprovalGatesForAiAgents } from "./articles/human-approval-gates-for-ai-agents.ts";
+import { article as dockerToK3sMigrationZeroChange } from "./articles/docker-to-k3s-migration-zero-change.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -169,6 +172,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   commonCausesNetworkExposure,
   humanApprovalGatesProductionChanges,
   failClosedSecurityAutomation,
+  backupRestorationVerification,
+  humanApprovalGatesForAiAgents,
+  dockerToK3sMigrationZeroChange,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
