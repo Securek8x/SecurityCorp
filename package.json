@@ -21,7 +21,8 @@
     "check:public-terms": "node scripts/check-prohibited-public-terms.ts",
     "check:privacy-leak-gate": "node scripts/check-privacy-leak-gate.ts",
     "check:citations": "node scripts/check-citations.ts",
-    "check:security-txt": "node scripts/check-security-txt-expiry.ts"
+    "check:security-txt": "node scripts/check-security-txt-expiry.ts",
+    "check:route-integrity": "node scripts/check-route-integrity.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
