@@ -35,6 +35,9 @@ import { article as failClosedSecurityAutomation } from "./articles/designing-fa
 import { article as backupRestorationVerification } from "./articles/backup-restoration-verification.ts";
 import { article as humanApprovalGatesForAiAgents } from "./articles/human-approval-gates-for-ai-agents.ts";
 import { article as dockerToK3sMigrationZeroChange } from "./articles/docker-to-k3s-migration-zero-change.ts";
+import { article as dockerSockMountingSecurityRisks } from "./articles/docker-sock-mounting-security-risks.ts";
+import { article as secureInternalReverseProxyDesign } from "./articles/secure-internal-reverse-proxy-design.ts";
+import { article as logsAreNotProofVerifyingAutomatedActions } from "./articles/logs-are-not-proof-verifying-automated-actions.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -175,6 +178,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   backupRestorationVerification,
   humanApprovalGatesForAiAgents,
   dockerToK3sMigrationZeroChange,
+  secureInternalReverseProxyDesign,
+  dockerSockMountingSecurityRisks,
+  logsAreNotProofVerifyingAutomatedActions,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
