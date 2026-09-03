@@ -104,7 +104,7 @@ const sections: UniversalSections = {
     "k3s documentation — Basic Network Options (NetworkPolicy controller and --disable-network-policy): https://docs.k3s.io/networking/basic-network-options",
     "Docker Compose documentation — Networking (default per-project network behavior): https://docs.docker.com/compose/how-tos/networking/",
   ],
-  relatedSlugs: ["segmentation-vs-isolation", "network-trust-boundaries", "designing-fail-closed-security-automation"],
+  relatedSlugs: ["segmentation-vs-isolation", "understanding-network-trust-boundaries", "designing-fail-closed-security-automation"],
 };
 
 const module_: DeepDiveModule = {

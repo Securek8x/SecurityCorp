@@ -1,5 +1,5 @@
-import { articles } from "@/lib/content";
-import { publishedKnowledgeArticles } from "@/lib/knowledge-content";
+import { articles } from "./content.ts";
+import { publishedKnowledgeArticles } from "./knowledge-content.ts";
 
 const siteUrl = "https://securitycorp.net";
 
