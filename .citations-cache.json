@@ -1,7 +1,7 @@
 {
   "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Code_Review_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:38.324Z",
-    "lastCheckedAt": "2026-09-03T17:15:18.246Z",
+    "lastCheckedAt": "2026-09-04T00:59:12.093Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Code_Review_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -10,7 +10,7 @@
   },
   "https://owasp.org/www-project-code-review-guide/": {
     "firstCheckedAt": "2026-09-01T20:04:38.480Z",
-    "lastCheckedAt": "2026-09-03T17:15:18.498Z",
+    "lastCheckedAt": "2026-09-04T00:59:12.298Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-project-code-review-guide/",
     "contentType": "text/html; charset=utf-8",
@@ -19,43 +19,43 @@
   },
   "https://csrc.nist.gov/pubs/sp/800/218/final": {
     "firstCheckedAt": "2026-09-01T20:04:38.796Z",
-    "lastCheckedAt": "2026-09-03T17:15:18.706Z",
+    "lastCheckedAt": "2026-09-04T00:59:12.497Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/218/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "40aa47e574ea2448",
+    "contentHash": "5d9a67505bf9ecb7",
     "title": "SP 800-218, Secure Software Development Framework (SSDF) Version 1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities | CSRC"
   },
   "https://csrc.nist.gov/pubs/sp/800/207/final": {
     "firstCheckedAt": "2026-09-01T20:04:38.991Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.072Z",
+    "lastCheckedAt": "2026-09-04T00:59:13.845Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/207/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "6a3bd7169082a711",
+    "contentHash": "a178a6e499fdc206",
     "title": "SP 800-207, Zero Trust Architecture | CSRC"
   },
   "https://csrc.nist.gov/pubs/sp/800/41/r1/final": {
     "firstCheckedAt": "2026-09-01T20:04:39.062Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.416Z",
+    "lastCheckedAt": "2026-09-04T00:59:14.077Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/41/r1/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "b32157af11e786a7",
+    "contentHash": "be9ec4ef6dc80b9c",
     "title": "SP 800-41 Rev. 1, Guidelines on Firewalls and Firewall Policy | CSRC"
   },
   "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final": {
     "firstCheckedAt": "2026-09-01T20:04:39.134Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.531Z",
+    "lastCheckedAt": "2026-09-04T00:59:14.278Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "c74fff60b94bcaad",
+    "contentHash": "ea78765fc5cda26b",
     "title": "SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations | CSRC"
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:39.208Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.643Z",
+    "lastCheckedAt": "2026-09-04T00:59:14.457Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -64,7 +64,7 @@
   },
   "https://slsa.dev/": {
     "firstCheckedAt": "2026-09-01T20:04:39.357Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.735Z",
+    "lastCheckedAt": "2026-09-04T00:59:14.543Z",
     "status": 200,
     "finalUrl": "https://slsa.dev/",
     "contentType": "text/html; charset=UTF-8",
@@ -73,16 +73,16 @@
   },
   "https://owasp.org/www-project-top-10-ci-cd-security-risks/": {
     "firstCheckedAt": "2026-09-01T20:04:39.498Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.858Z",
+    "lastCheckedAt": "2026-09-04T00:59:14.916Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-project-top-10-ci-cd-security-risks/",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "4376648aa89d65d7",
+    "contentHash": "406b5c5b86ed1699",
     "title": "OWASP Top 10 CI/CD Security Risks | OWASP Foundation"
   },
   "https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd": {
     "firstCheckedAt": "2026-09-01T20:04:39.845Z",
-    "lastCheckedAt": "2026-09-03T17:15:19.959Z",
+    "lastCheckedAt": "2026-09-04T00:59:15.009Z",
     "status": 200,
     "finalUrl": "https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     "contentType": "text/html; charset=utf-8",
@@ -91,7 +91,7 @@
   },
   "https://owasp.org/www-project-api-security/": {
     "firstCheckedAt": "2026-09-01T20:04:39.977Z",
-    "lastCheckedAt": "2026-09-03T17:15:20.264Z",
+    "lastCheckedAt": "2026-09-04T00:59:15.261Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-project-api-security/",
     "contentType": "text/html; charset=utf-8",
@@ -100,7 +100,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc6749": {
     "firstCheckedAt": "2026-09-01T20:04:40.142Z",
-    "lastCheckedAt": "2026-09-03T17:15:20.493Z",
+    "lastCheckedAt": "2026-09-04T00:59:15.353Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc6749/",
     "contentType": "text/html;charset=utf-8",
@@ -109,7 +109,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc6750": {
     "firstCheckedAt": "2026-09-01T20:04:40.376Z",
-    "lastCheckedAt": "2026-09-03T17:15:20.698Z",
+    "lastCheckedAt": "2026-09-04T00:59:15.548Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc6750/",
     "contentType": "text/html;charset=utf-8",
@@ -118,7 +118,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc7519": {
     "firstCheckedAt": "2026-09-01T20:04:40.508Z",
-    "lastCheckedAt": "2026-09-03T17:15:20.860Z",
+    "lastCheckedAt": "2026-09-04T00:59:16.043Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc7519/",
     "contentType": "text/html;charset=utf-8",
@@ -127,7 +127,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc9068": {
     "firstCheckedAt": "2026-09-01T20:04:40.591Z",
-    "lastCheckedAt": "2026-09-03T17:15:20.979Z",
+    "lastCheckedAt": "2026-09-04T00:59:16.521Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc9068/",
     "contentType": "text/html;charset=utf-8",
@@ -136,34 +136,34 @@
   },
   "https://pages.nist.gov/800-63-3/sp800-63b.html": {
     "firstCheckedAt": "2026-09-01T20:04:40.703Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.071Z",
+    "lastCheckedAt": "2026-09-04T00:59:16.965Z",
     "status": 200,
     "finalUrl": "https://pages.nist.gov/800-63-3/sp800-63b.html",
     "contentType": "text/html",
-    "contentHash": "ef2b82967b38c0cb",
+    "contentHash": "9c56bdf90c1c26cd",
     "title": "NIST Special Publication 800-63B"
   },
   "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches": {
     "firstCheckedAt": "2026-09-01T20:04:40.919Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.296Z",
+    "lastCheckedAt": "2026-09-04T00:59:17.296Z",
     "status": 200,
     "finalUrl": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "c7f15ca11ef2b414",
+    "contentHash": "915d2c8c15ee6c24",
     "title": "About protected branches - GitHub Docs"
   },
   "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets": {
     "firstCheckedAt": "2026-09-01T20:04:41.006Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.375Z",
+    "lastCheckedAt": "2026-09-04T00:59:17.799Z",
     "status": 200,
     "finalUrl": "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "5cacb43d811a8d5a",
+    "contentHash": "f35bc284342dc643",
     "title": "About rulesets - GitHub Docs"
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:41.074Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.443Z",
+    "lastCheckedAt": "2026-09-04T00:59:19.057Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -172,7 +172,7 @@
   },
   "https://cwe.mitre.org/data/definitions/798.html": {
     "firstCheckedAt": "2026-09-01T20:04:41.343Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.628Z",
+    "lastCheckedAt": "2026-09-04T00:59:19.210Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/798.html",
     "contentType": "text/html",
@@ -181,34 +181,34 @@
   },
   "https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning": {
     "firstCheckedAt": "2026-09-01T20:04:41.564Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.832Z",
+    "lastCheckedAt": "2026-09-04T00:59:19.412Z",
     "status": 200,
     "finalUrl": "https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "742d76cbe2900431",
+    "contentHash": "f57970eda4353eee",
     "title": "Secret scanning - GitHub Docs"
   },
   "https://github.com/trufflesecurity/trufflehog": {
     "firstCheckedAt": "2026-09-01T20:04:41.713Z",
-    "lastCheckedAt": "2026-09-03T17:15:21.987Z",
+    "lastCheckedAt": "2026-09-04T00:59:19.973Z",
     "status": 200,
     "finalUrl": "https://github.com/trufflesecurity/trufflehog",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "6b07e5eb62a56284",
+    "contentHash": "c5ca8c0e90a7bc19",
     "title": "GitHub - trufflesecurity/trufflehog: Find, verify, and analyze leaked credentials · GitHub"
   },
   "https://github.com/gitleaks/gitleaks": {
     "firstCheckedAt": "2026-09-01T20:04:42.439Z",
-    "lastCheckedAt": "2026-09-03T17:15:22.946Z",
+    "lastCheckedAt": "2026-09-04T00:59:20.617Z",
     "status": 200,
     "finalUrl": "https://github.com/gitleaks/gitleaks",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "7daa330c9ed14f8c",
+    "contentHash": "844b68a8cba58d03",
     "title": "GitHub - gitleaks/gitleaks: Find secrets with Gitleaks 🔑 · GitHub"
   },
   "https://www.rfc-editor.org/rfc/rfc1035": {
     "firstCheckedAt": "2026-09-01T20:04:43.203Z",
-    "lastCheckedAt": "2026-09-03T17:15:23.611Z",
+    "lastCheckedAt": "2026-09-04T00:59:21.214Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc1035/",
     "contentType": "text/html;charset=utf-8",
@@ -217,7 +217,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc4033": {
     "firstCheckedAt": "2026-09-01T20:04:43.303Z",
-    "lastCheckedAt": "2026-09-03T17:15:23.697Z",
+    "lastCheckedAt": "2026-09-04T00:59:21.768Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc4033/",
     "contentType": "text/html;charset=utf-8",
@@ -226,7 +226,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc7858": {
     "firstCheckedAt": "2026-09-01T20:04:43.407Z",
-    "lastCheckedAt": "2026-09-03T17:15:23.841Z",
+    "lastCheckedAt": "2026-09-04T00:59:22.200Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc7858/",
     "contentType": "text/html;charset=utf-8",
@@ -235,7 +235,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc8484": {
     "firstCheckedAt": "2026-09-01T20:04:43.498Z",
-    "lastCheckedAt": "2026-09-03T17:15:23.922Z",
+    "lastCheckedAt": "2026-09-04T00:59:22.499Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc8484/",
     "contentType": "text/html;charset=utf-8",
@@ -244,16 +244,16 @@
   },
   "https://csrc.nist.gov/pubs/sp/800/81/r3/final": {
     "firstCheckedAt": "2026-09-01T20:04:43.580Z",
-    "lastCheckedAt": "2026-09-03T17:15:24.015Z",
+    "lastCheckedAt": "2026-09-04T00:59:22.777Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/81/r3/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "80bb75340e10fafc",
+    "contentHash": "79091b438d977aa1",
     "title": "SP 800-81 Rev. 3, Secure Domain Name System (DNS) Deployment Guide | CSRC"
   },
   "https://docs.npmjs.com/cli/v10/using-npm/scope": {
     "firstCheckedAt": "2026-09-01T20:04:43.871Z",
-    "lastCheckedAt": "2026-09-03T17:15:24.304Z",
+    "lastCheckedAt": "2026-09-04T00:59:23.186Z",
     "status": 200,
     "finalUrl": "https://docs.npmjs.com/cli/v10/using-npm/scope/",
     "contentType": "text/html; charset=utf-8",
@@ -262,7 +262,7 @@
   },
   "https://pip.pypa.io/en/stable/cli/pip_install/#cmdoption-extra-index-url": {
     "firstCheckedAt": "2026-09-01T20:04:44.160Z",
-    "lastCheckedAt": "2026-09-03T17:15:24.494Z",
+    "lastCheckedAt": "2026-09-04T00:59:23.498Z",
     "status": 200,
     "finalUrl": "https://pip.pypa.io/en/stable/cli/pip_install/",
     "contentType": "text/html; charset=utf-8",
@@ -271,16 +271,16 @@
   },
   "https://cwe.mitre.org/data/definitions/1357.html": {
     "firstCheckedAt": "2026-09-01T20:04:44.405Z",
-    "lastCheckedAt": "2026-09-03T17:15:24.598Z",
+    "lastCheckedAt": "2026-09-04T00:59:23.659Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/1357.html",
     "contentType": "text/html",
-    "contentHash": "15dbaad8b5851a5d",
+    "contentHash": "a7b85db21b85547f",
     "title": "CWE - CWE-1357: Reliance on Insufficiently Trustworthy Component (4.20)"
   },
   "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/": {
     "firstCheckedAt": "2026-09-01T20:04:44.633Z",
-    "lastCheckedAt": "2026-09-03T17:15:24.800Z",
+    "lastCheckedAt": "2026-09-04T00:59:23.902Z",
     "status": 200,
     "finalUrl": "https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/",
     "contentType": "text/html; charset=utf-8",
@@ -289,7 +289,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc5280": {
     "firstCheckedAt": "2026-09-01T20:04:44.752Z",
-    "lastCheckedAt": "2026-09-03T17:15:24.994Z",
+    "lastCheckedAt": "2026-09-04T00:59:24.088Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc5280/",
     "contentType": "text/html;charset=utf-8",
@@ -298,7 +298,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc9525": {
     "firstCheckedAt": "2026-09-01T20:04:44.878Z",
-    "lastCheckedAt": "2026-09-03T17:15:25.073Z",
+    "lastCheckedAt": "2026-09-04T00:59:24.818Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc9525/",
     "contentType": "text/html;charset=utf-8",
@@ -307,7 +307,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc6960": {
     "firstCheckedAt": "2026-09-01T20:04:44.969Z",
-    "lastCheckedAt": "2026-09-03T17:15:25.165Z",
+    "lastCheckedAt": "2026-09-04T00:59:25.289Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc6960/",
     "contentType": "text/html;charset=utf-8",
@@ -316,7 +316,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc6066": {
     "firstCheckedAt": "2026-09-01T20:04:45.069Z",
-    "lastCheckedAt": "2026-09-03T17:15:25.248Z",
+    "lastCheckedAt": "2026-09-04T00:59:25.829Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc6066/",
     "contentType": "text/html;charset=utf-8",
@@ -325,7 +325,7 @@
   },
   "https://cabforum.org/baseline-requirements/": {
     "firstCheckedAt": "2026-09-01T20:04:45.162Z",
-    "lastCheckedAt": "2026-09-03T17:15:25.470Z",
+    "lastCheckedAt": "2026-09-04T00:59:26.080Z",
     "status": 200,
     "finalUrl": "https://cabforum.org/baseline-requirements/",
     "contentType": "text/html; charset=utf-8",
@@ -334,7 +334,7 @@
   },
   "https://www.cisa.gov/resources-tools/resources/2026-minimum-elements-software-bill-materials-sbom": {
     "firstCheckedAt": "2026-09-01T20:04:45.335Z",
-    "lastCheckedAt": "2026-09-03T17:15:25.685Z",
+    "lastCheckedAt": "2026-09-04T00:59:26.436Z",
     "status": 200,
     "finalUrl": "https://www.cisa.gov/resources-tools/resources/2026-minimum-elements-software-bill-materials-sbom",
     "contentType": "text/html; charset=utf-8",
@@ -343,7 +343,7 @@
   },
   "https://spdx.dev/": {
     "firstCheckedAt": "2026-09-01T20:04:45.437Z",
-    "lastCheckedAt": "2026-09-03T17:15:25.781Z",
+    "lastCheckedAt": "2026-09-04T00:59:26.635Z",
     "status": 200,
     "finalUrl": "https://spdx.dev/",
     "contentType": "text/html; charset=UTF-8",
@@ -352,7 +352,7 @@
   },
   "https://cyclonedx.org/": {
     "firstCheckedAt": "2026-09-01T20:04:46.052Z",
-    "lastCheckedAt": "2026-09-03T17:15:26.338Z",
+    "lastCheckedAt": "2026-09-04T00:59:27.313Z",
     "status": 200,
     "finalUrl": "https://cyclonedx.org/",
     "contentType": "text/html; charset=utf-8",
@@ -361,7 +361,7 @@
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:46.777Z",
-    "lastCheckedAt": "2026-09-03T17:15:26.602Z",
+    "lastCheckedAt": "2026-09-04T00:59:27.649Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -370,7 +370,7 @@
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:47.338Z",
-    "lastCheckedAt": "2026-09-03T17:15:26.816Z",
+    "lastCheckedAt": "2026-09-04T00:59:27.828Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -379,7 +379,7 @@
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:47.488Z",
-    "lastCheckedAt": "2026-09-03T17:15:26.907Z",
+    "lastCheckedAt": "2026-09-04T00:59:27.879Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -388,7 +388,7 @@
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:47.730Z",
-    "lastCheckedAt": "2026-09-03T17:15:26.966Z",
+    "lastCheckedAt": "2026-09-04T00:59:28.006Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -397,7 +397,7 @@
   },
   "https://owasp.org/Top10/A01_2021-Broken_Access_Control/": {
     "firstCheckedAt": "2026-09-01T20:04:47.949Z",
-    "lastCheckedAt": "2026-09-03T17:15:27.131Z",
+    "lastCheckedAt": "2026-09-04T00:59:28.224Z",
     "status": 200,
     "finalUrl": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
     "contentType": "text/html; charset=utf-8",
@@ -406,7 +406,7 @@
   },
   "https://owasp.org/Top10/A03_2021-Injection/": {
     "firstCheckedAt": "2026-09-01T20:04:48.005Z",
-    "lastCheckedAt": "2026-09-03T17:15:27.226Z",
+    "lastCheckedAt": "2026-09-04T00:59:28.415Z",
     "status": 200,
     "finalUrl": "https://owasp.org/Top10/A03_2021-Injection/",
     "contentType": "text/html; charset=utf-8",
@@ -415,7 +415,7 @@
   },
   "https://cwe.mitre.org/data/definitions/20.html": {
     "firstCheckedAt": "2026-09-01T20:04:48.059Z",
-    "lastCheckedAt": "2026-09-03T17:15:27.326Z",
+    "lastCheckedAt": "2026-09-04T00:59:28.544Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/20.html",
     "contentType": "text/html",
@@ -424,7 +424,7 @@
   },
   "https://cwe.mitre.org/data/definitions/79.html": {
     "firstCheckedAt": "2026-09-01T20:04:48.302Z",
-    "lastCheckedAt": "2026-09-03T17:15:27.541Z",
+    "lastCheckedAt": "2026-09-04T00:59:28.787Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/79.html",
     "contentType": "text/html",
@@ -433,7 +433,7 @@
   },
   "https://cwe.mitre.org/data/definitions/89.html": {
     "firstCheckedAt": "2026-09-01T20:04:48.505Z",
-    "lastCheckedAt": "2026-09-03T17:15:27.773Z",
+    "lastCheckedAt": "2026-09-04T00:59:29.001Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/89.html",
     "contentType": "text/html",
@@ -442,7 +442,7 @@
   },
   "https://owasp.org/www-community/Source_Code_Analysis_Tools": {
     "firstCheckedAt": "2026-09-01T20:04:48.719Z",
-    "lastCheckedAt": "2026-09-03T17:15:27.995Z",
+    "lastCheckedAt": "2026-09-04T00:59:29.184Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-community/Source_Code_Analysis_Tools",
     "contentType": "text/html; charset=utf-8",
@@ -451,7 +451,7 @@
   },
   "https://owasp.org/www-project-devsecops-guideline/latest/02b-Dynamic-Application-Security-Testing": {
     "firstCheckedAt": "2026-09-01T20:04:48.769Z",
-    "lastCheckedAt": "2026-09-03T17:15:28.106Z",
+    "lastCheckedAt": "2026-09-04T00:59:29.284Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-project-devsecops-guideline/latest/02b-Dynamic-Application-Security-Testing",
     "contentType": "text/html; charset=utf-8",
@@ -460,34 +460,34 @@
   },
   "https://cwe.mitre.org/": {
     "firstCheckedAt": "2026-09-01T20:04:49.043Z",
-    "lastCheckedAt": "2026-09-03T17:15:28.207Z",
+    "lastCheckedAt": "2026-09-04T00:59:29.489Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/",
     "contentType": "text/html",
-    "contentHash": "25e40231080a6d9e",
+    "contentHash": "147d2e7ff5b14c9c",
     "title": "CWE - Common Weakness Enumeration"
   },
   "https://csrc.nist.gov/pubs/sp/800/86/final": {
     "firstCheckedAt": "2026-09-01T20:04:49.208Z",
-    "lastCheckedAt": "2026-09-03T17:15:28.363Z",
+    "lastCheckedAt": "2026-09-04T00:59:29.680Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/86/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "671226d680557e5e",
+    "contentHash": "2dba67c07c0ed520",
     "title": "SP 800-86, Guide to Integrating Forensic Techniques into Incident Response | CSRC"
   },
   "https://csrc.nist.gov/pubs/sp/800/61/r2/final": {
     "firstCheckedAt": "2026-09-01T20:04:49.451Z",
-    "lastCheckedAt": "2026-09-03T17:15:29.619Z",
+    "lastCheckedAt": "2026-09-04T00:59:29.924Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/61/r2/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "b9fe5b7a15391ef4",
+    "contentHash": "78cc81ec9c05a4dd",
     "title": "SP 800-61 Rev. 2, Computer Security Incident Handling Guide | CSRC"
   },
   "https://slsa.dev/spec/v1.0/provenance": {
     "firstCheckedAt": "2026-09-01T20:04:49.535Z",
-    "lastCheckedAt": "2026-09-03T17:15:29.823Z",
+    "lastCheckedAt": "2026-09-04T00:59:30.026Z",
     "status": 200,
     "finalUrl": "https://slsa.dev/spec/v1.0/provenance",
     "contentType": "text/html; charset=UTF-8",
@@ -496,7 +496,7 @@
   },
   "https://in-toto.io/": {
     "firstCheckedAt": "2026-09-01T20:04:49.692Z",
-    "lastCheckedAt": "2026-09-03T17:15:29.989Z",
+    "lastCheckedAt": "2026-09-04T00:59:30.275Z",
     "status": 200,
     "finalUrl": "https://in-toto.io/",
     "contentType": "text/html; charset=UTF-8",
@@ -505,7 +505,7 @@
   },
   "https://owasp.org/www-community/attacks/Path_Traversal": {
     "firstCheckedAt": "2026-09-01T20:04:49.830Z",
-    "lastCheckedAt": "2026-09-03T17:15:30.108Z",
+    "lastCheckedAt": "2026-09-04T00:59:30.534Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-community/attacks/Path_Traversal",
     "contentType": "text/html; charset=utf-8",
@@ -514,7 +514,7 @@
   },
   "https://cwe.mitre.org/data/definitions/22.html": {
     "firstCheckedAt": "2026-09-01T20:04:50.242Z",
-    "lastCheckedAt": "2026-09-03T17:15:30.203Z",
+    "lastCheckedAt": "2026-09-04T00:59:30.735Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/22.html",
     "contentType": "text/html",
@@ -523,52 +523,52 @@
   },
   "https://cwe.mitre.org/data/definitions/23.html": {
     "firstCheckedAt": "2026-09-01T20:04:50.322Z",
-    "lastCheckedAt": "2026-09-03T17:15:30.275Z",
+    "lastCheckedAt": "2026-09-04T00:59:30.826Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/23.html",
     "contentType": "text/html",
-    "contentHash": "0452d278526f6455",
+    "contentHash": "02bf20358b07be34",
     "title": "CWE - CWE-23: Relative Path Traversal (4.20)"
   },
   "https://cwe.mitre.org/data/definitions/36.html": {
     "firstCheckedAt": "2026-09-01T20:04:50.590Z",
-    "lastCheckedAt": "2026-09-03T17:15:30.508Z",
+    "lastCheckedAt": "2026-09-04T00:59:31.029Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/36.html",
     "contentType": "text/html",
-    "contentHash": "7817b003216c75a6",
+    "contentHash": "293f51efd5e55f70",
     "title": "CWE - CWE-36: Absolute Path Traversal (4.20)"
   },
   "https://cwe.mitre.org/data/definitions/59.html": {
     "firstCheckedAt": "2026-09-01T20:04:50.887Z",
-    "lastCheckedAt": "2026-09-03T17:15:30.747Z",
+    "lastCheckedAt": "2026-09-04T00:59:31.255Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/59.html",
     "contentType": "text/html",
-    "contentHash": "69c44a62dc3c9244",
+    "contentHash": "5c2690aed6479d94",
     "title": "CWE - CWE-59: Improper Link Resolution Before File Access (&#39;Link Following&#39;) (4.20)"
   },
   "https://csrc.nist.gov/pubs/sp/800/115/final": {
     "firstCheckedAt": "2026-09-01T20:04:51.137Z",
-    "lastCheckedAt": "2026-09-03T17:15:30.951Z",
+    "lastCheckedAt": "2026-09-04T00:59:31.492Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/115/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "a57c75ae768d4dec",
+    "contentHash": "5cead877632c22ae",
     "title": "SP 800-115, Technical Guide to Information Security Testing and Assessment | CSRC"
   },
   "https://docs.github.com/actions/security-guides/using-secrets-in-github-actions": {
     "firstCheckedAt": "2026-09-01T20:04:51.239Z",
-    "lastCheckedAt": "2026-09-03T17:15:31.053Z",
+    "lastCheckedAt": "2026-09-04T00:59:31.707Z",
     "status": 200,
     "finalUrl": "https://docs.github.com/en/actions/how-tos/write-workflows/choose-what-workflows-do/use-secrets",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "c4c2b8d1e6737872",
+    "contentHash": "c387622b4d4dd1b4",
     "title": "Using secrets in GitHub Actions - GitHub Docs"
   },
   "https://cwe.mitre.org/data/definitions/636.html": {
     "firstCheckedAt": "2026-09-01T20:04:51.376Z",
-    "lastCheckedAt": "2026-09-03T17:15:31.185Z",
+    "lastCheckedAt": "2026-09-04T00:59:35.433Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/636.html",
     "contentType": "text/html",
@@ -577,25 +577,25 @@
   },
   "https://cwe.mitre.org/data/definitions/703.html": {
     "firstCheckedAt": "2026-09-01T20:04:51.674Z",
-    "lastCheckedAt": "2026-09-03T17:15:31.386Z",
+    "lastCheckedAt": "2026-09-04T00:59:35.661Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/703.html",
     "contentType": "text/html",
-    "contentHash": "b3825f55d04d747d",
+    "contentHash": "3191f71c343ac80a",
     "title": "CWE - CWE-703: Improper Check or Handling of Exceptional Conditions (4.20)"
   },
   "https://cwe.mitre.org/data/definitions/754.html": {
     "firstCheckedAt": "2026-09-01T20:04:51.877Z",
-    "lastCheckedAt": "2026-09-03T17:15:31.636Z",
+    "lastCheckedAt": "2026-09-04T00:59:35.882Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/754.html",
     "contentType": "text/html",
-    "contentHash": "5e18e39720181db1",
+    "contentHash": "ad9cde3aa534d334",
     "title": "CWE - CWE-754: Improper Check for Unusual or Exceptional Conditions (4.20)"
   },
   "https://owasp.org/Top10/A04_2021-Insecure_Design/": {
     "firstCheckedAt": "2026-09-01T20:04:52.123Z",
-    "lastCheckedAt": "2026-09-03T17:15:31.834Z",
+    "lastCheckedAt": "2026-09-04T00:59:36.092Z",
     "status": 200,
     "finalUrl": "https://owasp.org/Top10/A04_2021-Insecure_Design/",
     "contentType": "text/html; charset=utf-8",
@@ -604,25 +604,25 @@
   },
   "https://owasp.org/www-project-web-security-testing-guide/": {
     "firstCheckedAt": "2026-09-01T20:04:52.242Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.042Z",
+    "lastCheckedAt": "2026-09-04T00:59:36.295Z",
     "status": 200,
     "finalUrl": "https://owasp.org/www-project-web-security-testing-guide/",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "48b48813f1c3123b",
+    "contentHash": "575c51918663c77a",
     "title": "OWASP Web Security Testing Guide | OWASP Foundation"
   },
   "https://www.cisecurity.org/controls": {
     "firstCheckedAt": "2026-09-01T20:04:52.325Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.187Z",
+    "lastCheckedAt": "2026-09-04T00:59:36.395Z",
     "status": 200,
     "finalUrl": "https://www.cisecurity.org/controls",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "fa6edde5c76493cb",
+    "contentHash": "52bced4de4e0a43a",
     "title": "CIS Critical Security Controls"
   },
   "https://dora.dev/": {
     "firstCheckedAt": "2026-09-01T20:04:52.549Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.306Z",
+    "lastCheckedAt": "2026-09-04T00:59:36.960Z",
     "status": 200,
     "finalUrl": "https://dora.dev/",
     "contentType": "text/html; charset=utf-8",
@@ -631,7 +631,7 @@
   },
   "https://www.cs.virginia.edu/~evans/cs551/saltzer/": {
     "firstCheckedAt": "2026-09-01T20:04:52.637Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.378Z",
+    "lastCheckedAt": "2026-09-04T00:59:37.126Z",
     "status": 200,
     "finalUrl": "https://www.cs.virginia.edu/~evans/cs551/saltzer/",
     "contentType": "text/html",
@@ -640,7 +640,7 @@
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Product_Design_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-01T20:04:52.825Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.539Z",
+    "lastCheckedAt": "2026-09-04T00:59:37.285Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Secure_Product_Design_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -649,7 +649,7 @@
   },
   "https://martinfowler.com/bliki/CircuitBreaker.html": {
     "firstCheckedAt": "2026-09-01T20:04:53.028Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.696Z",
+    "lastCheckedAt": "2026-09-04T00:59:37.432Z",
     "status": 200,
     "finalUrl": "https://martinfowler.com/bliki/CircuitBreaker.html",
     "contentType": "text/html",
@@ -658,25 +658,25 @@
   },
   "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final": {
     "firstCheckedAt": "2026-09-03T17:13:33.900Z",
-    "lastCheckedAt": "2026-09-03T17:15:32.843Z",
+    "lastCheckedAt": "2026-09-04T00:59:37.584Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "7df2eb18c214d109",
+    "contentHash": "0c94955bd2335033",
     "title": "SP 800-34 Rev. 1, Contingency Planning Guide for Federal Information Systems | CSRC"
   },
   "https://www.cisecurity.org/controls/data-recovery": {
     "firstCheckedAt": "2026-09-03T17:13:33.995Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.187Z",
+    "lastCheckedAt": "2026-09-04T00:59:37.879Z",
     "status": 200,
     "finalUrl": "https://www.cisecurity.org/controls/data-recovery",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "e6fa49aadb4d24b0",
+    "contentHash": "71741969ed2682ff",
     "title": "CIS Critical Security Control 11: Data Recovery"
   },
   "https://attack.mitre.org/techniques/T1490/": {
     "firstCheckedAt": "2026-09-03T17:13:34.150Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.328Z",
+    "lastCheckedAt": "2026-09-04T00:59:38.279Z",
     "status": 200,
     "finalUrl": "https://attack.mitre.org/techniques/T1490/",
     "contentType": "text/html; charset=utf-8",
@@ -685,7 +685,7 @@
   },
   "https://www.cisa.gov/stopransomware/ransomware-guide": {
     "firstCheckedAt": "2026-09-03T17:13:34.320Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.473Z",
+    "lastCheckedAt": "2026-09-04T00:59:38.440Z",
     "status": 200,
     "finalUrl": "https://www.cisa.gov/stopransomware/ransomware-guide",
     "contentType": "text/html; charset=utf-8",
@@ -694,7 +694,7 @@
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-03T17:13:34.439Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.563Z",
+    "lastCheckedAt": "2026-09-04T00:59:38.618Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/AI_Agent_Security_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -703,25 +703,25 @@
   },
   "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence": {
     "firstCheckedAt": "2026-09-03T17:13:34.647Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.631Z",
+    "lastCheckedAt": "2026-09-04T00:59:38.784Z",
     "status": 200,
     "finalUrl": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
     "contentType": "text/html; charset=UTF-8",
-    "contentHash": "82872ca419ed8cec",
+    "contentHash": "c0b793be67b0248a",
     "title": null
   },
   "https://www.nist.gov/itl/ai-risk-management-framework": {
     "firstCheckedAt": "2026-09-03T17:13:34.836Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.734Z",
+    "lastCheckedAt": "2026-09-04T00:59:38.943Z",
     "status": 200,
     "finalUrl": "https://www.nist.gov/itl/ai-risk-management-framework",
     "contentType": "text/html; charset=UTF-8",
-    "contentHash": "1af35b4fc073fdf5",
+    "contentHash": "00d8a9dcc5204b03",
     "title": "AI Risk Management Framework | NIST"
   },
   "https://www.cisa.gov/news-events/alerts/2024/04/15/joint-guidance-deploying-ai-systems-securely": {
     "firstCheckedAt": "2026-09-03T17:13:34.901Z",
-    "lastCheckedAt": "2026-09-03T17:15:33.900Z",
+    "lastCheckedAt": "2026-09-04T00:59:39.076Z",
     "status": 200,
     "finalUrl": "https://www.cisa.gov/news-events/alerts/2024/04/15/joint-guidance-deploying-ai-systems-securely",
     "contentType": "text/html; charset=utf-8",
@@ -730,34 +730,34 @@
   },
   "https://csrc.nist.gov/pubs/sp/800/190/final": {
     "firstCheckedAt": "2026-09-03T17:13:35.089Z",
-    "lastCheckedAt": "2026-09-03T17:15:34.052Z",
+    "lastCheckedAt": "2026-09-04T00:59:39.175Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/190/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "8620d8732d6b327d",
+    "contentHash": "ab2375db46936fed",
     "title": "SP 800-190, Application Container Security Guide | CSRC"
   },
   "https://www.cisecurity.org/benchmark/kubernetes": {
     "firstCheckedAt": "2026-09-03T17:13:35.181Z",
-    "lastCheckedAt": "2026-09-03T17:15:34.151Z",
+    "lastCheckedAt": "2026-09-04T00:59:39.323Z",
     "status": 200,
     "finalUrl": "https://www.cisecurity.org/benchmark/kubernetes",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "ac8e85a8c6d910a8",
+    "contentHash": "683b781aa017b638",
     "title": "CIS Kubernetes Benchmarks"
   },
   "https://www.cisecurity.org/benchmark/docker": {
     "firstCheckedAt": "2026-09-03T17:13:35.359Z",
-    "lastCheckedAt": "2026-09-03T17:15:34.255Z",
+    "lastCheckedAt": "2026-09-04T00:59:39.720Z",
     "status": 200,
     "finalUrl": "https://www.cisecurity.org/benchmark/docker",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "2b4fa80eb97ce18e",
+    "contentHash": "01ea5d8c2b406e77",
     "title": "CIS Docker Benchmarks"
   },
   "https://www.cisa.gov/news-events/alerts/2022/03/15/updated-kubernetes-hardening-guide": {
     "firstCheckedAt": "2026-09-03T17:13:35.777Z",
-    "lastCheckedAt": "2026-09-03T17:15:34.777Z",
+    "lastCheckedAt": "2026-09-04T00:59:40.169Z",
     "status": 200,
     "finalUrl": "https://www.cisa.gov/news-events/alerts/2022/03/15/updated-kubernetes-hardening-guide",
     "contentType": "text/html; charset=utf-8",
@@ -766,7 +766,7 @@
   },
   "https://kubernetes.io/docs/concepts/services-networking/": {
     "firstCheckedAt": "2026-09-03T17:13:35.857Z",
-    "lastCheckedAt": "2026-09-03T17:15:34.811Z",
+    "lastCheckedAt": "2026-09-04T00:59:40.311Z",
     "status": 200,
     "finalUrl": "https://kubernetes.io/docs/concepts/services-networking/",
     "contentType": "text/html; charset=UTF-8",
@@ -775,7 +775,7 @@
   },
   "https://kubernetes.io/docs/concepts/services-networking/network-policies/": {
     "firstCheckedAt": "2026-09-03T17:13:36.023Z",
-    "lastCheckedAt": "2026-09-03T17:15:34.922Z",
+    "lastCheckedAt": "2026-09-04T00:59:40.517Z",
     "status": 200,
     "finalUrl": "https://kubernetes.io/docs/concepts/services-networking/network-policies/",
     "contentType": "text/html; charset=UTF-8",
@@ -784,7 +784,7 @@
   },
   "https://kubernetes.io/docs/concepts/configuration/secret/": {
     "firstCheckedAt": "2026-09-03T17:13:36.138Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.242Z",
+    "lastCheckedAt": "2026-09-04T00:59:40.656Z",
     "status": 200,
     "finalUrl": "https://kubernetes.io/docs/concepts/configuration/secret/",
     "contentType": "text/html; charset=UTF-8",
@@ -793,7 +793,7 @@
   },
   "https://kubernetes.io/docs/concepts/security/rbac-good-practices/": {
     "firstCheckedAt": "2026-09-03T17:13:36.283Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.388Z",
+    "lastCheckedAt": "2026-09-04T00:59:40.817Z",
     "status": 200,
     "finalUrl": "https://kubernetes.io/docs/concepts/security/rbac-good-practices/",
     "contentType": "text/html; charset=UTF-8",
@@ -802,7 +802,7 @@
   },
   "https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/": {
     "firstCheckedAt": "2026-09-03T17:13:36.583Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.562Z",
+    "lastCheckedAt": "2026-09-04T00:59:40.986Z",
     "status": 200,
     "finalUrl": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/",
     "contentType": "text/html; charset=UTF-8",
@@ -811,7 +811,7 @@
   },
   "https://docs.k3s.io/security/hardening-guide": {
     "firstCheckedAt": "2026-09-03T17:13:36.716Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.683Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.129Z",
     "status": 200,
     "finalUrl": "https://docs.k3s.io/security/hardening-guide",
     "contentType": "text/html; charset=utf-8",
@@ -820,7 +820,7 @@
   },
   "https://docs.k3s.io/networking/networking-services": {
     "firstCheckedAt": "2026-09-03T17:13:36.868Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.802Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.300Z",
     "status": 200,
     "finalUrl": "https://docs.k3s.io/networking/networking-services",
     "contentType": "text/html; charset=utf-8",
@@ -829,7 +829,7 @@
   },
   "https://docs.k3s.io/networking/basic-network-options": {
     "firstCheckedAt": "2026-09-03T17:13:36.986Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.893Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.399Z",
     "status": 200,
     "finalUrl": "https://docs.k3s.io/networking/basic-network-options",
     "contentType": "text/html; charset=utf-8",
@@ -838,7 +838,7 @@
   },
   "https://docs.docker.com/compose/how-tos/networking/": {
     "firstCheckedAt": "2026-09-03T17:13:37.109Z",
-    "lastCheckedAt": "2026-09-03T17:15:35.997Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.508Z",
     "status": 200,
     "finalUrl": "https://docs.docker.com/compose/how-tos/networking/",
     "contentType": "text/html",
@@ -847,16 +847,16 @@
   },
   "https://csrc.nist.gov/pubs/sp/800/52/r2/final": {
     "firstCheckedAt": "2026-09-03T17:13:37.274Z",
-    "lastCheckedAt": "2026-09-03T17:15:36.118Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.687Z",
     "status": 200,
     "finalUrl": "https://csrc.nist.gov/pubs/sp/800/52/r2/final",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "09ccc1c23f4b95a4",
+    "contentHash": "803be0c7638a0d7d",
     "title": "SP 800-52 Rev. 2, Guidelines for the Selection, Configuration, and Use of Transport Layer Security (TLS) Implementations | CSRC"
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-03T17:13:37.360Z",
-    "lastCheckedAt": "2026-09-03T17:15:36.203Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.841Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -865,7 +865,7 @@
   },
   "https://cwe.mitre.org/data/definitions/918.html": {
     "firstCheckedAt": "2026-09-03T17:13:37.541Z",
-    "lastCheckedAt": "2026-09-03T17:15:36.449Z",
+    "lastCheckedAt": "2026-09-04T00:59:41.996Z",
     "status": 200,
     "finalUrl": "https://cwe.mitre.org/data/definitions/918.html",
     "contentType": "text/html",
@@ -874,7 +874,7 @@
   },
   "https://www.rfc-editor.org/rfc/rfc7239": {
     "firstCheckedAt": "2026-09-03T17:13:37.730Z",
-    "lastCheckedAt": "2026-09-03T17:15:36.632Z",
+    "lastCheckedAt": "2026-09-04T00:59:42.238Z",
     "status": 200,
     "finalUrl": "https://www.rfc-editor.org/info/rfc7239/",
     "contentType": "text/html;charset=utf-8",
@@ -883,16 +883,16 @@
   },
   "https://www.cisecurity.org/controls/network-infrastructure-management": {
     "firstCheckedAt": "2026-09-03T17:13:38.205Z",
-    "lastCheckedAt": "2026-09-03T17:15:36.827Z",
+    "lastCheckedAt": "2026-09-04T00:59:42.669Z",
     "status": 200,
     "finalUrl": "https://www.cisecurity.org/controls/network-infrastructure-management",
     "contentType": "text/html; charset=utf-8",
-    "contentHash": "99fb4a659c69cf56",
+    "contentHash": "7d186fb8fe06d690",
     "title": "CIS Critical Security Control 12: Network Infrastructure Management"
   },
   "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html": {
     "firstCheckedAt": "2026-09-03T17:15:37.265Z",
-    "lastCheckedAt": "2026-09-03T17:15:37.265Z",
+    "lastCheckedAt": "2026-09-04T00:59:43.170Z",
     "status": 200,
     "finalUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
     "contentType": "text/html; charset=utf-8",
@@ -901,7 +901,7 @@
   },
   "https://docs.docker.com/engine/security/": {
     "firstCheckedAt": "2026-09-03T17:15:37.364Z",
-    "lastCheckedAt": "2026-09-03T17:15:37.364Z",
+    "lastCheckedAt": "2026-09-04T00:59:43.342Z",
     "status": 200,
     "finalUrl": "https://docs.docker.com/engine/security/",
     "contentType": "text/html",
@@ -910,7 +910,7 @@
   },
   "https://docs.docker.com/engine/security/rootless/": {
     "firstCheckedAt": "2026-09-03T17:15:37.527Z",
-    "lastCheckedAt": "2026-09-03T17:15:37.527Z",
+    "lastCheckedAt": "2026-09-04T00:59:43.499Z",
     "status": 200,
     "finalUrl": "https://docs.docker.com/engine/security/rootless/",
     "contentType": "text/html",
@@ -919,7 +919,7 @@
   },
   "https://attack.mitre.org/techniques/T1611/": {
     "firstCheckedAt": "2026-09-03T17:15:37.682Z",
-    "lastCheckedAt": "2026-09-03T17:15:37.682Z",
+    "lastCheckedAt": "2026-09-04T00:59:43.637Z",
     "status": 200,
     "finalUrl": "https://attack.mitre.org/techniques/T1611/",
     "contentType": "text/html; charset=utf-8",
@@ -928,11 +928,164 @@
   },
   "https://attack.mitre.org/techniques/T1609/": {
     "firstCheckedAt": "2026-09-03T17:15:37.803Z",
-    "lastCheckedAt": "2026-09-03T17:15:37.803Z",
+    "lastCheckedAt": "2026-09-04T00:59:43.752Z",
     "status": 200,
     "finalUrl": "https://attack.mitre.org/techniques/T1609/",
     "contentType": "text/html; charset=utf-8",
     "contentHash": "8fc62bf5e32a0a2c",
     "title": "Container Administration Command, Technique T1609 - Enterprise | MITRE ATT&CK&reg;"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/137/final": {
+    "firstCheckedAt": "2026-09-04T00:59:43.813Z",
+    "lastCheckedAt": "2026-09-04T00:59:43.813Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/137/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "3089bf8c085dbeae",
+    "title": "SP 800-137, Information Security Continuous Monitoring (ISCM) for Federal Information Systems and Organizations | CSRC"
+  },
+  "https://attack.mitre.org/techniques/T1562/": {
+    "firstCheckedAt": "2026-09-04T00:59:44.269Z",
+    "lastCheckedAt": "2026-09-04T00:59:44.269Z",
+    "status": 200,
+    "finalUrl": "https://attack.mitre.org/techniques/T1562/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "a58b8144500d23d5",
+    "title": null
+  },
+  "https://www.cisecurity.org/controls/network-monitoring-and-defense": {
+    "firstCheckedAt": "2026-09-04T00:59:44.319Z",
+    "lastCheckedAt": "2026-09-04T00:59:44.319Z",
+    "status": 200,
+    "finalUrl": "https://www.cisecurity.org/controls/network-monitoring-and-defense",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "446aa0de2ba81b75",
+    "title": "CIS Critical Security Control 13: Network Monitoring and Defense"
+  },
+  "https://www.cisa.gov/cross-sector-cybersecurity-performance-goals": {
+    "firstCheckedAt": "2026-09-04T00:59:44.686Z",
+    "lastCheckedAt": "2026-09-04T00:59:44.686Z",
+    "status": 200,
+    "finalUrl": "https://www.cisa.gov/cross-sector-cybersecurity-performance-goals/cross-sector-cybersecurity-performance-goals",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "b77b2f093e90204a",
+    "title": "Cross-Sector Cybersecurity Performance Goals | CISA"
+  },
+  "https://docs.gitea.com/usage/multi-factor-authentication": {
+    "firstCheckedAt": "2026-09-04T00:59:44.895Z",
+    "lastCheckedAt": "2026-09-04T00:59:44.895Z",
+    "status": 200,
+    "finalUrl": "https://docs.gitea.com/usage/user-setting/multi-factor-authentication/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "38ad5b57cd8421d0",
+    "title": "Multi-factor Authentication (MFA) | Gitea Documentation"
+  },
+  "https://docs.gitea.com/administration/config-cheat-sheet/": {
+    "firstCheckedAt": "2026-09-04T00:59:45.211Z",
+    "lastCheckedAt": "2026-09-04T00:59:45.211Z",
+    "status": 200,
+    "finalUrl": "https://docs.gitea.com/administration/config-cheat-sheet/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "2f4bc40aa4527c91",
+    "title": "Configuration Cheat Sheet | Gitea Documentation"
+  },
+  "https://docs.gitea.com/usage/webhooks": {
+    "firstCheckedAt": "2026-09-04T00:59:45.312Z",
+    "lastCheckedAt": "2026-09-04T00:59:45.312Z",
+    "status": 200,
+    "finalUrl": "https://docs.gitea.com/usage/repository/webhooks/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "9b90554ba76d6409",
+    "title": "Webhooks | Gitea Documentation"
+  },
+  "https://docs.gitea.com/usage/access-control/permissions/": {
+    "firstCheckedAt": "2026-09-04T00:59:45.544Z",
+    "lastCheckedAt": "2026-09-04T00:59:45.544Z",
+    "status": 200,
+    "finalUrl": "https://docs.gitea.com/usage/access-control/permissions/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "325be81e4d6108e3",
+    "title": "Permissions | Gitea Documentation"
+  },
+  "https://docs.gitea.com/usage/access-control/protected-branches/": {
+    "firstCheckedAt": "2026-09-04T00:59:45.620Z",
+    "lastCheckedAt": "2026-09-04T00:59:45.620Z",
+    "status": 200,
+    "finalUrl": "https://docs.gitea.com/usage/access-control/protected-branches/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "5e4d8e7efaf97f10",
+    "title": "Protected branches | Gitea Documentation"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/63/b/4/final": {
+    "firstCheckedAt": "2026-09-04T00:59:45.688Z",
+    "lastCheckedAt": "2026-09-04T00:59:45.688Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "ffb87f25324b7c09",
+    "title": "SP 800-63B-4, Digital Identity Guidelines: Authentication and Authenticator Management | CSRC"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/40/r4/final": {
+    "firstCheckedAt": "2026-09-04T00:59:45.891Z",
+    "lastCheckedAt": "2026-09-04T00:59:45.891Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/40/r4/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "e3a85c34556d1896",
+    "title": "SP 800-40 Rev. 4, Guide to Enterprise Patch Management Planning: Preventive Maintenance for Technology | CSRC"
+  },
+  "https://csrc.nist.gov/pubs/sp/800/92/final": {
+    "firstCheckedAt": "2026-09-04T00:59:46.046Z",
+    "lastCheckedAt": "2026-09-04T00:59:46.046Z",
+    "status": 200,
+    "finalUrl": "https://csrc.nist.gov/pubs/sp/800/92/final",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "55cb6d3c7ae44d2c",
+    "title": "SP 800-92, Guide to Computer Security Log Management | CSRC"
+  },
+  "https://www.cisecurity.org/controls/access-control-management": {
+    "firstCheckedAt": "2026-09-04T00:59:46.195Z",
+    "lastCheckedAt": "2026-09-04T00:59:46.195Z",
+    "status": 200,
+    "finalUrl": "https://www.cisecurity.org/controls/access-control-management",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "dce8c6d019cec368",
+    "title": "CIS Critical Security Control 6: Access Control Management"
+  },
+  "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/": {
+    "firstCheckedAt": "2026-09-04T00:59:46.638Z",
+    "lastCheckedAt": "2026-09-04T00:59:46.638Z",
+    "status": 200,
+    "finalUrl": "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/",
+    "contentType": "text/html; charset=UTF-8",
+    "contentHash": "9013489c6e3d8ca6",
+    "title": null
+  },
+  "https://atlas.mitre.org/": {
+    "firstCheckedAt": "2026-09-04T00:59:46.725Z",
+    "lastCheckedAt": "2026-09-04T00:59:46.725Z",
+    "status": 200,
+    "finalUrl": "https://atlas.mitre.org/",
+    "contentType": "text/html; charset=utf-8",
+    "contentHash": "a91ddc41838b8885",
+    "title": "MITRE ATLAS™"
+  },
+  "https://genai.owasp.org/llmrisk/llm01-prompt-injection/": {
+    "firstCheckedAt": "2026-09-04T00:59:46.846Z",
+    "lastCheckedAt": "2026-09-04T00:59:46.846Z",
+    "status": 200,
+    "finalUrl": "https://genai.owasp.org/llmrisk/llm01-prompt-injection/",
+    "contentType": "text/html; charset=UTF-8",
+    "contentHash": "9013489c6e3d8ca6",
+    "title": null
+  },
+  "https://cwe.mitre.org/data/definitions/1427.html": {
+    "firstCheckedAt": "2026-09-04T00:59:46.933Z",
+    "lastCheckedAt": "2026-09-04T00:59:46.933Z",
+    "status": 200,
+    "finalUrl": "https://cwe.mitre.org/data/definitions/1427.html",
+    "contentType": "text/html",
+    "contentHash": "1f0580c98236b2d9",
+    "title": "CWE - CWE-1427: Improper Neutralization of Input Used for LLM Prompting (4.20)"
   }
 }
