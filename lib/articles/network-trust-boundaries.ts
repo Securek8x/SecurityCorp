@@ -24,6 +24,11 @@ const coverImage: ArticleVisual = {
     "Let a reader register, before reading a word, that not every boundary in this article is the same strength — foreshadowing the segmentation-vs-isolation distinction the article's thesis depends on.",
   width: 1600,
   height: 900,
+  // Biased right, toward the sealed zone — this is what the catalog-card
+  // thumbnail's object-fit:cover crop keeps centered under the card's
+  // 16:9 aspect ratio; the full article-page cover itself only ever
+  // scales (never crops), so focalPoint only matters for the card.
+  focalPoint: { x: 0.75, y: 0.5 },
   brief: {
     articleSlug: "understanding-network-trust-boundaries",
     readerTakeaway: "Boundaries between zones are not uniform — some permit controlled traffic, one permits none at all, and the difference is deliberate, not decorative.",
@@ -50,8 +55,9 @@ const coverImage: ArticleVisual = {
       },
     ],
     compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Horizontal flow, generous negative space — calm operations-console feel, not busy or noisy. Restrained cyan/violet accents only, per DESIGN.md.",
-    mobileCropNotes: "Center-crop to the two rightmost zones (including the sealed one) under 480px — the sealed-zone contrast is the one idea that must survive any crop.",
-    exportFormats: ["avif", "webp"],
+    mobileCropNotes:
+      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so composition must keep the sealed zone and its violet ring legible even scaled to a narrow phone width, not just at full size. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.75, 0.5), biased toward the sealed zone, so the card's crop keeps that zone centered.",
+    exportFormats: ["webp"],
     sizeBudgetKb: 200,
   },
   provenance: {

@@ -66,8 +66,18 @@ for the full field list and order). Non-negotiables:
   PII/identifiable screenshots, and the generic-imagery list from the
   guide (stock hacker, hooded figure, generic padlock, random code
   screen, meaningless HUD, excessive glow).
-- `mobileCropNotes` must say what survives a narrow crop — a cover that
-  only reads correctly at wide desktop size is an incomplete brief.
+- `mobileCropNotes` must say what stays legible when scaled down, NOT
+  claim a literal crop occurs — the full article-page cover only ever
+  scales (`app/globals.css`'s `.article-figure img` is
+  `width:100%;height:auto`, never cropped). Only the catalog-card
+  thumbnail actually crops (`object-fit:cover`), driven by `focalPoint`
+  — if the brief's key idea needs to survive that crop specifically, set
+  a real `focalPoint` and justify it in this field. A cover that only
+  reads correctly at wide desktop size is still an incomplete brief.
+- `exportFormats` must list exactly **one** format (e.g. `["webp"]`) —
+  the rendering contract (`ArticleVisual.src` / `ArticleFigure`) delivers
+  a single file per visual today; `validateArticleVisual` rejects more
+  than one entry.
 
 ## 4. Factual verification
 
@@ -95,7 +105,16 @@ treated as capability.
 - **Capability available and approved**: generate from the stored brief
   verbatim, save the editable source (the prompt/seed for an AI
   generator, or the source file for a hand-illustrated/vector asset)
-  under a real `editableSourceRef`, and set `stage: "asset"`.
+  under a real `editableSourceRef`, and set `stage: "asset"` — NOT
+  `"reviewed"`. `stage: "asset"` renders on the article page (including
+  an unmerged branch's Cloudflare Pages preview, so a human can actually
+  see it) but is never production-eligible; only a human reviewer moves
+  it to `stage: "reviewed"` with `reviewStatus: "approved"` (see §9).
+  Manually confirm the generated file's real pixel dimensions match the
+  declared `width`/`height` and that its metadata has been stripped
+  before considering it ready for review — the audit script does not
+  verify either automatically (see `docs/article-visual-guidelines.md`'s
+  visual-audit section for why).
 
 ## 6. Accessibility
 
@@ -107,23 +126,48 @@ treated as capability.
   the card's own heading already names the link); the meaningful alt
   text lives once, on the full-size `ArticleFigure`.
 - If `enlargeable`, confirm keyboard operation: the trigger is a real
-  `<button>`, the enlarged view is a native `<dialog>` (browser-native
-  focus trap and Escape-to-close — do not hand-roll a modal), and focus
-  visibly lands on the close button on open.
+  `<button>` with an explicit accessible name (`aria-label="Enlarge
+  image: <alt>"`, not just the nested image's own alt text), the
+  enlarged view is a native `<dialog>` (browser-native focus trap and
+  Escape-to-close — do not hand-roll a modal), focus visibly lands on
+  the close button on open, and focus returns to the trigger button on
+  close (listen for the dialog's own `close` event, which fires
+  regardless of how it closed — Escape, the close button, or
+  `dialog.close()` — not only the button's `onClick`).
+- Only `FigureEnlargeTrigger` (`components/figure-enlarge-trigger.tsx`)
+  is a client component — a plain, non-enlargeable `ArticleFigure` stays
+  server-rendered. Don't make the whole figure a client component just
+  because some figures elsewhere use a dialog.
 - Confirm `prefers-reduced-motion` is respected (the only motion here is
-  a `.15s` opacity transition, already gated) and that print output
-  doesn't clip or waste a page on interactive-only chrome.
+  a `.15s` opacity transition, already gated). Print behavior is
+  currently undefined — this repo's `@media print` block
+  (securitycorp-source-1ng) is a separate, unmerged PR; do not claim
+  print handling exists until it does.
 
 ## 7. Optimization
 
 - Explicit `width`/`height` on every `<img>` (prevents CLS) — required
   by `ArticleFigure`'s props, not optional. Set the specific asset's
   real dimensions, not placeholder defaults.
-- Raster budget: 400KB per asset (`MAX_RASTER_BYTES` in
-  `scripts/check-article-visuals.ts`). Prefer AVIF/WebP export formats.
+- A cover near the top of the article should set `priority` (eager
+  `loading`, high `fetchPriority`) — it's almost always already in or
+  near the viewport on load. An in-body illustration should leave
+  `priority` unset and stay lazy.
+- Raster budget: enforced against **this visual's own**
+  `brief.sizeBudgetKb` (not one shared global number), with a 1MB
+  absolute ceiling as a backstop (`ABSOLUTE_MAX_RASTER_BYTES` in
+  `scripts/check-article-visuals.ts`). Deliver a single WebP file — the
+  rendering contract takes exactly one `exportFormats` entry (see §3).
 - SVG assets must not contain `<script>`, inline event-handler
-  attributes, external `xlink:href` references, or XML entities — the
-  audit script rejects these; write clean, static SVG.
+  attributes, external `xlink:href`/bare `href` references,
+  `<foreignObject>`, or XML entities — the audit script rejects these.
+  This is a targeted check, not a comprehensive sanitizer (it doesn't
+  cover `@import`/`url(...)` in an embedded `<style>` block or SMIL
+  scripting) — write clean, static SVG regardless.
+- An asset's `src` must live under `/article-visuals/` and resolve
+  inside `public/article-visuals/` after normalization — the audit
+  rejects `..` traversal, backslashes, query strings/fragments, and
+  external URLs before ever reading the file.
 
 ## 8. Browser QA
 
@@ -141,10 +185,17 @@ correct; a claimed-but-undone check is not.
 Fill every `VisualProvenance` field (see the guide's Provenance
 section). Two hard rules the type doesn't fully enforce on its own:
 
-- Never write `reviewStatus: "approved"` yourself. That field is for a
-  named human reviewer (in practice, Ravi Teja Thota) to set — an agent
-  self-approving its own design output defeats the purpose of having a
-  review field at all.
+- Never write `reviewStatus: "approved"` yourself, and never write
+  `stage: "reviewed"` yourself — both fields are for a named human
+  reviewer (in practice, Ravi Teja Thota) to set together;
+  `validateArticleVisual` enforces the pairing in both directions
+  (`"approved"` requires `stage: "reviewed"`; `stage: "reviewed"`
+  requires `"approved"`) precisely so an agent can't construct a record
+  that reads as approved without one. An agent's own work stops at
+  `stage: "asset"` at most — it renders for review, it just isn't
+  production-eligible (`isVisualProductionEligible` /
+  `checkAssetApprovalGate`, always-on regardless of `VISUAL_GATE_ENABLED`)
+  until a human promotes it.
 - `source: "ai-generated"` requires `generatingModel` and `prompt` (and
   `seed` if the generator produced one) once past `stage: "brief"` — an
   asset with no way to reproduce or audit it is not acceptable

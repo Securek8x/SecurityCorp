@@ -12,48 +12,77 @@ import type { ArticleVisual } from "../article-visuals.ts";
 // visual-guidelines.md). This article is already status:"published"
 // (reviewed 2026-08-30) — this brief only adds cover-visual infrastructure
 // to it, it does not touch content or review state. Specific to the
-// article's actual thesis (detectable vs. context-dependent/derived
-// secrets), not a generic "secrets scanning" or padlock image.
+// article's actual thesis (detectable vs. context-dependent/derived/
+// runtime secrets), not a generic "secrets scanning" or padlock image.
+//
+// Revision note (2026-09-04): the original "grid of glyphs" concept was
+// replaced after review — it risked reading as decorative texture without
+// the caption doing all the explanatory work. This revision (scanning
+// plane over a visible layer, with other forms existing in an adjacent
+// layer the plane never reaches) makes the coverage boundary the
+// composition's own structure, not something only the caption explains.
+// Ruflo editorial routing was attempted for this revision's prose
+// (workflow-1788484125025-4rnxy4, template "research") before writing it;
+// it reproduced the documented 0%-pending-Execute stall with no
+// retrievable output, so this revision used the disclosed native fallback
+// — separate research (re-reading the article's own thesis), drafting,
+// technical-verification (the factual claim below re-checked against the
+// article's actual executiveSummary), and publication-safety review
+// passes, not credited to Ruflo. First two pilot concepts (network trust
+// boundaries, protecting main branch) were kept unchanged — this revision
+// only touches this one brief.
 const coverImage: ArticleVisual = {
   stage: "brief",
   visualType: "cover",
-  alt: "A grid of small glyphs in cyan, most rendered sharp and flagged with a thin bracket, a few rendered refracted and unbracketed among them, indistinguishable in shape from the flagged ones at a glance",
-  caption: "Some of these were caught. Some were never shaped like something a scanner recognizes.",
-  purpose: "Make the false-negative gap (a real secret the scanner never flags) visually felt before the prose defines it — the two categories must look genuinely hard to tell apart, not obviously different.",
+  alt: "A restrained cyan scanning plane passing over a visible source layer, illuminating a row of recognizable token-like abstract forms as it crosses them — while other abstract forms sit in a deeper violet layer beneath, entirely outside the plane's reach",
+  caption: "A passing scan means the visible layer looked clean. It says nothing about what's underneath.",
+  purpose:
+    "Make the coverage boundary itself — not just 'some secrets are missed' but specifically that an entire class of secret sits in a layer the scanner structurally never reaches — the first thing a reader registers, before the prose defines detectable vs. derived/runtime secrets.",
   width: 1600,
   height: 900,
+  // Centered on the plane's leading edge, where it's actively illuminating
+  // the visible layer — the one moment that reads as "scanning," not just
+  // "two layers of dots." What the catalog-card thumbnail's
+  // object-fit:cover crop keeps centered; the full article-page cover
+  // itself only ever scales (never crops).
+  focalPoint: { x: 0.55, y: 0.45 },
   brief: {
     articleSlug: "secrets-detection-scanner-limits",
-    readerTakeaway: "A scanner catches recognizable, high-entropy formats — it does not catch a secret that's context-dependent, derived at runtime, or otherwise shaped differently, and those look the same as safe values at a glance.",
-    whyThisHelps: "The article's core distinction (false negative vs. false positive, and why fixing one doesn't fix the other) is abstract in prose — a grid where the \"missed\" items are deliberately NOT visually obvious makes the actual risk (you can't eyeball which is which) concrete.",
+    readerTakeaway:
+      "A scanner's coverage is structurally bounded to one visible layer — a secret that's context-dependent, derived at runtime, or otherwise lives outside that layer isn't a near-miss the scanner almost caught, it's outside where the scanner looks at all.",
+    whyThisHelps:
+      "The article's core distinction (false negative vs. false positive, and why fixing one doesn't fix the other) is abstract in prose — a visible \"scanned layer\" versus an adjacent \"unreached layer\" gives the coverage boundary a shape a reader can hold in mind before the prose defines it precisely.",
     visualType: "cover",
     placement: "After the lead paragraph, before the prerequisites box — the shared article-shell cover slot.",
     mustShow: [
-      "A grid or loose scatter of 15-25 small abstract glyph/token shapes, uniform in general size",
-      "Most glyphs rendered sharp/solid with a thin bracket or tick mark beside them (representing scanner-flagged)",
-      "A minority of glyphs (roughly 3-5) rendered with a subtle refraction/distortion effect and NO bracket — but critically, similar enough in base shape to the flagged ones that they don't visually announce themselves",
-      "Deep-navy field, restrained cyan for flagged glyphs, a muted violet for the unflagged/refracted ones",
+      "A restrained cyan scanning plane or beam, angled or horizontal, actively crossing a visible source layer",
+      "A row of small abstract token-like forms on that visible layer, a subset of them illuminated/highlighted right where the plane currently crosses them",
+      "A second, deeper layer (rendered in muted violet, visually behind/beneath the scanned layer) containing other abstract forms that the plane's path never reaches",
+      "Deep-navy background field consistent with the site's existing hero/diagram palette",
     ],
     mustNotShow: [
-      "Any text, actual credential-shaped strings, code syntax, or recognizable token formats (no 'sk-', 'AKIA', or similar real-looking prefixes)",
-      "A padlock, shield, magnifying glass, or checkmark/X icon set used as literal scanner-result shorthand",
-      "A hooded figure, terminal window, or stock hacker imagery",
+      "Any text, actual credential-shaped strings, code syntax, or recognizable token/credential prefixes (no 'sk-', 'AKIA', or similar real-looking formats)",
+      "A padlock, shield, magnifying glass, checkmark/X icon, or any literal scanner-result iconography",
+      "A hooded figure, terminal window, product logo, or stock hacker imagery",
       "Any real credential, API key format, or infrastructure identifier — this is the one brief in this pilot where that risk is most literal, given the subject matter",
     ],
     factualClaims: [
       {
-        claim: "Regex/entropy-based scanners reliably catch recognizable, high-entropy secret formats and reliably miss context-dependent or low-entropy secrets — a false negative and a false positive are different failure modes requiring different fixes.",
+        claim:
+          "Regex/entropy-based scanners are structurally bounded to scanning a specific visible surface (tracked source, commit diffs, sometimes history) — a secret that's context-dependent, derived at runtime, or otherwise lives outside that surface is not a near-miss, it is outside the scanner's coverage entirely; this is a different failure mode from a false positive and needs a different fix.",
         source: "This article's own executiveSummary and whatYouWillLearn (lib/articles/secrets-detection-scanner-limits.ts), already published and reviewed 2026-08-30.",
       },
     ],
-    compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Grid or loose scatter, not a strict rigid table — should read as texture/field at a glance, not as a literal spreadsheet.",
-    mobileCropNotes: "Center-crop to a denser sub-cluster of ~8-10 glyphs under 480px, keeping at least one unflagged glyph visible and non-obvious in the crop.",
-    exportFormats: ["avif", "webp"],
+    compositionNotes:
+      "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). The scanning plane reads as an active process (motion-suggestive angle or a subtle gradient trail), not a static grid line — the two layers must read as physically separated (depth/blur/opacity), not just two adjacent rows of the same texture.",
+    mobileCropNotes:
+      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so the scanning plane crossing the visible layer, and at least one form visible in the deeper unreached layer, must both stay legible even scaled to a narrow phone width. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.55, 0.45), centered on the plane's leading edge, so the card's crop keeps the active-scanning moment centered.",
+    exportFormats: ["webp"],
     sizeBudgetKb: 200,
   },
   provenance: {
     source: "brief-only",
-    createdAt: "2026-09-03",
+    createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
     reviewStatus: "pending",

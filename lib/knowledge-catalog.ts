@@ -6,6 +6,7 @@
 import { publishedKnowledgeArticles, type KnowledgeArticle } from "./knowledge-content.ts";
 import type { ContentType, Difficulty, EvidenceState, Audience } from "./knowledge-schema.ts";
 import type { CategoryId, PillarId } from "./taxonomy.ts";
+import { isVisualProductionEligible } from "./article-visuals.ts";
 
 export type KnowledgeCatalogCard = {
   slug: string;
@@ -19,14 +20,21 @@ export type KnowledgeCatalogCard = {
   audience: Audience[];
   tags: string[];
   estimatedReadingMinutes: number;
-  /** Only set once the article's coverImage has a real asset (stage
-   * "asset"/"reviewed") — a "brief"-stage cover has no file to show yet,
-   * so the card renders exactly as it does today (Bead s41.9-12 pilot). */
-  thumbnail?: { src: string; alt: string };
+  /** Only set once the article's coverImage is BOTH a real asset (stage
+   * "asset"/"reviewed") AND production-eligible (isVisualProductionEligible
+   * — stage "reviewed" with an approved review). Unlike the full-size
+   * cover on the article's own page (which deliberately renders any real
+   * asset so a reviewer can inspect it on an unmerged branch preview),
+   * the catalog card is treated as a production-only surface — a
+   * pending/rejected/needs-revision asset never appears here, even on a
+   * preview build. A "brief"-stage cover has no file to show yet, so the
+   * card renders exactly as it does today (Bead s41.9-12 pilot). */
+  thumbnail?: { src: string; alt: string; focalPoint?: { x: number; y: number } };
 };
 
 function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
   const { meta, coverImage } = article;
+  const showThumbnail = coverImage && coverImage.stage !== "brief" && coverImage.src && isVisualProductionEligible(coverImage);
   return {
     slug: meta.slug,
     title: meta.title,
@@ -39,7 +47,7 @@ function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
     audience: meta.audience,
     tags: meta.tags,
     estimatedReadingMinutes: meta.estimatedReadingMinutes,
-    thumbnail: coverImage && coverImage.stage !== "brief" && coverImage.src ? { src: coverImage.src, alt: coverImage.alt } : undefined,
+    thumbnail: showThumbnail ? { src: coverImage.src!, alt: coverImage.alt, focalPoint: coverImage.focalPoint } : undefined,
   };
 }
 

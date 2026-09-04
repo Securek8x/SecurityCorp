@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test lib/*.test.ts",
     "design:audit": "impeccable detect --json app components",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build:pages && npm run check:draft-isolation",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build:pages && npm run check:draft-isolation && npm run check:article-visuals",
     "check:draft-isolation": "node scripts/check-draft-isolation.ts",
     "guard:release": "node scripts/check-release-guard.ts",
     "audit:knowledge-tags": "node scripts/audit-knowledge-tags.ts",

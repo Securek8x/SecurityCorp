@@ -66,9 +66,15 @@ document is mostly about that surface.
   credentials, tokens, personal data, or identifiable private
   screenshots in a visual, its prompt, its filename, or its metadata —
   per `docs/publication-safety-policy.md`. `lib/article-visuals.ts`'s
-  `validateArticleVisual` runs every free-text field through
-  `lib/privacy-leak-gate.ts`'s structural scanner as a backstop; it does
-  not replace human judgment.
+  `validateArticleVisual` runs `lib/privacy-leak-gate.ts`'s structural
+  scanner across every free-text field on both the visual and its
+  nested brief — `alt`, `caption`, `credit`, `purpose`,
+  `provenance.prompt`, `provenance.editableSourceRef`,
+  `provenance.creator`, and the brief's `readerTakeaway`,
+  `whyThisHelps`, `placement`, `compositionNotes`, `mobileCropNotes`,
+  every `mustShow`/`mustNotShow` entry, and every factual claim's
+  `claim`/`source` text — as a backstop; it does not replace human
+  judgment.
 
 ## Capability status (read this before writing a brief)
 
@@ -128,9 +134,9 @@ order `validateArticleVisual` expects them:
 | `mustNotShow` | Concrete elements it must exclude — always include generic-imagery and real-infrastructure exclusions explicitly. |
 | `factualClaims` | Any factual relationship the visual depicts, each with a real source (the article's own cited sources, not invented). |
 | `compositionNotes` | Aspect ratio, layout direction, palette constraints. |
-| `mobileCropNotes` | What must survive a narrow-viewport crop. |
-| `exportFormats` | e.g. `["avif", "webp"]`. |
-| `sizeBudgetKb` | A real number, checked by `npm run check:article-visuals` once an asset exists. |
+| `mobileCropNotes` | What must stay legible/composition-safe at a narrow viewport. **Not a literal crop claim** — the full article-page cover only ever scales (`app/globals.css`'s `.article-figure img` is `width:100%;height:auto`, never cropped). A real crop only happens on the catalog-card thumbnail (`.guide-card-thumb{object-fit:cover}`), driven by `focalPoint`. Write this field as "X must stay legible when scaled down," and use it to justify a `focalPoint` choice for the one surface that actually crops. |
+| `exportFormats` | Exactly **one** format, e.g. `["webp"]` — the current rendering contract (`ArticleVisual.src` / `ArticleFigure`) delivers a single file per visual; there's no `<picture>`/multi-source model yet. `validateArticleVisual` rejects more than one entry here. |
+| `sizeBudgetKb` | This visual's own size budget in KB — enforced **per-visual**, not against one shared global number, by `npm run check:article-visuals`. A separate, generous absolute ceiling (1MB) still applies as a backstop even if a brief sets an unreasonably large budget. |
 
 `alt`, `caption`, `credit`, `purpose`, `width`/`height`, `focalPoint`,
 and `provenance` live on the parent `ArticleVisual`, not inside the
@@ -146,22 +152,85 @@ Every visual records `VisualProvenance`: `source` (`"ai-generated"` |
 `prompt` (and `seed` when the generator supports one) once it's past
 `stage: "brief"` — this is what makes the asset reproducible and
 auditable later, not just a file that happened to appear. A
-`reviewStatus: "approved"` record requires a named `reviewer` and
+`human-illustrated` or `photographed` asset requires a named `creator`.
+A `reviewStatus: "approved"` record requires a named `reviewer` and
 `reviewedAt` — **an agent must not approve its own design work**; only a
 human reviewer (in practice, Ravi) sets this to `"approved"`.
+
+## Lifecycle, human approval, and production eligibility
+
+Two separate concerns, kept deliberately apart — conflating them was a
+real defect this document used to have:
+
+1. **Coverage**: does a published article have a cover *at all*?
+   Governed by `VISUAL_GATE_ENABLED` / `checkCoverImageGate` (see
+   Migration state above) — disabled during the migration period, and
+   even once enabled, only checks "is there SOME cover," not whether it's
+   approved.
+2. **Approval**: if a cover *is* present, is it actually human-approved
+   for production? Governed by `isVisualProductionEligible` /
+   `checkAssetApprovalGate` (`lib/article-visuals.ts`) — **always on**,
+   never gated by `VISUAL_GATE_ENABLED`. This is what actually enforces
+   the human-approval requirement.
+
+The lifecycle states and what each one means for rendering vs. approval:
+
+- **`stage: "brief"`**: no file. Never renders. Trivially "eligible"
+  (there's nothing to approve). May sit at this stage indefinitely.
+- **`stage: "asset"`**: a real file exists. **Renders** on the article's
+  own page — including on an unmerged PR branch's Cloudflare Pages
+  preview, deliberately, so a human reviewer can actually see it. **Not
+  production-eligible** while `reviewStatus` is `"pending"`,
+  `"needs-revision"`, or `"rejected"` — `checkAssetApprovalGate` fails
+  for any of those, which is what actually blocks the PR's required CI
+  check (and therefore the merge) even though the image itself is
+  visible on the preview.
+- **`stage: "reviewed"`**: requires `reviewStatus: "approved"` with a
+  named `reviewer` and valid `reviewedAt` — `validateArticleVisual`
+  enforces this pairing in both directions (`"approved"` requires stage
+  `"reviewed"`; stage `"reviewed"` requires `"approved"`), so an agent
+  cannot construct a record that reads as approved without an actual
+  human approval behind it. Only `stage: "reviewed"` +
+  `reviewStatus: "approved"` is production-eligible.
+
+The catalog-card thumbnail (`components/knowledge-catalog-filter.tsx`)
+is treated as a stricter, production-only surface: `lib/knowledge-
+catalog.ts`'s `toCard()` only sets a `thumbnail` when
+`isVisualProductionEligible` is true, so a pending/rejected/needs-
+revision asset never appears there, even on a preview build. The
+article's own cover is the one surface that intentionally renders an
+unapproved asset, because that's what makes review possible in the first
+place.
 
 ## Where a cover renders
 
 `components/knowledge-article-shell.tsx` renders `article.coverImage`
-(when present and past `stage: "brief"`) right after the lead paragraph
-and before the prerequisites box — after the article's own intro, before
-the first instructional content, matching the existing shell's reading
-order. `components/knowledge-catalog-filter.tsx` renders the same
-asset as a card thumbnail (`alt=""` there deliberately — the card's own
-heading already gives the link an accessible name; the meaningful alt
-text lives on the full-size cover). Neither component invents a second
+(when present and past `stage: "brief"`, regardless of `reviewStatus` —
+see Lifecycle above) right after the lead paragraph and before the
+prerequisites box — after the article's own intro, before the first
+instructional content, matching the existing shell's reading order. It
+renders with `priority` set (eager `loading`, high `fetchPriority`),
+since a cover there is almost always already in or near the viewport on
+load; an in-body illustration should NOT set `priority` and stays lazy
+by default. `components/knowledge-catalog-filter.tsx` renders the same
+asset as a card thumbnail, but only once it's production-eligible (see
+Lifecycle above) — `alt=""` there deliberately, since the card's own
+heading already gives the link an accessible name and the meaningful alt
+text lives on the full-size cover. Neither component invents a second
 place for a cover to appear; do not add one without updating this
 document.
+
+`presentation="wide"` and `presentation="inline"` on `ArticleFigure`
+currently render **identically** within the article shell — both sit
+inside the shared `.article-page article{max-width:900px}` column, so
+`wide`'s own `max-width:min(1100px,92vw)` rule can never actually be
+reached; the parent caps it first. This is intentional and unchanged
+from the incumbent shell (breaking a figure out past the shared 900px
+column is a layout change to that shell, not something this pilot has
+authorization to make) — the `wide`/`inline` distinction exists in the
+component's API for a possible future non-nested context, not because it
+currently does anything different. Do not describe `wide` as "breaking
+out" of the article column; it doesn't.
 
 ## Reuse for cards and social images
 
@@ -177,18 +246,62 @@ the actual OG-image pipeline is `wq4`'s scope, not this pilot's.
 
 ## The visual-audit command
 
-`npm run check:article-visuals` (`scripts/check-article-visuals.ts`)
-checks every article's `coverImage` (when present) via
-`validateArticleVisual`, plus filesystem-level concerns pure data
-validation can't catch: missing referenced files, oversized rasters
-(400KB budget), missing raster dimensions, unsafe SVG (`<script>`,
-inline event handlers, external `xlink:href`, XML entities), orphaned
-files under `public/article-visuals/`, and unsupported formats. It also
-runs `checkCoverImageGate`, a no-op while `VISUAL_GATE_ENABLED` is
-false. Run it alongside the rest of the standard validation suite
-(`lint`, `typecheck`, `test`, `check:route-integrity`, `check:public-
-terms`, `check:privacy-leak-gate`, `guard:release`, `build:pages`)
-before shipping any article-visual change.
+`npm run check:article-visuals` (`scripts/check-article-visuals.ts`,
+using pure logic split into `lib/article-visual-assets.ts` for path
+safety, per-visual budget, and SVG-pattern checks — each unit-tested in
+`lib/article-visual-assets.test.ts`) checks every article's `coverImage`
+(when present) via `validateArticleVisual`, plus filesystem-level
+concerns pure data validation can't catch:
+
+- Missing referenced files.
+- Oversized rasters — enforced against **that visual's own**
+  `brief.sizeBudgetKb`, not one shared global number, with a separate
+  1MB absolute ceiling as a backstop.
+- Missing raster dimensions (declared metadata only — see the dimension-
+  verification gap below).
+- Unsafe SVG: `<script>` tags, inline event-handler attributes, external
+  `xlink:href` **or bare `href`** references, `<foreignObject>`, and XML
+  external entities. **This is a targeted check, not a comprehensive SVG
+  sanitizer** — it does not cover `@import`/`url(...)` inside an embedded
+  `<style>` block, SMIL `<animate>`/`<set>` scripting, or any other form
+  not listed above.
+- Unsafe or malformed asset paths: an asset's declared `src` must start
+  with `/article-visuals/` and resolve (after normalization) inside
+  `public/article-visuals/` — `..` traversal, backslashes, query
+  strings/fragments, absolute filesystem paths, and any external URL are
+  all rejected before the path is ever read from disk.
+- Orphaned files under `public/article-visuals/`, walked **recursively**
+  (a per-article subdirectory is a permitted layout, even though the
+  current pilot uses flat filenames).
+- Unsupported formats.
+
+It also runs `checkCoverImageGate` (a no-op while `VISUAL_GATE_ENABLED`
+is false) and `checkAssetApprovalGate` (**always on** — see Lifecycle
+above). It is wired into CI (`.github/workflows/ci.yml`'s "Article visual
+audit" step) and into `npm run check`, so a green required check
+actually proves it ran — this document is not the only enforcement.
+
+**Known, deliberate gaps — do not claim otherwise:**
+
+- **Dimension verification**: the audit checks only that `width`/`height`
+  are positive numbers in the metadata. It does **not** open an
+  AVIF/WebP/PNG/JPEG file and compare its real pixel dimensions against
+  the declared ones. Adding that would need a new image-inspection
+  dependency (e.g. `image-size`), which has not been added — a new
+  dependency requires Ravi's explicit authorization (exact package,
+  pinned version, reason, dependency-review result) first. Until then, a
+  real asset's dimensions must be manually confirmed before it's
+  promoted past `stage: "asset"`.
+- **Metadata stripping**: the audit does not inspect or strip embedded
+  metadata from a raster file. A generated or imported asset must be
+  manually normalized/stripped before being promoted past `stage:
+  "asset"` — this is a human-process requirement today, not an automated
+  guarantee.
+
+Run the full suite (`lint`, `typecheck`, `test`, `check:route-integrity`,
+`check:public-terms`, `check:privacy-leak-gate`, `guard:release`,
+`build:pages`, `check:article-visuals`) before shipping any
+article-visual change.
 
 ## Keep policy, workflow, and data separated
 

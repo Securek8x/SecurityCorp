@@ -71,8 +71,11 @@ opening it:
   approved image-generation capability exists, Ravi has approved the
   pilot direction, and an approved backfill is complete — do not flip it
   as a side effect of unrelated work.
-- An agent must never set a visual's `reviewStatus` to `"approved"` —
-  only a named human reviewer does that.
+- An agent must never set a visual's `reviewStatus` to `"approved"` or
+  its `stage` to `"reviewed"` — both are for a named human reviewer only.
+  `checkAssetApprovalGate` enforces this at CI regardless of
+  `VISUAL_GATE_ENABLED`: an "asset"-stage cover renders for review but
+  is never production-eligible until a human promotes it.
 
 ## Mandatory Ruflo Editorial Routing
 

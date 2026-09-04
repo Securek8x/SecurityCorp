@@ -31,6 +31,12 @@ const coverImage: ArticleVisual = {
   purpose: "Establish, before the prose, that this article is about a layered gate — not a single checkbox — so the 'required review is necessary but not sufficient' thesis lands with less friction.",
   width: 1600,
   height: 900,
+  // Biased right, toward the final gate and the intercepted shortcut —
+  // what the catalog-card thumbnail's object-fit:cover crop keeps
+  // centered under the card's 16:9 aspect ratio; the full article-page
+  // cover itself only ever scales (never crops), so focalPoint only
+  // matters for the card.
+  focalPoint: { x: 0.8, y: 0.5 },
   brief: {
     articleSlug: "protecting-main-branch-beyond-pr-approval",
     readerTakeaway: "A defensible main-branch control is several layers working together, not any single one of them — including the review-approval layer alone.",
@@ -56,8 +62,9 @@ const coverImage: ArticleVisual = {
       },
     ],
     compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Read left-to-right like the site's existing interactive diagrams, but purely atmospheric/geometric — no node labels, distinct from the article's own precise technical diagram further down the page.",
-    mobileCropNotes: "Center-crop to the final gate and the trunk/intercepted-shortcut split under 480px — that's the one moment the composition can't lose.",
-    exportFormats: ["avif", "webp"],
+    mobileCropNotes:
+      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so the final gate and the trunk/intercepted-shortcut split must stay legible even scaled to a narrow phone width, not just at full size. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.8, 0.5), biased toward the final gate, so the card's crop keeps that moment centered.",
+    exportFormats: ["webp"],
     sizeBudgetKb: 200,
   },
   provenance: {

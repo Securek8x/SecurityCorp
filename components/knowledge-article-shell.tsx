@@ -261,6 +261,13 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
 
         {lead && <p className="lead">{renderInline(lead)}</p>}
 
+        {/* Renders any real asset (stage "asset" or "reviewed"), regardless
+            of reviewStatus — this is deliberate: it's what lets a real
+            asset show up on an unmerged branch's Cloudflare Pages preview
+            for human review. Production-merge eligibility is a separate,
+            always-on gate (checkAssetApprovalGate, lib/article-visuals.ts /
+            scripts/check-article-visuals.ts), not something this component
+            enforces by hiding the image. */}
         {article.coverImage && article.coverImage.stage !== "brief" && article.coverImage.src && (
           <ArticleFigure
             src={article.coverImage.src}
@@ -270,6 +277,7 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             width={article.coverImage.width}
             height={article.coverImage.height}
             presentation="wide"
+            priority
           />
         )}
 
