@@ -6,7 +6,7 @@ import { ReadingProgress } from "@/components/reading-progress";
 import { KnowledgeArticleShell } from "@/components/knowledge-article-shell";
 import { knowledgeArticles, findKnowledgeArticle } from "@/lib/knowledge-content";
 import { knowledgeArticleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
-import { ogImages, twitterImages } from "@/lib/seo";
+import { pageOgImages, pageTwitterImages } from "@/lib/seo";
 
 // Sourced from the full (not just published) list — see the
 // STATIC_EXPORT_PLACEHOLDER comment in lib/knowledge-content.ts for why:
@@ -26,8 +26,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title,
     description: summary,
     alternates: { canonical: `/knowledge/${article.meta.slug}` },
-    openGraph: { type: "article", url: `https://securitycorp.net/knowledge/${article.meta.slug}`, siteName: "SecurityCorp", title: `${title} | SecurityCorp`, description: summary, images: ogImages(`${title} | SecurityCorp`) },
-    twitter: { card: "summary_large_image", title: `${title} | SecurityCorp`, description: summary, images: twitterImages(`${title} | SecurityCorp`) },
+    openGraph: {
+      type: "article",
+      url: `https://securitycorp.net/knowledge/${article.meta.slug}`,
+      siteName: "SecurityCorp",
+      title: `${title} | SecurityCorp`,
+      description: summary,
+      images: pageOgImages(`/knowledge/${article.meta.slug}`, `${title} | SecurityCorp`),
+    },
+    twitter: { card: "summary_large_image", title: `${title} | SecurityCorp`, description: summary, images: pageTwitterImages(`/knowledge/${article.meta.slug}`, `${title} | SecurityCorp`) },
   };
 }
 

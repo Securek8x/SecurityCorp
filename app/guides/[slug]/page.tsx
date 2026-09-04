@@ -12,7 +12,7 @@ import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
 import VpnWorkloadDiagram from "@/components/diagrams/vpn-workload-diagram";
 import ReverseProxyDiagram from "@/components/diagrams/reverse-proxy-diagram";
 import { articles, type Callout } from "@/lib/content";
-import { ogImages, twitterImages } from "@/lib/seo";
+import { pageOgImages, pageTwitterImages } from "@/lib/seo";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/json-ld";
 
@@ -61,9 +61,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: published,
       authors: ["Ravi Teja Thota"],
       tags: [article.category],
-      images: ogImages(article.title),
+      images: pageOgImages(`/guides/${article.slug}`, article.title),
     },
-    twitter: { card: "summary_large_image", title: article.title, description: article.dek, images: twitterImages(article.title) },
+    twitter: { card: "summary_large_image", title: article.title, description: article.dek, images: pageTwitterImages(`/guides/${article.slug}`, article.title) },
   };
 }
 
