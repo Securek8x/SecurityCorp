@@ -42,7 +42,7 @@ import { article as logsAreNotProofVerifyingAutomatedActions } from "./articles/
 import { article as hardeningPrivateGiteaServer } from "./articles/hardening-a-private-gitea-server.ts";
 import { article as threatModelingAiAgentsToolAccess } from "./articles/threat-modeling-ai-agents-tool-access.ts";
 import { article as promptInjectionAiAssistedEngineering } from "./articles/prompt-injection-ai-assisted-engineering.ts";
-import { article as humanApprovalGatesAutonomousActions } from "./articles/human-approval-gates-autonomous-actions.ts";
+import { article as approvalGateFailureModesActorAgnosticCatalog } from "./articles/approval-gate-failure-modes-actor-agnostic-catalog.ts";
 import { article as preventingSensitiveDataLeakageAiTools } from "./articles/preventing-sensitive-data-leakage-ai-tools.ts";
 import { article as workloadIdentitiesVsLongLivedCredentials } from "./articles/workload-identities-vs-long-lived-credentials.ts";
 import { article as cloudIamPermissionCreep } from "./articles/cloud-iam-permission-creep.ts";
@@ -203,7 +203,7 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   hardeningPrivateGiteaServer,
   threatModelingAiAgentsToolAccess,
   promptInjectionAiAssistedEngineering,
-  humanApprovalGatesAutonomousActions,
+  approvalGateFailureModesActorAgnosticCatalog,
   preventingSensitiveDataLeakageAiTools,
   workloadIdentitiesVsLongLivedCredentials,
   cloudIamPermissionCreep,

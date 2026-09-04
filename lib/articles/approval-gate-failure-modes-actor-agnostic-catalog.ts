@@ -1,38 +1,35 @@
 // Knowledge-base article draft (Bead securitycorp-source-4zl.54.4.3).
 // Status is intentionally "drafting" — see docs/publication-safety-policy.md.
-// This file is NOT wired into lib/knowledge-content.ts and is not
-// registered as an article import in this commit; it becomes part of the
-// published catalog only after human privacy/technical/publication review,
-// per docs/knowledge-base.md. Every example describes a fictional
-// automation system, fictional approval service, and fictional targets; no
-// real system, credential, account, or production identifier appears
-// anywhere in this file.
+// This file is registered in lib/knowledge-content.ts as a drafting-status
+// entry; it becomes part of the published catalog only after human privacy/
+// technical/publication review, per docs/knowledge-base.md. Every example
+// describes a fictional automation system, fictional approval service, and
+// fictional targets; no real system, credential, account, or production
+// identifier appears anywhere in this file.
 //
-// Scope note / duplicate-topic flag: this bead was assigned under the
-// "AI Security" epic (securitycorp-source-4zl.54.4) alongside bead
-// securitycorp-source-4zl.33, "Designing Human Approval Gates for AI
-// Agents," which was drafted and published (slug
-// human-approval-gates-for-ai-agents) earlier in this same session under
-// the same epic. That article's central thesis is narrative and threat-
-// model-specific: an instruction-only "ask before doing X" gate fails
-// because prompt injection can manipulate the agent's own reasoning, so
-// enforcement has to sit in an external broker rather than the agent's
-// context. This article deliberately does not re-argue that thesis. It is
-// scoped instead as a pattern catalog: concrete, implementation-level gate
-// mechanisms (confirmation prompts, scoped/expiring approval tokens, dual
-// control, audit trails) and a reversibility/blast-radius classification
-// applied across five named consequential-action categories (deploying
-// code, external communications, production data/infrastructure changes,
-// spending money, deleting data) — a broader taxonomy than either sibling
-// article uses, and one that applies whether the actor proposing the
-// action is a human (see the separate, already-published
-// designing-human-approval-gates-for-production-changes, which covers what
-// makes a human-authored change's approval meaningful) or an autonomous
-// system. Because the overlap in title and scope between this bead and
-// 4zl.33 appears to reflect duplicate planning rather than an intentional
-// split, this should be flagged to the human content owner to decide
-// whether both articles should remain in the catalog, be merged, or have
-// one bead retired — this file does not resolve that on its own.
+// Reframe note (2026-09-04, Ravi's explicit decision): this bead was
+// originally assigned under the "AI Security" epic (securitycorp-source-
+// 4zl.54.4) alongside bead securitycorp-source-4zl.33, "Designing Human
+// Approval Gates for AI Agents" (published as human-approval-gates-for-
+// ai-agents), and flagged as a possible 3-way overlap with that article and
+// securitycorp-source-4zl.54.2.8, "Designing Human Approval Gates for
+// Production Changes" (also published). A full content-level crosswalk
+// found the three genuinely distinct in substance — this article's central
+// thesis is a pattern catalog of concrete gate mechanisms (confirmation
+// prompts, scoped/expiring approval tokens, dual control, audit trails) and
+// a five-category action taxonomy that applies regardless of whether the
+// actor proposing the action is human or automated, which neither sibling
+// article covers in comparable depth — but a real title/discoverability
+// collision risk (three similarly-named "human approval gate" articles).
+// Ravi's decision: keep all three beads open (their scopes differ — no
+// supersession), and reframe this article's title/slug rather than merge,
+// replace, or reject it. Retitled from "Human Approval Gates for Autonomous
+// Actions" to make the distinguishing angle explicit in the title itself:
+// this is a catalog of *failure modes*, and it is *actor-agnostic* — a
+// claim neither the AI-agent/prompt-injection article (agent-specific) nor
+// the informed-approval/separation-of-duties article (human-change-
+// specific) makes. Content is unchanged from the original draft; only the
+// title, slug, and this header were updated.
 //
 // Editorial routing note: per this repo's Ruflo routing requirement, a real
 // mcp__ruflo__workflow_run invocation was attempted before drafting
@@ -162,10 +159,10 @@ const module_: GuideModule = {
 
 export const article: KnowledgeArticle = {
   meta: {
-    title: "Human Approval Gates for Autonomous Actions",
-    slug: "human-approval-gates-autonomous-actions",
+    title: "Approval-Gate Failure Modes: An Actor-Agnostic Catalog",
+    slug: "approval-gate-failure-modes-actor-agnostic-catalog",
     summary:
-      "A pattern catalog for gating consequential automated actions — deploying code, external communications, production data/infrastructure changes, spending money, and deleting data: classifying action risk by reversibility and blast radius, and four concrete gate-design patterns — explicit confirmation prompts, scoped/expiring approval tokens, dual control for the highest-risk actions, and structured audit trails.",
+      "A catalog of how approval gates for consequential automated actions actually fail — and the four gate-design patterns that hold up instead: explicit confirmation prompts, scoped/expiring approval tokens, dual control for the highest-risk actions, and structured audit trails — applied across five action categories (deploying code, external communications, production data/infrastructure changes, spending money, deleting data) regardless of whether the actor proposing the action is human or automated.",
     pillar: "build-securely",
     primaryCategory: "ai-security",
     contentType: "guide",
