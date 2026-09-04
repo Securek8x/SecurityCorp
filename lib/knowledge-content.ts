@@ -46,6 +46,9 @@ import { article as humanApprovalGatesAutonomousActions } from "./articles/human
 import { article as preventingSensitiveDataLeakageAiTools } from "./articles/preventing-sensitive-data-leakage-ai-tools.ts";
 import { article as workloadIdentitiesVsLongLivedCredentials } from "./articles/workload-identities-vs-long-lived-credentials.ts";
 import { article as cloudIamPermissionCreep } from "./articles/cloud-iam-permission-creep.ts";
+import { article as kubernetesRbacDesignPrinciples } from "./articles/kubernetes-rbac-design-principles.ts";
+import { article as containerHealthNotSecurityValidation } from "./articles/container-health-not-security-validation.ts";
+import { article as scopingAuthorizedSecurityAssessment } from "./articles/scoping-authorized-security-assessment.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -204,6 +207,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   preventingSensitiveDataLeakageAiTools,
   workloadIdentitiesVsLongLivedCredentials,
   cloudIamPermissionCreep,
+  kubernetesRbacDesignPrinciples,
+  containerHealthNotSecurityValidation,
+  scopingAuthorizedSecurityAssessment,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
