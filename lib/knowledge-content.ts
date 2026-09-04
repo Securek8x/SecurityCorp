@@ -42,6 +42,9 @@ import { article as hardeningPrivateGiteaServer } from "./articles/hardening-a-p
 import { article as threatModelingAiAgentsToolAccess } from "./articles/threat-modeling-ai-agents-tool-access.ts";
 import { article as promptInjectionAiAssistedEngineering } from "./articles/prompt-injection-ai-assisted-engineering.ts";
 import { article as humanApprovalGatesAutonomousActions } from "./articles/human-approval-gates-autonomous-actions.ts";
+import { article as preventingSensitiveDataLeakageAiTools } from "./articles/preventing-sensitive-data-leakage-ai-tools.ts";
+import { article as workloadIdentitiesVsLongLivedCredentials } from "./articles/workload-identities-vs-long-lived-credentials.ts";
+import { article as cloudIamPermissionCreep } from "./articles/cloud-iam-permission-creep.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -189,6 +192,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   threatModelingAiAgentsToolAccess,
   promptInjectionAiAssistedEngineering,
   humanApprovalGatesAutonomousActions,
+  preventingSensitiveDataLeakageAiTools,
+  workloadIdentitiesVsLongLivedCredentials,
+  cloudIamPermissionCreep,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
