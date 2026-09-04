@@ -15,3 +15,24 @@
 /.well-known/security.txt
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=86400
+
+# next/og's ImageResponse (app/**/opengraph-image.tsx) compiles to a route
+# handler, so under `output: "export"` the static file it produces has no
+# extension (out/knowledge/<slug>/opengraph-image, not .../opengraph-
+# image.png) — Cloudflare Pages otherwise infers Content-Type from the
+# file extension and serves it as application/octet-stream, which social
+# platforms reject as a share-card image. Same root cause the site's
+# original single static /opengraph-image.png already worked around (see
+# lib/seo.ts's comment); these three explicit overrides do the same for
+# the per-page dynamic images (securitycorp-source-wq4).
+/knowledge/*/opengraph-image
+  Content-Type: image/png
+  Cache-Control: public, max-age=3600
+
+/guides/*/opengraph-image
+  Content-Type: image/png
+  Cache-Control: public, max-age=3600
+
+/projects/*/opengraph-image
+  Content-Type: image/png
+  Cache-Control: public, max-age=3600

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Shell } from "@/components/site-shell";
 import { projects } from "@/lib/content";
-import { ogImages, twitterImages } from "@/lib/seo";
+import { pageOgImages, pageTwitterImages } from "@/lib/seo";
 import { breadcrumbJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/json-ld";
 import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
@@ -53,8 +53,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: project.title,
     description: project.text,
     alternates: { canonical: `/projects/${slug}` },
-    openGraph: { type: "website", url, siteName: "SecurityCorp", title: `${project.title} | SecurityCorp`, description: project.text, images: ogImages(project.title) },
-    twitter: { card: "summary_large_image", title: `${project.title} | SecurityCorp`, description: project.text, images: twitterImages(project.title) },
+    openGraph: { type: "website", url, siteName: "SecurityCorp", title: `${project.title} | SecurityCorp`, description: project.text, images: pageOgImages(`/projects/${slug}`, project.title) },
+    twitter: { card: "summary_large_image", title: `${project.title} | SecurityCorp`, description: project.text, images: pageTwitterImages(`/projects/${slug}`, project.title) },
   };
 }
 
