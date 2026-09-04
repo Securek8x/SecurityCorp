@@ -53,6 +53,30 @@ The Impeccable hook is project-local in `.claude/settings.local.json`; it is
 machine-local by design and MUST preserve unrelated Claude settings. Do not
 move it into a shared machine configuration without explicit authorization.
 
+## Article visual guidelines
+
+Cover images and in-body teaching visuals for knowledge articles follow
+[docs/article-visual-guidelines.md](docs/article-visual-guidelines.md) — the
+authoritative policy, brief template, and migration-state rules. Do not
+duplicate that guide here; a few invariants worth remembering without
+opening it:
+
+- A visual generic enough to fit ten unrelated articles is rejected, not
+  shipped. No stock hacker imagery, hooded figures, generic locks, random
+  code screens, meaningless HUD overlays, or excessive glow.
+- Generated raster art never carries factual labels/commands/protocol
+  detail — that content stays code-native (SVG/React), matching the
+  existing `KnowledgeArticle["diagram"]` mechanism.
+- `lib/article-visuals.ts`'s `VISUAL_GATE_ENABLED` stays `false` until an
+  approved image-generation capability exists, Ravi has approved the
+  pilot direction, and an approved backfill is complete — do not flip it
+  as a side effect of unrelated work.
+- An agent must never set a visual's `reviewStatus` to `"approved"` or
+  its `stage` to `"reviewed"` — both are for a named human reviewer only.
+  `checkAssetApprovalGate` enforces this at CI regardless of
+  `VISUAL_GATE_ENABLED`: an "asset"-stage cover renders for review but
+  is never production-eligible until a human promotes it.
+
 ## Mandatory Ruflo Editorial Routing
 
 At the beginning of every substantive SecurityCorp editorial task, Claude Code

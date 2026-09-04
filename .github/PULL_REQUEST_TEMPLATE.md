@@ -14,7 +14,9 @@
 
 - [ ] `npm run lint` passes
 - [ ] `npm run typecheck` passes
+- [ ] `npm run test` passes
 - [ ] `npm run build:pages` succeeds locally
+- [ ] `npm run check:article-visuals` passes (if this PR touches an article's `coverImage` or the visual-audit script itself)
 - [ ] Manually verified the change in a browser (if UI-affecting)
 
 ## Rollback

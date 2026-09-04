@@ -42,6 +42,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Test
+        run: npm run test
+
       - name: Build (Cloudflare Pages production build)
         run: npm run build:pages
 
@@ -53,3 +56,6 @@ jobs:
 
       - name: Privacy leak gate
         run: npm run check:privacy-leak-gate
+
+      - name: Article visual audit
+        run: npm run check:article-visuals
