@@ -718,9 +718,10 @@ a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
 h2 .heading-link-btn{display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;color:var(--muted);cursor:pointer;vertical-align:middle;margin-left:6px;padding:4px;opacity:0;transition:opacity .15s,color .15s}
 h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:focus-visible{opacity:1}
 .heading-link-btn:hover{color:var(--acid)}
-.byline .share-btn{margin-left:auto}
-.share-btn{background:transparent;cursor:pointer;border-color:var(--line);color:var(--muted)}
-.share-btn:hover{border-color:var(--acid);color:var(--acid);box-shadow:none}
+.byline .byline-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.share-btn,.correction-link{background:transparent;cursor:pointer;border-color:var(--line);color:var(--muted)}
+.share-btn:hover,.correction-link:hover{border-color:var(--acid);color:var(--acid);box-shadow:none}
+.change-note{margin-top:12px}
 
 /* ---- architecture diagrams ---- */
 .arch-diagram{margin:35px 0;border:1px solid var(--line);padding:20px;background:var(--surface-raised)}
@@ -821,7 +822,8 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
   .filter-count{margin-left:0}
   .case-timeline li{grid-template-columns:1fr;padding-left:16px}
   .timeline-index{display:none}
-  .byline .share-btn{margin-left:0;margin-top:10px;width:100%;justify-content:center}
+  .byline .byline-actions{margin-left:0;margin-top:10px;width:100%;flex-direction:column}
+  .byline .byline-actions .share-btn,.byline .byline-actions .correction-link{width:100%;justify-content:center}
   .theme-toggle{min-width:44px}
 }
 @media(prefers-reduced-motion:reduce){
