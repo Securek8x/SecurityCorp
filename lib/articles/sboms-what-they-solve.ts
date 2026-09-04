@@ -192,8 +192,15 @@ const sections: UniversalSections = {
     "Pair SBOM inventory with build-provenance controls (SLSA) and dependency-trust controls (registry and namespace configuration) — none of these three concerns substitutes for the other two.",
   ],
   references: [
-    "NTIA, \"The Minimum Elements For a Software Bill of Materials (SBOM)\" (2021): https://www.ntia.gov/report/2021/minimum-elements-software-bill-materials-sbom",
-    "CISA, updated minimum-elements guidance for a Software Bill of Materials: https://www.cisa.gov/resources-tools/resources/2026-minimum-elements-software-bill-materials-sbom",
+    // The original NTIA 2021 URL (www.ntia.gov/report/2021/minimum-
+    // elements-software-bill-materials-sbom) is dead — CISA's page below
+    // explicitly states it "updates and replaces" that NTIA guidance, so
+    // rather than archive-fallback a superseded document, the reference
+    // list keeps only its live, current successor. The prose above (this
+    // module's mainContent) still names and describes the NTIA 2021
+    // baseline by fact, unaffected by this reference-list change.
+    // securitycorp-source-fgz.
+    "CISA, \"2026 Minimum Elements for a Software Bill of Materials (SBOM)\" — updates and replaces NTIA's 2021 guidance: https://www.cisa.gov/resources-tools/resources/2026-minimum-elements-software-bill-materials-sbom",
     "SPDX Specification (ISO/IEC 5962:2021), Linux Foundation: https://spdx.dev/",
     "OWASP CycloneDX (Ecma International ECMA-424): https://cyclonedx.org/",
     "SLSA — Supply-chain Levels for Software Artifacts: https://slsa.dev/",
