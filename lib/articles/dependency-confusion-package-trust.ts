@@ -81,7 +81,13 @@ const sections: UniversalSections = {
     "Namespace scoping plus a single authoritative registry per name — not just noticing the attack after the fact — is what removes the ambiguity dependency confusion depends on.",
   ],
   references: [
-    "Alex Birsan, \"Dependency Confusion: How I Hacked Into Apple, Microsoft and Dozens of Other Companies\" (2021): https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610",
+    // Medium blocks automated/bot fetches (HTTP 403) regardless of the
+    // article's own liveness — confirmed live for a real reader via
+    // WebFetch and cross-referenced across multiple independent sources
+    // (2026-09-04) — so this cites a verifiably-fetchable Wayback Machine
+    // snapshot of the same original content instead of the bot-blocked
+    // direct URL. securitycorp-source-fgz.
+    "Alex Birsan, \"Dependency Confusion: How I Hacked Into Apple, Microsoft and Dozens of Other Companies\" (2021), archived: https://web.archive.org/web/20250102030015/https://medium.com/@alex.birsan/dependency-confusion-4a5d60fec610",
     "npm Docs — About scopes: https://docs.npmjs.com/cli/v10/using-npm/scope",
     "pip documentation — install command reference (multiple index URLs): https://pip.pypa.io/en/stable/cli/pip_install/#cmdoption-extra-index-url",
     "CWE-1357: Reliance on Insufficiently Trustworthy Component: https://cwe.mitre.org/data/definitions/1357.html",
