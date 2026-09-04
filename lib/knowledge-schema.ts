@@ -76,6 +76,12 @@ export type KnowledgeArticleMeta = {
   publishedAt?: string;
   updatedAt?: string;
   lastReviewedAt?: string;
+  /** Concise, reader-facing note on what changed — surfaced beside
+   * `updatedAt` only when both are set (securitycorp-source-nyu). Optional
+   * and additive like the other retrofit-later fields on this type: no
+   * existing article has one, and none is required to have one. Meant for
+   * substantive content revisions, not every editorial nit. */
+  changeNote?: string;
   labRequired: boolean;
   authorizedLabOnly: boolean;
   vendorNeutral: boolean;
