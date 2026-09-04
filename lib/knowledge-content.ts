@@ -39,6 +39,9 @@ import { article as dockerSockMountingSecurityRisks } from "./articles/docker-so
 import { article as secureInternalReverseProxyDesign } from "./articles/secure-internal-reverse-proxy-design.ts";
 import { article as logsAreNotProofVerifyingAutomatedActions } from "./articles/logs-are-not-proof-verifying-automated-actions.ts";
 import { article as hardeningPrivateGiteaServer } from "./articles/hardening-a-private-gitea-server.ts";
+import { article as threatModelingAiAgentsToolAccess } from "./articles/threat-modeling-ai-agents-tool-access.ts";
+import { article as promptInjectionAiAssistedEngineering } from "./articles/prompt-injection-ai-assisted-engineering.ts";
+import { article as humanApprovalGatesAutonomousActions } from "./articles/human-approval-gates-autonomous-actions.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -183,6 +186,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   dockerSockMountingSecurityRisks,
   logsAreNotProofVerifyingAutomatedActions,
   hardeningPrivateGiteaServer,
+  threatModelingAiAgentsToolAccess,
+  promptInjectionAiAssistedEngineering,
+  humanApprovalGatesAutonomousActions,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
