@@ -16,10 +16,10 @@ import type { ArticleVisual } from "../article-visuals.ts";
 // to this article's own thesis (segmentation vs. isolation as materially
 // different boundary strengths), not a generic "network security" image —
 // the differential boundary treatment IS the brief's one required idea.
-// Still `reviewStatus: "pending"` — an agent must not self-approve; only a
-// human reviewer (Ravi) promotes this to stage "reviewed"/"approved".
+// Reviewed and approved by Ravi Teja Thota (2026-09-05, PR #51) after
+// rendered browser QA — see provenance below.
 const coverImage: ArticleVisual = {
-  stage: "asset",
+  stage: "reviewed",
   src: "/article-visuals/understanding-network-trust-boundaries-cover.webp",
   visualType: "cover",
   alt: "Four adjacent zones in a deep-navy field, connected by cyan paths of varying visible strength — one zone sealed behind a solid violet ring with no path reaching it directly",
@@ -81,7 +81,9 @@ const coverImage: ArticleVisual = {
     createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
-    reviewStatus: "pending",
+    reviewStatus: "approved",
+    reviewer: "Ravi Teja Thota",
+    reviewedAt: "2026-09-05",
   },
 };
 

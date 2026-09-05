@@ -24,11 +24,10 @@ import type { ArticleVisual } from "../article-visuals.ts";
 // rather than a generic "code review" or "git" image — the
 // multi-layer-then-trunk composition is the one required idea,
 // deliberately distinct from the existing diagram's precise technical
-// layer labels. Still `reviewStatus: "pending"` — an agent must not
-// self-approve; only a human reviewer (Ravi) promotes this to stage
-// "reviewed"/"approved".
+// layer labels. Reviewed and approved by Ravi Teja Thota (2026-09-05,
+// PR #51) after rendered browser QA — see provenance below.
 const coverImage: ArticleVisual = {
-  stage: "asset",
+  stage: "reviewed",
   src: "/article-visuals/protecting-main-branch-beyond-pr-approval-cover.webp",
   visualType: "cover",
   alt: "Several converging paths passing through three sequential translucent gates before reaching a single cyan trunk line, with one shortcut path visibly stopped at the final gate",
@@ -89,7 +88,9 @@ const coverImage: ArticleVisual = {
     createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
-    reviewStatus: "pending",
+    reviewStatus: "approved",
+    reviewer: "Ravi Teja Thota",
+    reviewedAt: "2026-09-05",
   },
 };
 

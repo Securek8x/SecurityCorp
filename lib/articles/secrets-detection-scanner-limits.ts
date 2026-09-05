@@ -10,9 +10,9 @@ import type { ArticleVisual } from "../article-visuals.ts";
 // Cover visual (Bead s41.9/s41.12 pilot) — real asset produced from the
 // brief below via the OpenAI built-in image-generation tool in ChatGPT/
 // Codex (external to this repo; the tool exposed no model identifier or
-// seed), normalized with sharp@0.35.4 to exactly 1600x900 WebP. Still
-// `reviewStatus: "pending"` — an agent must not self-approve; only a
-// human reviewer (Ravi) promotes this to stage "reviewed"/"approved".
+// seed), normalized with sharp@0.35.4 to exactly 1600x900 WebP. Reviewed
+// and approved by Ravi Teja Thota (2026-09-05, PR #51) after rendered
+// browser QA — see provenance below.
 // This article is already status:"published"
 // (reviewed 2026-08-30) — this brief only adds cover-visual infrastructure
 // to it, it does not touch content or review state. Specific to the
@@ -36,7 +36,7 @@ import type { ArticleVisual } from "../article-visuals.ts";
 // boundaries, protecting main branch) were kept unchanged — this revision
 // only touches this one brief.
 const coverImage: ArticleVisual = {
-  stage: "asset",
+  stage: "reviewed",
   src: "/article-visuals/secrets-detection-scanner-limits-cover.webp",
   visualType: "cover",
   alt: "A restrained cyan scanning plane passing over a visible source layer, illuminating a row of recognizable token-like abstract forms as it crosses them — while other abstract forms sit in a deeper violet layer beneath, entirely outside the plane's reach",
@@ -94,7 +94,9 @@ const coverImage: ArticleVisual = {
     createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
-    reviewStatus: "pending",
+    reviewStatus: "approved",
+    reviewer: "Ravi Teja Thota",
+    reviewedAt: "2026-09-05",
   },
 };
 
