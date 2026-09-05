@@ -9,26 +9,35 @@
 // always-on concern (never gated by VISUAL_GATE_ENABLED): whether any
 // cover that IS present is actually human-approved for production.
 //
-// Known, deliberate limitation: this script validates metadata only —
-// declared width/height and declared file size — it does NOT open
-// AVIF/WebP/PNG/JPEG files and compare their real pixel dimensions
-// against the declared width/height, and it does NOT verify that a
-// raster's embedded metadata has been stripped. Both would require a new
-// image-inspection dependency (e.g. `image-size`), which this script
-// intentionally has not added — that requires Ravi's explicit
-// authorization (exact package, pinned version, reason, dependency-review
-// result) before being added, per docs/article-visual-guidelines.md.
-// Until that lands, a real asset must be manually confirmed to match its
-// declared dimensions and to have had its metadata stripped before it can
-// be promoted past stage "asset".
+// Real pixel-dimension and embedded-metadata verification (closing the two
+// "known, deliberate gaps" this comment used to describe) is done via the
+// exactly-pinned `sharp@0.35.4` devDependency, authorized by Ravi on Bead
+// securitycorp-source-s41.12 for exactly this purpose — see
+// scripts/normalize-cover-source.ts for the normalization side and
+// lib/article-visual-assets.ts's `checkDimensionsMatch`/
+// `hasDisallowedMetadata` for the pure comparison logic (unit-tested
+// there, without a `sharp` import, so the fast `lib/*.test.ts` suite
+// doesn't need it). This script opens each existing raster referenced by
+// an ArticleVisual and compares its ACTUAL decoded width/height/metadata
+// against the declared record — not just checking that the declared
+// numbers are positive.
 //
 // Pure path/budget/SVG-pattern logic lives in lib/article-visual-assets.ts
 // (unit-tested there) — this script is the thin fs-walking orchestrator.
 import { readFileSync, existsSync, statSync, readdirSync } from "node:fs";
 import path from "node:path";
+import sharp from "sharp";
 import { knowledgeArticles } from "../lib/knowledge-content.ts";
 import { validateArticleVisual, checkCoverImageGate, checkAssetApprovalGate, type ArticleVisual } from "../lib/article-visuals.ts";
-import { RASTER_EXTENSIONS, SUPPORTED_ASSET_EXTENSIONS, resolveAssetPath, checkRasterBudget, scanSvgForUnsafePatterns } from "../lib/article-visual-assets.ts";
+import {
+  RASTER_EXTENSIONS,
+  SUPPORTED_ASSET_EXTENSIONS,
+  resolveAssetPath,
+  checkRasterBudget,
+  scanSvgForUnsafePatterns,
+  checkDimensionsMatch,
+  hasDisallowedMetadata,
+} from "../lib/article-visual-assets.ts";
 
 const errors: string[] = [];
 const warnings: string[] = [];
@@ -42,7 +51,7 @@ const ABSOLUTE_MAX_RASTER_BYTES = 1024 * 1024; // 1MB
 
 const referencedAssets = new Set<string>();
 
-function checkAssetFile(visual: ArticleVisual, articleSlug: string) {
+async function checkAssetFile(visual: ArticleVisual, articleSlug: string) {
   if (visual.stage === "brief" || !visual.src) return;
   const ext = path.extname(visual.src).toLowerCase();
   if (!SUPPORTED_ASSET_EXTENSIONS.has(ext)) {
@@ -69,6 +78,26 @@ function checkAssetFile(visual: ArticleVisual, articleSlug: string) {
     if (!budgetCheck.withinBudget) {
       errors.push(`${articleSlug} ${visual.visualType}: ${budgetCheck.reason} (${visual.src})`);
     }
+
+    const metadata = await sharp(readFileSync(filePath)).metadata();
+    const dimCheck = checkDimensionsMatch({ width: metadata.width ?? -1, height: metadata.height ?? -1 }, { width: visual.width, height: visual.height });
+    if (!dimCheck.ok) {
+      errors.push(`${articleSlug} ${visual.visualType}: ${dimCheck.reason} (${visual.src})`);
+    }
+    if (metadata.format !== ext.slice(1)) {
+      errors.push(`${articleSlug} ${visual.visualType}: actual format "${metadata.format}" does not match extension "${ext}" (${visual.src})`);
+    }
+    const metadataFindings = hasDisallowedMetadata({
+      exif: metadata.exif,
+      icc: metadata.icc,
+      iptc: metadata.iptc,
+      xmp: metadata.xmp,
+      orientation: metadata.orientation,
+      comments: (metadata as { comments?: unknown[] }).comments,
+    });
+    if (metadataFindings.length > 0) {
+      errors.push(`${articleSlug} ${visual.visualType}: disallowed embedded metadata found: ${metadataFindings.join(", ")} (${visual.src})`);
+    }
   }
 
   if (ext === ".svg") {
@@ -84,7 +113,7 @@ for (const article of knowledgeArticles) {
 
   if (article.coverImage) {
     errors.push(...validateArticleVisual(article.coverImage, slug));
-    checkAssetFile(article.coverImage, slug);
+    await checkAssetFile(article.coverImage, slug);
   } else if (article.meta.status === "published") {
     warnings.push(`${slug}: published with no coverImage at all — not yet required (migration period), but worth a brief`);
   }

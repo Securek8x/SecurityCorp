@@ -9,14 +9,18 @@ import type { KnowledgeArticle } from "../knowledge-content.ts";
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
 import type { ArticleVisual } from "../article-visuals.ts";
 
-// Cover visual brief (Bead s41.9 pilot) — generation-ready, not yet an
-// asset: this repo has no working image-generation capability installed
-// (see docs/article-visual-guidelines.md). Specific to this article's own
-// thesis (segmentation vs. isolation as materially different boundary
-// strengths), not a generic "network security" image — the differential
-// boundary treatment IS the brief's one required idea.
+// Cover visual (Bead s41.9/s41.12 pilot) — real asset produced from the
+// brief below via the OpenAI built-in image-generation tool in ChatGPT/
+// Codex (external to this repo; the tool exposed no model identifier or
+// seed), normalized with sharp@0.35.4 to exactly 1600x900 WebP. Specific
+// to this article's own thesis (segmentation vs. isolation as materially
+// different boundary strengths), not a generic "network security" image —
+// the differential boundary treatment IS the brief's one required idea.
+// Still `reviewStatus: "pending"` — an agent must not self-approve; only a
+// human reviewer (Ravi) promotes this to stage "reviewed"/"approved".
 const coverImage: ArticleVisual = {
-  stage: "brief",
+  stage: "asset",
+  src: "/article-visuals/understanding-network-trust-boundaries-cover.webp",
   visualType: "cover",
   alt: "Four adjacent zones in a deep-navy field, connected by cyan paths of varying visible strength — one zone sealed behind a solid violet ring with no path reaching it directly",
   caption: "Not every boundary here is the same strength — one path never exists at all.",
@@ -27,8 +31,16 @@ const coverImage: ArticleVisual = {
   // Biased right, toward the sealed zone — this is what the catalog-card
   // thumbnail's object-fit:cover crop keeps centered under the card's
   // 16:9 aspect ratio; the full article-page cover itself only ever
-  // scales (never crops), so focalPoint only matters for the card.
-  focalPoint: { x: 0.75, y: 0.5 },
+  // scales (never crops), so focalPoint only matters for the card. Set to
+  // (0.87, 0.5) rather than a rounder number because the actual rendered
+  // artwork's sealed zone sits close to the right edge (independently
+  // measured centroid ~0.85-0.89) — this describes the real asset, not
+  // the brief's original aspirational framing. The current 1600x900
+  // asset is itself exactly 16:9, matching .guide-card-thumb's own
+  // aspect-ratio, so object-fit:cover currently has no crop to apply
+  // regardless of this value — it exists as an accurate record for any
+  // future alternate crop, not because it visibly changes today's card.
+  focalPoint: { x: 0.87, y: 0.5 },
   brief: {
     articleSlug: "understanding-network-trust-boundaries",
     readerTakeaway: "Boundaries between zones are not uniform — some permit controlled traffic, one permits none at all, and the difference is deliberate, not decorative.",
@@ -56,13 +68,17 @@ const coverImage: ArticleVisual = {
     ],
     compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Horizontal flow, generous negative space — calm operations-console feel, not busy or noisy. Restrained cyan/violet accents only, per DESIGN.md.",
     mobileCropNotes:
-      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so composition must keep the sealed zone and its violet ring legible even scaled to a narrow phone width, not just at full size. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.75, 0.5), biased toward the sealed zone, so the card's crop keeps that zone centered.",
+      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so composition must keep the sealed zone and its violet ring legible even scaled to a narrow phone width, not just at full size. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.87, 0.5), biased toward the sealed zone, so the card's crop keeps that zone centered.",
     exportFormats: ["webp"],
     sizeBudgetKb: 200,
   },
   provenance: {
-    source: "brief-only",
-    createdAt: "2026-09-03",
+    source: "ai-generated",
+    generatingModel: "OpenAI built-in image-generation tool in ChatGPT/Codex — the tool did not expose a narrower model identifier or version",
+    prompt:
+      'Use case: stylized-concept\nAsset type: SecurityCorp.net cybersecurity article cover, Pilot 1 of a coherent three-cover editorial series\nPrimary request: Create an original abstract cover for “Understanding Network Trust Boundaries” that immediately communicates that controlled connectivity and total isolation are different boundary strengths.\nScene/backdrop: Exact 16:9 wide landscape canvas, deep near-black navy gradient from #040609 to #070b12, subtle premium matte texture, spacious and calm.\nSubject: Four equally sized and equally weighted abstract geometric zones arranged in a simple left-to-right flow. Only the first three zones participate in a controlled network: thin cyan #00e5ff paths connect those three, with visibly varied thickness and opacity. The fourth zone on the right is entirely enclosed by one continuous solid muted/desaturated violet boundary ring derived from #8b5cf6. Absolutely no path enters, crosses, touches, or terminates on that violet boundary; the sealed zone is clearly separated by empty space.\nStyle/medium: Refined geometric editorial concept art, restrained netrunner operations aesthetic, crisp forms with subtle depth, not an infographic and not a literal network diagram.\nComposition/framing: Wide 16:9; four equal zones across the central band; visual focal point near x=75%, y=50% on the isolated right-hand zone; generous margins. The sealed zone and unbroken boundary must remain unmistakable in a narrow mobile crop centered around the right three-quarters.\nLighting/mood: Controlled low-key illumination, subtle cyan and muted-violet edge light, disciplined glow with no bloom.\nColor palette: #040609, #070b12, restrained #00e5ff cyan, muted/desaturated #8b5cf6 violet, rare #e8f1f8 neutral glints.\nConstraints: Exactly four zones. First three connected; fourth isolated. Geometric abstraction only. No text, letters, words, numbers, labels, arrows, factual diagram labels, code, protocol names, credential strings, hostnames, IP addresses, logos, signatures, or watermark. No literal icons.\nAvoid: padlocks, shields, magnifying glasses, checkmarks, hooded figures, terminals, keyboards, code screens, circuit-board motif, product branding, HUD frames, meaningless overlay chrome, photorealism, excessive neon, lens flare, bloom, clutter.',
+    // Seed: not exposed by the generating tool — not invented here.
+    createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
     reviewStatus: "pending",
