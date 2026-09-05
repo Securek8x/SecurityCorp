@@ -32,7 +32,11 @@ export type KnowledgeCatalogCard = {
   thumbnail?: { src: string; alt: string; focalPoint?: { x: number; y: number } };
 };
 
-function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
+/** Exported for direct unit-testing of the thumbnail-eligibility/focal-
+ * point propagation rule (lib/knowledge-catalog.test.ts) — the public
+ * catalog only ever has real published articles to construct from, which
+ * can't exercise both the pending and approved cases in one place. */
+export function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
   const { meta, coverImage } = article;
   const showThumbnail = coverImage && coverImage.stage !== "brief" && coverImage.src && isVisualProductionEligible(coverImage);
   return {

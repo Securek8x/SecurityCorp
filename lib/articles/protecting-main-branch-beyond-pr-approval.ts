@@ -16,15 +16,19 @@ import type { GuideModule } from "../knowledge-content-types.ts";
 import type { FlowDiagramSpec } from "@/components/diagrams/interactive-flow-diagram";
 import type { ArticleVisual } from "../article-visuals.ts";
 
-// Cover visual brief (Bead s41.9 pilot) — generation-ready, not yet an
-// asset (no image-generation capability installed; see docs/article-
-// visual-guidelines.md). Specific to this article's actual thesis
-// (layered gates, not one approval) rather than a generic "code review"
-// or "git" image — the multi-layer-then-trunk composition is the one
-// required idea, deliberately distinct from the existing diagram's
-// precise technical layer labels.
+// Cover visual (Bead s41.9/s41.12 pilot) — real asset produced from the
+// brief below via the OpenAI built-in image-generation tool in ChatGPT/
+// Codex (external to this repo; the tool exposed no model identifier or
+// seed), normalized with sharp@0.35.4 to exactly 1600x900 WebP. Specific
+// to this article's actual thesis (layered gates, not one approval)
+// rather than a generic "code review" or "git" image — the
+// multi-layer-then-trunk composition is the one required idea,
+// deliberately distinct from the existing diagram's precise technical
+// layer labels. Reviewed and approved by Ravi Teja Thota (2026-09-05,
+// PR #51) after rendered browser QA — see provenance below.
 const coverImage: ArticleVisual = {
-  stage: "brief",
+  stage: "reviewed",
+  src: "/article-visuals/protecting-main-branch-beyond-pr-approval-cover.webp",
   visualType: "cover",
   alt: "Several converging paths passing through three sequential translucent gates before reaching a single cyan trunk line, with one shortcut path visibly stopped at the final gate",
   caption: "One approval is a layer. It is not the whole gate.",
@@ -35,8 +39,16 @@ const coverImage: ArticleVisual = {
   // what the catalog-card thumbnail's object-fit:cover crop keeps
   // centered under the card's 16:9 aspect ratio; the full article-page
   // cover itself only ever scales (never crops), so focalPoint only
-  // matters for the card.
-  focalPoint: { x: 0.8, y: 0.5 },
+  // matters for the card. Set to (0.73, 0.5) rather than a rounder number
+  // because the actual rendered artwork's final gate and interception
+  // point sit slightly left of the brief's original target (independently
+  // measured centroid ~0.71-0.75) — this describes the real asset, not
+  // the brief's original aspirational framing. The current 1600x900
+  // asset is itself exactly 16:9, matching .guide-card-thumb's own
+  // aspect-ratio, so object-fit:cover currently has no crop to apply
+  // regardless of this value — it exists as an accurate record for any
+  // future alternate crop, not because it visibly changes today's card.
+  focalPoint: { x: 0.73, y: 0.5 },
   brief: {
     articleSlug: "protecting-main-branch-beyond-pr-approval",
     readerTakeaway: "A defensible main-branch control is several layers working together, not any single one of them — including the review-approval layer alone.",
@@ -63,16 +75,22 @@ const coverImage: ArticleVisual = {
     ],
     compositionNotes: "Wide 16:9 (matches ArticleFigure presentation=\"wide\"). Read left-to-right like the site's existing interactive diagrams, but purely atmospheric/geometric — no node labels, distinct from the article's own precise technical diagram further down the page.",
     mobileCropNotes:
-      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so the final gate and the trunk/intercepted-shortcut split must stay legible even scaled to a narrow phone width, not just at full size. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.8, 0.5), biased toward the final gate, so the card's crop keeps that moment centered.",
+      "The full article-page cover only ever scales down (app/globals.css's .article-figure img is width:100%;height:auto — never cropped), so the final gate and the trunk/intercepted-shortcut split must stay legible even scaled to a narrow phone width, not just at full size. The catalog-card thumbnail DOES crop (object-fit:cover); focalPoint above is set to (0.73, 0.5), biased toward the final gate, so the card's crop keeps that moment centered.",
     exportFormats: ["webp"],
     sizeBudgetKb: 200,
   },
   provenance: {
-    source: "brief-only",
-    createdAt: "2026-09-03",
+    source: "ai-generated",
+    generatingModel: "OpenAI built-in image-generation tool in ChatGPT/Codex — the tool did not expose a narrower model identifier or version",
+    prompt:
+      'Use case: stylized-concept\nAsset type: SecurityCorp.net cybersecurity article cover, Pilot 2 of a coherent three-cover editorial series\nPrimary request: Create an original abstract cover for “Protecting Main Branch Beyond Pull-Request Approval” that communicates multiple sequential safeguards working together rather than one approval checkbox.\nScene/backdrop: Exact 16:9 wide landscape canvas, deep near-black navy gradient from #040609 to #070b12, subtle premium matte texture, spacious and calm.\nSubject: Three or four thin abstract paths enter from the left and converge while passing, in order, through three clearly distinct translucent geometric gate planes or angular thresholds. After the final gate, the permitted paths merge into one solid restrained cyan #00e5ff trunk continuing toward the right edge. One separate path diverges before the final gate and tries to arc around the sequence, but is visibly intercepted and terminated precisely at the final threshold; it never joins or reaches the cyan trunk. Render this stopped shortcut in muted/desaturated violet derived from #8b5cf6, optionally with the faintest restrained amber edge, without using any warning icon.\nStyle/medium: Refined geometric editorial concept art, restrained netrunner operations aesthetic, crisp translucent materials and subtle depth, atmospheric rather than a literal technical diagram.\nComposition/framing: Strong left-to-right flow on a wide 16:9 canvas; focal point near x=80%, y=50% at the final gate and stopped shortcut. Preserve a clean, readable silhouette so the last threshold, successful trunk, and intercepted shortcut remain distinguishable in a narrow mobile crop.\nLighting/mood: Controlled low-key illumination through translucent gate planes, restrained cyan and violet accents, no theatrical bloom.\nColor palette: #040609, #070b12, restrained #00e5ff cyan, muted/desaturated #8b5cf6 violet, rare #e8f1f8 neutral glints.\nConstraints: At least two and preferably three sequential gates. The shortcut must clearly stop at the last gate and never reach the trunk. No text, letters, words, numbers, labels, code, repository identifiers, logos, signatures, or watermark. No literal UI or security icons.\nAvoid: GitHub or GitLab styling, pull-request UI, merge buttons, checkmarks, padlocks, shields, magnifying glasses, hooded figures, terminals, keyboards, code screens, HUD frames, product branding, photorealism, excessive neon, lens flare, bloom, clutter.',
+    // Seed: not exposed by the generating tool — not invented here.
+    createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
-    reviewStatus: "pending",
+    reviewStatus: "approved",
+    reviewer: "Ravi Teja Thota",
+    reviewedAt: "2026-09-05",
   },
 };
 

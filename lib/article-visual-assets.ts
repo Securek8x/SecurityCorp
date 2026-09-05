@@ -44,6 +44,59 @@ export function resolveAssetPath(src: string, publicDirAbs: string, assetsDirAbs
   return { ok: true, filePath };
 }
 
+export type DimensionCheck = { ok: true } | { ok: false; reason: string };
+
+/** Compares a raster's actual decoded pixel dimensions (read from the file
+ * itself, e.g. via sharp's `.metadata()`) against the dimensions declared
+ * on its ArticleVisual record. Pure comparison — the caller is responsible
+ * for actually opening the file; this function never touches the
+ * filesystem, so it stays testable without a real image or the `sharp`
+ * dependency. Closes the "dimension verification" gap named in
+ * docs/article-visual-guidelines.md. */
+export function checkDimensionsMatch(actual: { width: number; height: number }, declared: { width: number; height: number }): DimensionCheck {
+  if (actual.width !== declared.width || actual.height !== declared.height) {
+    return {
+      ok: false,
+      reason: `actual dimensions ${actual.width}x${actual.height} do not match declared ${declared.width}x${declared.height}`,
+    };
+  }
+  return { ok: true };
+}
+
+/** A minimal shape mirroring the fields of sharp's `Metadata` result that
+ * matter for the "no disallowed embedded metadata" requirement. Kept as a
+ * plain structural type (not imported from `sharp`) so this stays
+ * testable without the `sharp` dependency. */
+export type RasterMetadataSummary = {
+  exif?: unknown;
+  icc?: unknown;
+  iptc?: unknown;
+  xmp?: unknown;
+  /** sharp reports EXIF orientation 1-8; 1 (or absent) means "already
+   * normalized, nothing to strip." Anything else means orientation
+   * metadata is still present and must be resolved (via `.rotate()`)
+   * before the file can be considered clean. */
+  orientation?: number;
+  comments?: unknown[];
+};
+
+/** Returns the names of every disallowed metadata field actually present
+ * in a decoded raster's metadata — EXIF, ICC profile, IPTC, XMP, a
+ * non-normalized orientation tag, or embedded comments. An empty array
+ * means the file is clean. Pure classifier — no filesystem/sharp
+ * dependency, so it's directly unit-testable against a plain object
+ * shaped like sharp's `.metadata()` return. */
+export function hasDisallowedMetadata(metadata: RasterMetadataSummary): string[] {
+  const found: string[] = [];
+  if (metadata.exif) found.push("exif");
+  if (metadata.icc) found.push("icc");
+  if (metadata.iptc) found.push("iptc");
+  if (metadata.xmp) found.push("xmp");
+  if (metadata.orientation !== undefined && metadata.orientation !== 1) found.push(`orientation (${metadata.orientation})`);
+  if (metadata.comments && metadata.comments.length > 0) found.push("comments");
+  return found;
+}
+
 export type RasterBudgetCheck = { withinBudget: true } | { withinBudget: false; reason: string };
 
 /** A raster's own declared brief.sizeBudgetKb is the enforced limit — NOT
