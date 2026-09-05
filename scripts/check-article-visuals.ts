@@ -24,7 +24,7 @@
 //
 // Pure path/budget/SVG-pattern logic lives in lib/article-visual-assets.ts
 // (unit-tested there) — this script is the thin fs-walking orchestrator.
-import { readFileSync, existsSync, statSync, readdirSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { knowledgeArticles } from "../lib/knowledge-content.ts";
@@ -67,19 +67,30 @@ async function checkAssetFile(visual: ArticleVisual, articleSlug: string) {
   const filePath = resolved.filePath;
   referencedAssets.add(filePath);
 
-  if (!existsSync(filePath)) {
-    errors.push(`${articleSlug} ${visual.visualType}: referenced file not found at public${visual.src}`);
-    return;
+  // Read once into memory rather than existsSync()-then-later-read/stat —
+  // separate check-then-use filesystem calls on the same path are a
+  // classic TOCTOU race (flagged by CodeQL's js/file-system-race). A
+  // single read, with ENOENT handled here, removes the gap entirely; the
+  // in-memory buffer is then reused for both the size and sharp checks
+  // below instead of stat-ing the path again.
+  let fileBuffer: Buffer;
+  try {
+    fileBuffer = readFileSync(filePath);
+  } catch (err) {
+    if ((err as NodeJS.ErrnoException).code === "ENOENT") {
+      errors.push(`${articleSlug} ${visual.visualType}: referenced file not found at public${visual.src}`);
+      return;
+    }
+    throw err;
   }
 
   if (RASTER_EXTENSIONS.has(ext)) {
-    const size = statSync(filePath).size;
-    const budgetCheck = checkRasterBudget(size, visual.brief.sizeBudgetKb, ABSOLUTE_MAX_RASTER_BYTES);
+    const budgetCheck = checkRasterBudget(fileBuffer.length, visual.brief.sizeBudgetKb, ABSOLUTE_MAX_RASTER_BYTES);
     if (!budgetCheck.withinBudget) {
       errors.push(`${articleSlug} ${visual.visualType}: ${budgetCheck.reason} (${visual.src})`);
     }
 
-    const metadata = await sharp(readFileSync(filePath)).metadata();
+    const metadata = await sharp(fileBuffer).metadata();
     const dimCheck = checkDimensionsMatch({ width: metadata.width ?? -1, height: metadata.height ?? -1 }, { width: visual.width, height: visual.height });
     if (!dimCheck.ok) {
       errors.push(`${articleSlug} ${visual.visualType}: ${dimCheck.reason} (${visual.src})`);
@@ -101,7 +112,7 @@ async function checkAssetFile(visual: ArticleVisual, articleSlug: string) {
   }
 
   if (ext === ".svg") {
-    const content = readFileSync(filePath, "utf-8");
+    const content = fileBuffer.toString("utf-8");
     for (const pattern of scanSvgForUnsafePatterns(content)) {
       errors.push(`${articleSlug} ${visual.visualType}: SVG at ${visual.src} matches an unsafe pattern (${pattern})`);
     }
