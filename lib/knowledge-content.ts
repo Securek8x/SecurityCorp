@@ -49,6 +49,7 @@ import { article as cloudIamPermissionCreep } from "./articles/cloud-iam-permiss
 import { article as kubernetesRbacDesignPrinciples } from "./articles/kubernetes-rbac-design-principles.ts";
 import { article as containerHealthNotSecurityValidation } from "./articles/container-health-not-security-validation.ts";
 import { article as scopingAuthorizedSecurityAssessment } from "./articles/scoping-authorized-security-assessment.ts";
+import { article as turningAttackHypothesisIntoDetection } from "./articles/turning-attack-hypothesis-into-detection.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -210,6 +211,7 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   kubernetesRbacDesignPrinciples,
   containerHealthNotSecurityValidation,
   scopingAuthorizedSecurityAssessment,
+  turningAttackHypothesisIntoDetection,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
