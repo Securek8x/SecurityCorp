@@ -78,24 +78,38 @@ document is mostly about that surface.
 
 ## Capability status (read this before writing a brief)
 
-**This repository has no working image-generation capability installed
-as of 2026-09.** The `ui-ux-pro-max` plugin's `banner-design` skill
-depends on a separate `ai-multimodal` skill and a Python venv
-(`.claude/skills/.venv/`) calling the Gemini API — neither is set up in
-this project's `.claude/skills/` (only `impeccable/` exists there). The
-official Figma MCP was evaluated for this pilot and not installed:
-nothing in this repository currently treats Figma as a source of truth,
-and this repo-native SVG/React/CSS approach already satisfies the
-"editable, code-native" requirement for teaching visuals; a raster cover
-brief doesn't need a design tool round-trip to be written or reviewed.
+**This repository has no installed/MCP-integrated image-generation
+tool** — the `ui-ux-pro-max` plugin's `banner-design` skill depends on a
+separate `ai-multimodal` skill and a Python venv (`.claude/skills/.venv/`)
+calling the Gemini API, neither of which is set up in this project's
+`.claude/skills/` (only `impeccable/` and `article-visuals/` exist
+there). The official Figma MCP was evaluated for this pilot and not
+installed: nothing in this repository currently treats Figma as a source
+of truth, and this repo-native SVG/React/CSS approach already satisfies
+the "editable, code-native" requirement for teaching visuals; a raster
+cover brief doesn't need a design tool round-trip to be written or
+reviewed.
 
-**Until a capability is actually approved and installed**, every cover
-stays at `stage: "brief"` — a complete, generation-ready brief with no
-image file. Do not represent a brief as a finished visual. Do not
-generate a placeholder and present it as final. When a real capability
-is approved, generate directly from the stored brief (the brief's
-`mustShow`/`mustNotShow`/composition fields are written to be handed to
-a generator as-is) and move the visual to `stage: "asset"`.
+**A real, demonstrated capability does exist as an external human-in-
+the-loop workflow**, established by the s41.12 pilot (2026-09-04/05):
+Ravi generates the raster art externally (an image-generation tool such
+as ChatGPT/Codex, outside this repo), hands off the raw source PNG(s)
+plus a generation manifest recording the exact prompt/dimensions/hashes,
+and Claude normalizes the source through the exactly-pinned
+`sharp@0.35.4` devDependency (`scripts/normalize-cover-source.ts`) into
+the final `webp` — verifying real decoded dimensions and stripped
+metadata from the actual output bytes, not the declared numbers (see
+`scripts/check-article-visuals.ts`). This is the current, real
+generation path; it does not require installing any new MCP server,
+plugin, or automated generation service.
+
+**Until an asset is actually produced this way**, every cover stays at
+`stage: "brief"` — a complete, generation-ready brief with no image
+file. Do not represent a brief as a finished visual. Do not generate a
+placeholder and present it as final. Once a real asset exists (via the
+path above), move the visual to `stage: "asset"` — never directly to
+`stage: "reviewed"`, which only a human reviewer sets (see Lifecycle
+below).
 
 ## Migration state (do not break the build)
 
@@ -257,8 +271,12 @@ concerns pure data validation can't catch:
 - Oversized rasters — enforced against **that visual's own**
   `brief.sizeBudgetKb`, not one shared global number, with a separate
   1MB absolute ceiling as a backstop.
-- Missing raster dimensions (declared metadata only — see the dimension-
-  verification gap below).
+- Missing raster dimensions, AND (as of `sharp@0.35.4`, Bead s41.12) a
+  mismatch between declared `width`/`height` and the file's actual
+  decoded pixel dimensions, plus any disallowed embedded metadata
+  (EXIF/ICC/IPTC/XMP, a non-normalized orientation tag, embedded
+  comments) still present in the file — see the visual-audit gaps note
+  below for exactly what this does and does not cover.
 - Unsafe SVG: `<script>` tags, inline event-handler attributes, external
   `xlink:href` **or bare `href`** references, `<foreignObject>`, and XML
   external entities. **This is a targeted check, not a comprehensive SVG
@@ -281,22 +299,30 @@ above). It is wired into CI (`.github/workflows/ci.yml`'s "Article visual
 audit" step) and into `npm run check`, so a green required check
 actually proves it ran — this document is not the only enforcement.
 
-**Known, deliberate gaps — do not claim otherwise:**
-
-- **Dimension verification**: the audit checks only that `width`/`height`
-  are positive numbers in the metadata. It does **not** open an
-  AVIF/WebP/PNG/JPEG file and compare its real pixel dimensions against
-  the declared ones. Adding that would need a new image-inspection
-  dependency (e.g. `image-size`), which has not been added — a new
-  dependency requires Ravi's explicit authorization (exact package,
-  pinned version, reason, dependency-review result) first. Until then, a
-  real asset's dimensions must be manually confirmed before it's
-  promoted past `stage: "asset"`.
-- **Metadata stripping**: the audit does not inspect or strip embedded
-  metadata from a raster file. A generated or imported asset must be
-  manually normalized/stripped before being promoted past `stage:
-  "asset"` — this is a human-process requirement today, not an automated
-  guarantee.
+**Dimension and metadata verification (closed 2026-09-05, Bead s41.12)**:
+the audit used to check only that `width`/`height` were positive numbers
+in the *declared* metadata, and did not inspect or strip embedded raster
+metadata at all — both were named as known, deliberate gaps here. Ravi
+authorized `sharp@0.35.4` as an exactly-pinned devDependency for exactly
+this purpose (never used in production request handling — this site has
+none, it's static export only). `scripts/check-article-visuals.ts` now
+opens every existing raster referenced by a `coverImage`, decodes its
+real metadata via `sharp`, and compares it against the declared record
+using `lib/article-visual-assets.ts`'s `checkDimensionsMatch` (actual
+vs. declared `width`/`height`) and `hasDisallowedMetadata` (flags
+`exif`/`icc`/`iptc`/`xmp`, a non-normalized `orientation` tag, or
+embedded comments) — both pure, unit-tested functions that don't import
+`sharp` themselves, so `lib/*.test.ts` stays fast. The companion
+normalization script, `scripts/normalize-cover-source.ts`, produces a
+clean file in the first place: it auto-orients from EXIF (`.rotate()`)
+*before* anything else, never calls `.withMetadata()` (sharp strips
+source metadata by default unless you explicitly ask it to keep it —
+easy to get backwards), and re-reads its own output from disk to
+re-verify dimensions and metadata cleanliness before considering a file
+done. This closes the gap for real; do not represent it as still
+manual, and do not claim it covers more than what these functions
+actually check (e.g. it does not attempt any deeper forensic metadata
+scan beyond the fields named above).
 
 Run the full suite (`lint`, `typecheck`, `test`, `check:route-integrity`,
 `check:public-terms`, `check:privacy-leak-gate`, `guard:release`,

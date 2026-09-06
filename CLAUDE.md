@@ -68,9 +68,17 @@ opening it:
   detail — that content stays code-native (SVG/React), matching the
   existing `KnowledgeArticle["diagram"]` mechanism.
 - `lib/article-visuals.ts`'s `VISUAL_GATE_ENABLED` stays `false` until an
-  approved image-generation capability exists, Ravi has approved the
-  pilot direction, and an approved backfill is complete — do not flip it
-  as a side effect of unrelated work.
+  approved backfill gives the rest of the catalog real covers. The other
+  two preconditions are now met: an image-generation capability exists
+  (external human-in-the-loop generation, normalized/verified through
+  the `sharp@0.35.4` pipeline in `scripts/normalize-cover-source.ts` and
+  `scripts/check-article-visuals.ts`), and Ravi approved the pilot
+  direction — all three pilot covers (`understanding-network-trust-
+  boundaries`, `protecting-main-branch-beyond-pr-approval`, `secrets-
+  detection-scanner-limits`) are `stage: "reviewed"`/`reviewStatus:
+  "approved"` as of 2026-09-05. Do not flip the gate as a side effect of
+  unrelated work — the remaining 38 published articles still have no
+  cover at all.
 - An agent must never set a visual's `reviewStatus` to `"approved"` or
   its `stage` to `"reviewed"` — both are for a named human reviewer only.
   `checkAssetApprovalGate` enforces this at CI regardless of
