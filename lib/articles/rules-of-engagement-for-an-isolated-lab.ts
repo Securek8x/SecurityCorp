@@ -117,7 +117,7 @@ const sections: UniversalSections = {
     "OWASP Web Security Testing Guide: https://owasp.org/www-project-web-security-testing-guide/",
     "MITRE ATT&CK: https://attack.mitre.org/",
   ],
-  relatedSlugs: ["scoping-authorized-security-assessment", "network-trust-boundaries", "segmentation-vs-isolation"],
+  relatedSlugs: ["scoping-authorized-security-assessment", "understanding-network-trust-boundaries", "segmentation-vs-isolation"],
 };
 
 const module_: GuideModule = {
@@ -161,7 +161,9 @@ export const article: KnowledgeArticle = {
     primaryCategory: "offensive-security",
     contentType: "guide",
     difficulty: "intermediate",
-    status: "drafting",
+    status: "published",
+    publishedAt: "2026-09-06",
+    lastReviewedAt: "2026-09-06",
     tags: ["authorized-offensive-testing", "network-isolation", "governance-risk-compliance"],
     audience: ["practitioner", "security-engineer"],
     estimatedReadingMinutes: 13,
@@ -169,9 +171,9 @@ export const article: KnowledgeArticle = {
     authorizedLabOnly: true,
     vendorNeutral: true,
     evidenceState: "UNVERIFIED",
-    privacyReview: { status: "pending" },
-    technicalReview: { status: "pending" },
-    publicationApproval: { status: "pending" },
+    privacyReview: { status: "approved", reviewer: "Ravi Teja Thota", reviewedAt: "2026-09-06" },
+    technicalReview: { status: "approved", reviewer: "Ravi Teja Thota", reviewedAt: "2026-09-06" },
+    publicationApproval: { status: "approved", reviewer: "Ravi Teja Thota", reviewedAt: "2026-09-06" },
   },
   sections,
   module: module_,
