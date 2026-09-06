@@ -102,19 +102,29 @@ treated as capability.
   happen directly from it later, with the `mustShow`/`mustNotShow`/
   composition/crop fields as the generation contract. Do not create a
   placeholder image and present it as final.
-- **Capability available and approved**: generate from the stored brief
-  verbatim, save the editable source (the prompt/seed for an AI
-  generator, or the source file for a hand-illustrated/vector asset)
-  under a real `editableSourceRef`, and set `stage: "asset"` — NOT
-  `"reviewed"`. `stage: "asset"` renders on the article page (including
-  an unmerged branch's Cloudflare Pages preview, so a human can actually
-  see it) but is never production-eligible; only a human reviewer moves
-  it to `stage: "reviewed"` with `reviewStatus: "approved"` (see §9).
-  Manually confirm the generated file's real pixel dimensions match the
-  declared `width`/`height` and that its metadata has been stripped
-  before considering it ready for review — the audit script does not
-  verify either automatically (see `docs/article-visual-guidelines.md`'s
-  visual-audit section for why).
+- **Capability available (the established path)**: as of the s41.12
+  pilot, this means Ravi generates externally (e.g. an image-generation
+  tool such as ChatGPT/Codex, outside this repo) and hands off the raw
+  source file(s) plus a manifest recording the exact prompt, dimensions,
+  and hashes. Do not fabricate this handoff yourself — a raw source file
+  and its manifest are user-owned intake, never something an agent
+  invents. From there: normalize through the exactly-pinned
+  `sharp@0.35.4` devDependency (see `scripts/normalize-cover-source.ts`
+  for the established pattern — auto-orient before anything else, resize
+  to the declared dimensions with no stretching, encode to the single
+  approved format, verify the *output* file's real dimensions and
+  metadata cleanliness before considering it done, never silently ship
+  something over its size budget), record the exact prompt in
+  `provenance.prompt`, and set `stage: "asset"` — NOT `"reviewed"`.
+  `stage: "asset"` renders on the article page (including an unmerged
+  branch's Cloudflare Pages preview, so a human can actually see it) but
+  is never production-eligible; only a human reviewer moves it to
+  `stage: "reviewed"` with `reviewStatus: "approved"` (see §9).
+  `scripts/check-article-visuals.ts` now verifies a promoted asset's real
+  decoded dimensions and embedded-metadata cleanliness automatically
+  (via `lib/article-visual-assets.ts`'s `checkDimensionsMatch`/
+  `hasDisallowedMetadata`) — this is no longer a manual-only check, but
+  still confirm it by reading the actual audit output, not by assuming.
 
 ## 6. Accessibility
 

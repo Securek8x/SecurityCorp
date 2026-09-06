@@ -7,9 +7,13 @@ import type { KnowledgeArticle } from "../knowledge-content.ts";
 import type { UniversalSections, GuideModule } from "../knowledge-content-types.ts";
 import type { ArticleVisual } from "../article-visuals.ts";
 
-// Cover visual brief (Bead s41.9 pilot) — generation-ready, not yet an
-// asset (no image-generation capability installed; see docs/article-
-// visual-guidelines.md). This article is already status:"published"
+// Cover visual (Bead s41.9/s41.12 pilot) — real asset produced from the
+// brief below via the OpenAI built-in image-generation tool in ChatGPT/
+// Codex (external to this repo; the tool exposed no model identifier or
+// seed), normalized with sharp@0.35.4 to exactly 1600x900 WebP. Reviewed
+// and approved by Ravi Teja Thota (2026-09-05, PR #51) after rendered
+// browser QA — see provenance below.
+// This article is already status:"published"
 // (reviewed 2026-08-30) — this brief only adds cover-visual infrastructure
 // to it, it does not touch content or review state. Specific to the
 // article's actual thesis (detectable vs. context-dependent/derived/
@@ -32,7 +36,8 @@ import type { ArticleVisual } from "../article-visuals.ts";
 // boundaries, protecting main branch) were kept unchanged — this revision
 // only touches this one brief.
 const coverImage: ArticleVisual = {
-  stage: "brief",
+  stage: "reviewed",
+  src: "/article-visuals/secrets-detection-scanner-limits-cover.webp",
   visualType: "cover",
   alt: "A restrained cyan scanning plane passing over a visible source layer, illuminating a row of recognizable token-like abstract forms as it crosses them — while other abstract forms sit in a deeper violet layer beneath, entirely outside the plane's reach",
   caption: "A passing scan means the visible layer looked clean. It says nothing about what's underneath.",
@@ -81,11 +86,17 @@ const coverImage: ArticleVisual = {
     sizeBudgetKb: 200,
   },
   provenance: {
-    source: "brief-only",
+    source: "ai-generated",
+    generatingModel: "OpenAI built-in image-generation tool in ChatGPT/Codex — the tool did not expose a narrower model identifier or version",
+    prompt:
+      'Use case: stylized-concept\nAsset type: SecurityCorp.net cybersecurity article cover, Pilot 3 of a coherent three-cover editorial series\nPrimary request: Create an original abstract cover for “Secrets Detection: What Automated Scanners Miss” that makes a scanner’s structural coverage boundary immediately visible: it examines one exposed layer while a separate deeper layer remains entirely outside its reach.\nScene/backdrop: Exact 16:9 wide landscape canvas, deep near-black navy gradient from #040609 to #070b12, subtle premium matte texture, composed as two clearly separated depth planes.\nSubject: A crisp restrained cyan #00e5ff scanning plane sweeps at a slight angle across one foreground source layer. That visible layer contains 8–12 small non-symbolic faceted geometric fragments—irregular lozenges, crystals, and rounded polygons with no repeated character-like shapes. Only the fragments intersected by the scan’s leading edge receive a subtle cyan illumination; the rest are dim. Beneath and visibly behind this plane is a second spatially separated muted-violet layer containing several related faceted fragments. The cyan scan path ends at the foreground layer and never descends, extends, reflects, or reaches the deeper layer.\nStyle/medium: Refined abstract geometric editorial concept art, restrained netrunner operations aesthetic, shallow volumetric depth with crisp foreground and lower-contrast deeper plane, not a literal scanner interface or factual diagram.\nComposition/framing: Wide 16:9; scan leading edge near x=55%, y=45%; both the active foreground crossing and at least one unreached deeper fragment remain legible in a narrow mobile crop. The depth separation—not decorative particles—is the dominant visual idea.\nLighting/mood: Controlled, analytical, quiet; restrained cyan scan light and muted/desaturated violet depth, absolutely no glow bloom.\nColor palette: #040609, #070b12, restrained #00e5ff cyan, muted/desaturated #8b5cf6 violet, rare #e8f1f8 neutral glints.\nConstraints: All fragments must be purely geometric and must not resemble any letter, numeral, punctuation mark, code token, key, password, barcode, QR code, or credential format. No text of any kind, labels, code, syntax, realistic credentials, logos, signatures, or watermark. No literal security icons.\nAvoid: alphanumeric glyphs, strings, token prefixes, API keys, keys as physical objects, magnifying glasses, checkmarks, X marks, padlocks, shields, hooded figures, terminals, keyboards, code screens, scanner-result UI, HUD frames, product branding, photorealism, excessive neon, lens flare, bloom, clutter.',
+    // Seed: not exposed by the generating tool — not invented here.
     createdAt: "2026-09-04",
     license: "site-original-all-rights-reserved",
     editableSourceRef: "this coverImage.brief record",
-    reviewStatus: "pending",
+    reviewStatus: "approved",
+    reviewer: "Ravi Teja Thota",
+    reviewedAt: "2026-09-05",
   },
 };
 
