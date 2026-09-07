@@ -122,13 +122,22 @@ const MIME: Record<string, string> = {
   ".xml": "application/xml; charset=utf-8",
 };
 
+const OUT_DIR_WITH_SEP = OUT_DIR.endsWith(path.sep) ? OUT_DIR : `${OUT_DIR}${path.sep}`;
+
+// This server only ever receives requests from this script's own Puppeteer
+// navigations, but req.url is still untrusted input as far as static
+// analysis is concerned (and rightly so — nothing stops it being reused
+// against a real client later). Reject anything that normalizes outside
+// OUT_DIR (e.g. "/../../etc/passwd") before it ever reaches the filesystem.
 function resolveStaticFile(urlPath: string): string | null {
   const clean = decodeURIComponent(urlPath.split("?")[0] ?? "/");
   const candidates = clean.endsWith("/")
     ? [path.join(OUT_DIR, clean, "index.html")]
     : [path.join(OUT_DIR, clean), path.join(OUT_DIR, `${clean}.html`), path.join(OUT_DIR, clean, "index.html")];
   for (const candidate of candidates) {
-    if (existsSync(candidate)) return candidate;
+    const resolved = path.normalize(candidate);
+    if (resolved !== OUT_DIR && !resolved.startsWith(OUT_DIR_WITH_SEP)) continue;
+    if (existsSync(resolved)) return resolved;
   }
   return null;
 }
