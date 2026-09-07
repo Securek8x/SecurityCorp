@@ -310,7 +310,7 @@ nav a[aria-current="page"]{color:var(--acid)}
 .hero-webgl-host[data-state="ready"]{opacity:1}
 .hero-visual:has(.hero-webgl-host[data-state="ready"]) .hero-network{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 48% 76% at 31% 66%,var(--paper) 0%,color-mix(in srgb,var(--paper) 85%,transparent) 33%,transparent 72%),radial-gradient(ellipse 42% 70% at 103% 54%,var(--paper) 0%,transparent 68%)}
-@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}}
+@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}.hero h1{margin-top:36px}}
 @media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}}
 :root[data-theme="light"] .hero-webgl-host{opacity:.52;filter:saturate(.72) contrast(1.18)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
@@ -348,8 +348,8 @@ nav a[aria-current="page"]{color:var(--acid)}
    set .hero-tiger-image dimensions, position, or transform must come
    first, or a later unconditional desktop rule silently wins regardless of
    which media query is actually active (the bug fixed here). */
-@media(max-width:900px){.hero-tiger-image{width:300px;height:300px;top:4%;right:1%}}
-@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}}
+@media(max-width:900px){.hero-tiger-image{width:clamp(150px,30vw,300px);height:clamp(150px,30vw,300px);top:4%;right:1%}}
+@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}.hero h1{margin-top:140px}}
 
 /* subtle pointer-driven depth on the scope card: --pointer-x/--pointer-y
    are set directly (no React state) on .hero by the same rAF loop that
