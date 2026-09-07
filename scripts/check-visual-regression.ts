@@ -31,7 +31,7 @@
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer, { type Browser, type Page } from "puppeteer";
@@ -122,36 +122,48 @@ const MIME: Record<string, string> = {
   ".xml": "application/xml; charset=utf-8",
 };
 
-// This server only ever receives requests from this script's own Puppeteer
-// navigations, but req.url is still untrusted input as far as static
-// analysis is concerned (and rightly so — nothing stops it being reused
-// against a real client later). Reject anything that resolves outside
-// OUT_DIR (e.g. "/../../etc/passwd") before it ever reaches the filesystem —
-// path.resolve() + startsWith() against the resolved root, the standard
-// CodeQL js/path-injection remediation shape.
-function isInsideOutDir(candidate: string): boolean {
-  const resolved = path.resolve(candidate);
-  const root = path.resolve(OUT_DIR);
-  return resolved === root || resolved.startsWith(root + path.sep);
+// The request URL is untrusted input, so rather than derive a filesystem
+// path from it at request time (however carefully guarded), enumerate every
+// real file under OUT_DIR exactly once at startup into a trusted lookup
+// table keyed by its site-relative URL. A request is then answered purely
+// by map lookup — the tainted string never participates in constructing the
+// path that actually reaches the filesystem, which closes off path
+// traversal (e.g. "/../../etc/passwd") by construction rather than by guard.
+async function buildFileIndex(): Promise<Map<string, string>> {
+  const index = new Map<string, string>();
+  async function walk(dir: string): Promise<void> {
+    const entries = await readdir(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        await walk(full);
+      } else {
+        const relative = `/${path.relative(OUT_DIR, full).split(path.sep).join("/")}`;
+        index.set(relative, full);
+      }
+    }
+  }
+  await walk(OUT_DIR);
+  return index;
 }
 
-function resolveStaticFile(urlPath: string): string | null {
+function resolveStaticFile(index: Map<string, string>, urlPath: string): string | null {
   const clean = decodeURIComponent(urlPath.split("?")[0] ?? "/");
   const candidates = clean.endsWith("/")
-    ? [path.join(OUT_DIR, clean, "index.html")]
-    : [path.join(OUT_DIR, clean), path.join(OUT_DIR, `${clean}.html`), path.join(OUT_DIR, clean, "index.html")];
+    ? [`${clean}index.html`]
+    : [clean, `${clean}.html`, `${clean}/index.html`];
   for (const candidate of candidates) {
-    if (!isInsideOutDir(candidate)) continue;
-    const resolved = path.resolve(candidate);
-    if (existsSync(resolved)) return resolved;
+    const hit = index.get(candidate);
+    if (hit) return hit;
   }
   return null;
 }
 
-function startServer(): Promise<{ url: string; close: () => Promise<void> }> {
+async function startServer(): Promise<{ url: string; close: () => Promise<void> }> {
+  const index = await buildFileIndex();
   return new Promise((resolve, reject) => {
     const server = createServer((req, res) => {
-      const filePath = resolveStaticFile(req.url ?? "/");
+      const filePath = resolveStaticFile(index, req.url ?? "/");
       if (!filePath) {
         res.writeHead(404, { "content-type": "text/plain" });
         res.end("Not found");
