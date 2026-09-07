@@ -52,6 +52,8 @@ import { article as scopingAuthorizedSecurityAssessment } from "./articles/scopi
 import { article as turningAttackHypothesisIntoDetection } from "./articles/turning-attack-hypothesis-into-detection.ts";
 import { article as rulesOfEngagementIsolatedLab } from "./articles/rules-of-engagement-for-an-isolated-lab.ts";
 import { article as tuningSocAlertsWithoutHidingRealAttacks } from "./articles/tuning-soc-alerts-without-hiding-real-attacks.ts";
+import { article as choosingTelemetryBeforeWritingDetectionLogic } from "./articles/choosing-telemetry-before-writing-detection-logic.ts";
+import { article as falsePositiveVsBenignPositive } from "./articles/false-positive-vs-benign-positive.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -216,6 +218,8 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   turningAttackHypothesisIntoDetection,
   rulesOfEngagementIsolatedLab,
   tuningSocAlertsWithoutHidingRealAttacks,
+  choosingTelemetryBeforeWritingDetectionLogic,
+  falsePositiveVsBenignPositive,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
