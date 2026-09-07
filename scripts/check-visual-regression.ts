@@ -62,6 +62,12 @@ type PageSpec = {
   isHomepage?: boolean;
   expectArticleShell?: boolean;
   expectRelatedContent?: boolean;
+  /** Also capture one full-page (not just viewport-height) screenshot, at
+   * desktop/dark only, so long tables/diagrams/pager/related-content further
+   * down the page get regression coverage without every combination paying
+   * for a full-page capture (a full article can be 5-10x a viewport's
+   * height, and PNG-per-combination adds up fast in repo size). */
+  alsoCaptureFullPage?: boolean;
 };
 
 const PAGES: PageSpec[] = [
@@ -77,6 +83,7 @@ const PAGES: PageSpec[] = [
     path: "/knowledge/build-runners-untrusted/",
     label: "Knowledge article with an interactive diagram",
     expectArticleShell: true,
+    alsoCaptureFullPage: true,
   },
   {
     slug: "knowledge-table",
@@ -84,6 +91,7 @@ const PAGES: PageSpec[] = [
     label: "Knowledge article with a data table and related-content",
     expectArticleShell: true,
     expectRelatedContent: true,
+    alsoCaptureFullPage: true,
   },
 ];
 
@@ -360,6 +368,7 @@ async function main(): Promise<void> {
 
   let failures = 0;
   let created = 0;
+  let checked = 0;
   const domFailures: string[] = [];
 
   try {
@@ -387,11 +396,22 @@ async function main(): Promise<void> {
         for (const theme of THEMES) {
           const page = await preparePage(browser, theme, viewport);
           await loadAndSettle(page, `${server.url}${spec.path}`);
-          const screenshot = (await page.screenshot({ fullPage: true })) as Buffer;
+          // Viewport-height clip, not full-page: this is what a reader
+          // actually sees without scrolling on each device class, and it
+          // keeps committed baseline size bounded regardless of article
+          // length. The hero-overlap regression this suite guards against
+          // is exactly this kind of above-the-fold layout defect.
+          const screenshot = (await page.screenshot({ fullPage: false })) as Buffer;
+
+          let fullPageScreenshot: Buffer | null = null;
+          if (spec.alsoCaptureFullPage && viewport.name === "desktop-1440" && theme === "dark") {
+            fullPageScreenshot = (await page.screenshot({ fullPage: true })) as Buffer;
+          }
           await page.close();
 
           const name = `${spec.slug}__${viewport.name}__${theme}`;
           const result = await compareOrUpdate(name, screenshot);
+          checked++;
           const line = `[${name}] ${result.status.toUpperCase()} — ${result.message}`;
           if (result.status === "fail" || result.status === "size-changed") {
             console.error(line);
@@ -399,6 +419,20 @@ async function main(): Promise<void> {
           } else {
             console.log(line);
             if (result.status === "created") created++;
+          }
+
+          if (fullPageScreenshot) {
+            const fullName = `${spec.slug}__full-page`;
+            const fullResult = await compareOrUpdate(fullName, fullPageScreenshot);
+            checked++;
+            const fullLine = `[${fullName}] ${fullResult.status.toUpperCase()} — ${fullResult.message}`;
+            if (fullResult.status === "fail" || fullResult.status === "size-changed") {
+              console.error(fullLine);
+              failures++;
+            } else {
+              console.log(fullLine);
+              if (fullResult.status === "created") created++;
+            }
           }
         }
       }
@@ -409,7 +443,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `\n[visual-regression] ${PAGES.length * VIEWPORTS.length * THEMES.length} screenshot(s) checked, ${created} baseline(s) created, ${failures} failure(s), ${domFailures.length} DOM/motion assertion failure(s).`,
+    `\n[visual-regression] ${checked} screenshot(s) checked, ${created} baseline(s) created, ${failures} failure(s), ${domFailures.length} DOM/motion assertion failure(s).`,
   );
 
   if (failures > 0 || domFailures.length > 0) {
