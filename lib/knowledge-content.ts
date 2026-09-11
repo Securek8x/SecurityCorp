@@ -52,6 +52,9 @@ import { article as scopingAuthorizedSecurityAssessment } from "./articles/scopi
 import { article as turningAttackHypothesisIntoDetection } from "./articles/turning-attack-hypothesis-into-detection.ts";
 import { article as rulesOfEngagementIsolatedLab } from "./articles/rules-of-engagement-for-an-isolated-lab.ts";
 import { article as tuningSocAlertsWithoutHidingRealAttacks } from "./articles/tuning-soc-alerts-without-hiding-real-attacks.ts";
+import { article as buildingADefensibleIncidentTimeline } from "./articles/building-a-defensible-incident-timeline.ts";
+import { article as validatingDetectionWithSyntheticEvents } from "./articles/validating-a-detection-with-synthetic-events.ts";
+import { article as buildingAlertTriageDecisionTree } from "./articles/building-an-alert-triage-decision-tree.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -216,6 +219,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   turningAttackHypothesisIntoDetection,
   rulesOfEngagementIsolatedLab,
   tuningSocAlertsWithoutHidingRealAttacks,
+  buildingADefensibleIncidentTimeline,
+  validatingDetectionWithSyntheticEvents,
+  buildingAlertTriageDecisionTree,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
