@@ -54,6 +54,9 @@ import { article as rulesOfEngagementIsolatedLab } from "./articles/rules-of-eng
 import { article as tuningSocAlertsWithoutHidingRealAttacks } from "./articles/tuning-soc-alerts-without-hiding-real-attacks.ts";
 import { article as choosingTelemetryBeforeWritingDetectionLogic } from "./articles/choosing-telemetry-before-writing-detection-logic.ts";
 import { article as falsePositiveVsBenignPositive } from "./articles/false-positive-vs-benign-positive.ts";
+import { article as buildingADefensibleIncidentTimeline } from "./articles/building-a-defensible-incident-timeline.ts";
+import { article as validatingDetectionWithSyntheticEvents } from "./articles/validating-a-detection-with-synthetic-events.ts";
+import { article as buildingAlertTriageDecisionTree } from "./articles/building-an-alert-triage-decision-tree.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -220,6 +223,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   tuningSocAlertsWithoutHidingRealAttacks,
   choosingTelemetryBeforeWritingDetectionLogic,
   falsePositiveVsBenignPositive,
+  buildingADefensibleIncidentTimeline,
+  validatingDetectionWithSyntheticEvents,
+  buildingAlertTriageDecisionTree,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
