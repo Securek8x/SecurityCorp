@@ -55,6 +55,9 @@ import { article as tuningSocAlertsWithoutHidingRealAttacks } from "./articles/t
 import { article as buildingADefensibleIncidentTimeline } from "./articles/building-a-defensible-incident-timeline.ts";
 import { article as validatingDetectionWithSyntheticEvents } from "./articles/validating-a-detection-with-synthetic-events.ts";
 import { article as buildingAlertTriageDecisionTree } from "./articles/building-an-alert-triage-decision-tree.ts";
+import { article as containerManagementInterfacesSecurityRisks } from "./articles/container-management-interfaces-security-risks.ts";
+import { article as evidenceCollectionBeforeContainment } from "./articles/evidence-collection-before-containment.ts";
+import { article as writingSecurityFindingsDevelopersCanFix } from "./articles/writing-security-findings-developers-can-fix.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -222,6 +225,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   buildingADefensibleIncidentTimeline,
   validatingDetectionWithSyntheticEvents,
   buildingAlertTriageDecisionTree,
+  containerManagementInterfacesSecurityRisks,
+  evidenceCollectionBeforeContainment,
+  writingSecurityFindingsDevelopersCanFix,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
