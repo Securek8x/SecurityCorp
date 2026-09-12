@@ -16,6 +16,10 @@ coverage/
 .claude/settings.local.json
 .privacy-denylist.json
 
+# Visual regression: baselines under test/visual-regression/baselines/ are
+# committed intentionally; diffs/candidates are regenerated per run.
+test/visual-regression/diffs/
+
 # impeccable-ignore-start
 # Ephemeral detector, hook, screenshot, live-session, and per-developer state.
 .impeccable/config.local.json

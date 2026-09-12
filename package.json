@@ -23,7 +23,8 @@
     "check:citations": "node scripts/check-citations.ts",
     "check:security-txt": "node scripts/check-security-txt-expiry.ts",
     "check:route-integrity": "node scripts/check-route-integrity.ts",
-    "check:article-visuals": "node scripts/check-article-visuals.ts"
+    "check:article-visuals": "node scripts/check-article-visuals.ts",
+    "check:visual-regression": "node scripts/check-visual-regression.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
@@ -35,12 +36,16 @@
   "devDependencies": {
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/three": "^0.180.0",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.3",
     "impeccable": "3.6.0",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
+    "puppeteer": "^25.1.0",
     "serve": "^14.2.3",
     "sharp": "0.35.4",
     "tailwindcss": "4.2.1",
