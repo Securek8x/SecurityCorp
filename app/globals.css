@@ -310,7 +310,7 @@ nav a[aria-current="page"]{color:var(--acid)}
 .hero-webgl-host[data-state="ready"]{opacity:1}
 .hero-visual:has(.hero-webgl-host[data-state="ready"]) .hero-network{opacity:0}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 48% 76% at 31% 66%,var(--paper) 0%,color-mix(in srgb,var(--paper) 85%,transparent) 33%,transparent 72%),radial-gradient(ellipse 42% 70% at 103% 54%,var(--paper) 0%,transparent 68%)}
-@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}}
+@media(max-width:900px){.hero .hero-visual{top:72px;right:-145px;width:500px;height:510px;min-height:0;opacity:.62}.hero-webgl-host{display:none}.hero .hero-visual .hero-network{opacity:.42}.hero h1{margin-top:36px}}
 @media(max-width:600px){.hero .hero-visual{top:145px;right:-245px;width:500px;height:500px;opacity:.36}.hero::after{background:radial-gradient(ellipse 70% 70% at 30% 55%,var(--paper) 0%,color-mix(in srgb,var(--paper) 80%,transparent) 56%,transparent 90%)}}
 :root[data-theme="light"] .hero-webgl-host{opacity:.52;filter:saturate(.72) contrast(1.18)}
 :root[data-theme="light"] .hero-webgl-host[data-state="ready"]{opacity:.52}
@@ -348,8 +348,8 @@ nav a[aria-current="page"]{color:var(--acid)}
    set .hero-tiger-image dimensions, position, or transform must come
    first, or a later unconditional desktop rule silently wins regardless of
    which media query is actually active (the bug fixed here). */
-@media(max-width:900px){.hero-tiger-image{width:300px;height:300px;top:4%;right:1%}}
-@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}}
+@media(max-width:900px){.hero-tiger-image{width:clamp(150px,30vw,300px);height:clamp(150px,30vw,300px);top:4%;right:1%}}
+@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}.hero h1{margin-top:140px}}
 
 /* subtle pointer-driven depth on the scope card: --pointer-x/--pointer-y
    are set directly (no React state) on .hero by the same rAF loop that
@@ -718,9 +718,10 @@ a.build-log-row:hover{background:color-mix(in srgb,var(--acid) 5%,transparent)}
 h2 .heading-link-btn{display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;color:var(--muted);cursor:pointer;vertical-align:middle;margin-left:6px;padding:4px;opacity:0;transition:opacity .15s,color .15s}
 h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:focus-visible{opacity:1}
 .heading-link-btn:hover{color:var(--acid)}
-.byline .share-btn{margin-left:auto}
-.share-btn{background:transparent;cursor:pointer;border-color:var(--line);color:var(--muted)}
-.share-btn:hover{border-color:var(--acid);color:var(--acid);box-shadow:none}
+.byline .byline-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+.share-btn,.correction-link{background:transparent;cursor:pointer;border-color:var(--line);color:var(--muted)}
+.share-btn:hover,.correction-link:hover{border-color:var(--acid);color:var(--acid);box-shadow:none}
+.change-note{margin-top:12px}
 
 /* ---- architecture diagrams ---- */
 .arch-diagram{margin:35px 0;border:1px solid var(--line);padding:20px;background:var(--surface-raised)}
@@ -821,10 +822,41 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
   .filter-count{margin-left:0}
   .case-timeline li{grid-template-columns:1fr;padding-left:16px}
   .timeline-index{display:none}
-  .byline .share-btn{margin-left:0;margin-top:10px;width:100%;justify-content:center}
+  .byline .byline-actions{margin-left:0;margin-top:10px;width:100%;flex-direction:column}
+  .byline .byline-actions .share-btn,.byline .byline-actions .correction-link{width:100%;justify-content:center}
   .theme-toggle{min-width:44px}
 }
 @media(prefers-reduced-motion:reduce){
   .hero::before{animation:none}
   .project-card:hover,.project-card:focus-within{transform:none}
+}
+/* Print stylesheet (securitycorp-source-1ng). Scoped to article/guide pages
+   (.article-page) — the rest of the site (homepage, catalog) has no
+   printable-content requirement. Forces the light monochrome palette
+   regardless of the active theme, since --diagram-* tokens derive from the
+   base palette via var() and cascade automatically once the base tokens
+   are overridden here — no separate diagram-color rules needed. */
+@media print{
+  :root{
+    --paper:#fff;--ink:#000;--muted:#333;--line:#999;--surface-raised:#fff;
+    --acid:#000;--primary-hover:#000;--accent2:#333;--go:#333;--warn:#333;--danger:#333;
+    --code-background:#fff;--code-foreground:#000;
+  }
+  body{background:#fff;color:#000}
+  .site-header,#site-nav,.nav-toggle-input,.nav-toggle-label,.skip-link,footer,
+  .toc,.heading-link-btn,.share-btn,.article-pager,.diagram-controls,
+  .diagram-explore-panel,.theme-toggle,.article-page>.back,.related-grid,
+  .flow-packet{display:none!important}
+  .article-page{padding:0;max-width:none}
+  .article-page article{max-width:none}
+  .article-page header{border-top-color:#000}
+  .article-page h1{font-size:28px;margin:12px 0}
+  .article-page article>section{grid-template-columns:1fr;gap:8px;margin:24px 0;break-inside:avoid-page}
+  .article-page section h2{font-size:19px;margin:0 0 10px;break-after:avoid-page}
+  .article-page section p{font-size:12px;line-height:1.5}
+  .article-page pre{white-space:pre-wrap;border:1px solid #999;background:#f5f5f5;color:#000;break-inside:avoid-page}
+  .article-page article table{break-inside:avoid-page}
+  .article-page article th,.article-page article td{border-color:#999}
+  .byline{border-color:#999;color:#333}
+  a{color:#000;text-decoration:underline}
 }

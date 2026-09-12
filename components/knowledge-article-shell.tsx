@@ -11,6 +11,7 @@ import { ArticleToc } from "@/components/article-toc";
 import { HeadingLink } from "@/components/heading-link";
 import { ShareButton } from "@/components/share-button";
 import { ArticleFigure } from "@/components/article-figure";
+import { ReportCorrectionLink } from "@/components/report-correction-link";
 
 const CONTENT_TYPE_LABEL: Record<string, string> = {
   guide: "Guide",
@@ -241,7 +242,14 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             <span>{meta.difficulty}</span>
             <span>{EVIDENCE_LABEL[meta.evidenceState]}</span>
             {freshnessStatus && FRESHNESS_LABEL[freshnessStatus] && <span>{FRESHNESS_LABEL[freshnessStatus]}</span>}
+            <div className="byline-actions">
+              <ShareButton title={meta.title} label="Share this article" />
+              <ReportCorrectionLink title={meta.title} slug={meta.slug} evidenceState={meta.evidenceState} />
+            </div>
           </div>
+          {meta.updatedAt && meta.changeNote && meta.updatedAt !== meta.publishedAt && (
+            <p className="section-label change-note">What changed ({meta.updatedAt}): {renderInline(meta.changeNote)}</p>
+          )}
           {freshness && (freshness.appliesTo?.length || freshness.testedWith?.length) ? (
             <p className="section-label">
               {freshness.appliesTo?.length ? `Applies to: ${freshness.appliesTo.join(", ")}` : null}
@@ -256,7 +264,6 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
               ))}
             </div>
           )}
-          <ShareButton title={meta.title} label="Share this article" />
         </header>
 
         {lead && <p className="lead">{renderInline(lead)}</p>}
