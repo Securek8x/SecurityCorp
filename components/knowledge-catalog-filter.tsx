@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, X } from "lucide-react";
 import type { KnowledgeCatalogCard } from "@/lib/knowledge-catalog";
+import { PlateCardThumb } from "@/components/diagrams/schematic-plate";
 import { pillars, categoryById } from "@/lib/taxonomy";
 import type { ContentType, Difficulty, EvidenceState, Audience } from "@/lib/knowledge-schema";
 import { CONTENT_TYPES, DIFFICULTIES, EVIDENCE_STATES, AUDIENCES } from "@/lib/knowledge-schema";
@@ -190,8 +191,8 @@ export function KnowledgeCatalogFilter({ cards }: { cards: KnowledgeCatalogCard[
         <section className="guide-index">
           {filtered.map((c) => (
             <Link href={`/knowledge/${c.slug}/`} className="guide-card record-trace clip-corner-sm" key={c.slug}>
-              {/* alt="" deliberately: the card's own <h2> already gives the same link an accessible name, so the thumbnail here is redundant/decorative — the meaningful alt text lives on the full-size cover (ArticleFigure) in the article itself. */}
-              {c.thumbnail && (
+              {/* alt="" / aria-hidden deliberately: the card's own <h2> already gives the same link an accessible name, so the thumbnail here is redundant/decorative — the meaningful description lives on the full-size cover or plate in the article itself. */}
+              {c.thumbnail?.kind === "raster" && (
                 // eslint-disable-next-line @next/next/no-img-element -- next.config.ts sets images.unoptimized:true (static export); matches the plain-<img> convention used throughout this codebase.
                 <img
                   src={c.thumbnail.src}
@@ -204,6 +205,7 @@ export function KnowledgeCatalogFilter({ cards }: { cards: KnowledgeCatalogCard[
                   style={c.thumbnail.focalPoint ? { objectPosition: `${c.thumbnail.focalPoint.x * 100}% ${c.thumbnail.focalPoint.y * 100}%` } : undefined}
                 />
               )}
+              {c.thumbnail?.kind === "plate" && <PlateCardThumb spec={c.thumbnail.plate} />}
               <div className="article-meta">
                 <span>{CONTENT_TYPE_LABEL[c.contentType]}</span>
                 <span>{categoryById.get(c.category)?.name}</span>

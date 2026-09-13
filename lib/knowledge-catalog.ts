@@ -7,6 +7,16 @@ import { publishedKnowledgeArticles, type KnowledgeArticle } from "./knowledge-c
 import type { ContentType, Difficulty, EvidenceState, Audience } from "./knowledge-schema.ts";
 import type { CategoryId, PillarId } from "./taxonomy.ts";
 import { isVisualProductionEligible } from "./article-visuals.ts";
+import { plateForSlug } from "./article-plates.ts";
+import type { PlateSpec } from "./schematic-plate.ts";
+
+/** A raster cover image (the legacy Deep Field pilots) or a code-native
+ * Schematic Plate (bead s41.18) — the one system spanning covers, diagrams,
+ * catalog thumbnails, and social cards keeps a single discriminated shape
+ * here rather than smuggling a plate through the raster fields. */
+export type KnowledgeCatalogCardThumbnail =
+  | { kind: "raster"; src: string; alt: string; focalPoint?: { x: number; y: number } }
+  | { kind: "plate"; plate: PlateSpec };
 
 export type KnowledgeCatalogCard = {
   slug: string;
@@ -20,16 +30,20 @@ export type KnowledgeCatalogCard = {
   audience: Audience[];
   tags: string[];
   estimatedReadingMinutes: number;
-  /** Only set once the article's coverImage is BOTH a real asset (stage
-   * "asset"/"reviewed") AND production-eligible (isVisualProductionEligible
-   * — stage "reviewed" with an approved review). Unlike the full-size
-   * cover on the article's own page (which deliberately renders any real
-   * asset so a reviewer can inspect it on an unmerged branch preview),
-   * the catalog card is treated as a production-only surface — a
-   * pending/rejected/needs-revision asset never appears here, even on a
-   * preview build. A "brief"-stage cover has no file to show yet, so the
-   * card renders exactly as it does today (Bead s41.9-12 pilot). */
-  thumbnail?: { src: string; alt: string; focalPoint?: { x: number; y: number } };
+  /** `kind: "raster"` only once the article's coverImage is BOTH a real
+   * asset (stage "asset"/"reviewed") AND production-eligible
+   * (isVisualProductionEligible — stage "reviewed" with an approved
+   * review). Unlike the full-size cover on the article's own page (which
+   * deliberately renders any real asset so a reviewer can inspect it on
+   * an unmerged branch preview), the catalog card is treated as a
+   * production-only surface — a pending/rejected/needs-revision asset
+   * never appears here, even on a preview build. A raster cover always
+   * wins over a plate when both exist, so the three legacy cinematic
+   * covers keep their existing card treatment unchanged. `kind: "plate"`
+   * only for the bounded s41.12 pilot wave (lib/article-plates.ts) when
+   * no raster cover is eligible. Absent for every other article — visuals
+   * are additive, not a redesign every card must carry. */
+  thumbnail?: KnowledgeCatalogCardThumbnail;
 };
 
 /** Exported for direct unit-testing of the thumbnail-eligibility/focal-
@@ -38,7 +52,13 @@ export type KnowledgeCatalogCard = {
  * can't exercise both the pending and approved cases in one place. */
 export function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
   const { meta, coverImage } = article;
-  const showThumbnail = coverImage && coverImage.stage !== "brief" && coverImage.src && isVisualProductionEligible(coverImage);
+  const showRaster = Boolean(coverImage && coverImage.stage !== "brief" && coverImage.src && isVisualProductionEligible(coverImage));
+  const plate = !showRaster ? plateForSlug(meta.slug) : undefined;
+  const thumbnail: KnowledgeCatalogCardThumbnail | undefined = showRaster
+    ? { kind: "raster", src: coverImage!.src!, alt: coverImage!.alt, focalPoint: coverImage!.focalPoint }
+    : plate
+      ? { kind: "plate", plate }
+      : undefined;
   return {
     slug: meta.slug,
     title: meta.title,
@@ -51,7 +71,7 @@ export function toCard(article: KnowledgeArticle): KnowledgeCatalogCard {
     audience: meta.audience,
     tags: meta.tags,
     estimatedReadingMinutes: meta.estimatedReadingMinutes,
-    thumbnail: showThumbnail ? { src: coverImage.src!, alt: coverImage.alt, focalPoint: coverImage.focalPoint } : undefined,
+    thumbnail,
   };
 }
 

@@ -205,6 +205,15 @@
   .plate-legend{display:none}
 }
 
+/* Catalog-card thumbnail (bead s41.18) — the compact plate inherits
+   .guide-card-thumb's bleed/border/aspect-ratio (16/9) directly; this just
+   makes the SVG box fill that ratio explicitly rather than depending on
+   height:auto correctly overriding its own 800:300 viewBox ratio, and the
+   short labels get a touch more room than the article-page short-code size
+   since a card thumb has no full-label sibling competing for space. */
+.schematic-plate--compact{height:100%}
+.schematic-plate--compact .plate-zone-label{font-size:12px}
+
 /* Play-once / play-loop sequences: complete (fully drawn/settled) by
    default. Only once JS has attached data-js-motion to <html> — and only
    without a reduced-motion preference — do sequences get an "undrawn"
