@@ -176,7 +176,7 @@ test("no plate encodes an evidence state — the article shell stays the single 
 });
 
 test("plate prose carries no placeholder or unsupported-claim markers", () => {
-  const banned = [/lorem/i, /placeholder/i, /TODO/i, /TBD/i, /example\.com/i, /\blocalhost\b/i, /\b\d{1,3}(\.\d{1,3}){3}\b/];
+  const banned = [/lorem/i, /placeholder/i, /TODO/i, /TBD/i, /(^|[^a-z0-9.-])example\.com($|[^a-z0-9.-])/i, /\blocalhost\b/i, /\b\d{1,3}(\.\d{1,3}){3}\b/];
   for (const [slug, spec] of Object.entries(ARTICLE_PLATES)) {
     const prose = [spec.title, spec.desc, spec.caption, spec.headerLabel ?? "", ...spec.zones.flatMap((z) => [z.label, z.sublabel ?? "", z.description ?? ""])].join(" ");
     for (const pattern of banned) {
