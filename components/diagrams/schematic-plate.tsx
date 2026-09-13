@@ -35,23 +35,45 @@ function roleClass(role: PlateRole): string {
   }
 }
 
-export function SchematicPlate({ spec }: { spec: PlateSpec }) {
+export type SchematicPlateProps = {
+  spec: PlateSpec;
+  /** Card-thumbnail mode (bead s41.18): short codes only, no legend, no
+   * header/evidence marks, and the SVG is treated as decorative (the card's
+   * own heading already supplies the link's accessible name — exactly the
+   * existing `alt=""` treatment the raster thumbnail path uses) rather than
+   * announcing a `role="img"` name once per card in a 40+ item grid. This is
+   * a render-time choice, not a CSS/viewport toggle: a catalog card is
+   * always small regardless of viewport width, so density here does not
+   * follow the article-page responsive breakpoint. */
+  compact?: boolean;
+  /** Merged onto the root `<svg>` — used to apply `.guide-card-thumb`'s
+   * existing bleed/aspect-ratio/border treatment so a plate thumbnail sits
+   * in exactly the same box a raster thumbnail would. */
+  className?: string;
+};
+
+export function SchematicPlate({ spec, compact = false, className }: SchematicPlateProps) {
   const layout = layoutPlate(spec);
   // Ids are derived from plateId, which is repo-authored and validated, never
   // from free-form article prose.
   const titleId = `plate-${spec.plateId}-title`;
   const descId = `plate-${spec.plateId}-desc`;
+  const svgClassName = ["schematic-plate", compact && "schematic-plate--compact", className].filter(Boolean).join(" ");
 
   return (
     <svg
-      className="schematic-plate"
+      className={svgClassName}
       viewBox={`0 0 ${PLATE_VIEWBOX.width} ${PLATE_VIEWBOX.height}`}
       width="100%"
-      role="img"
-      aria-labelledby={`${titleId} ${descId}`}
+      preserveAspectRatio={compact ? "xMidYMid slice" : undefined}
+      {...(compact ? { "aria-hidden": true } : { role: "img", "aria-labelledby": `${titleId} ${descId}` })}
     >
-      <title id={titleId}>{spec.title}</title>
-      <desc id={descId}>{spec.desc}</desc>
+      {!compact && (
+        <>
+          <title id={titleId}>{spec.title}</title>
+          <desc id={descId}>{spec.desc}</desc>
+        </>
+      )}
 
       {/* registration frame + edge ticks: this is an instrument, not a picture */}
       <rect
@@ -65,12 +87,12 @@ export function SchematicPlate({ spec }: { spec: PlateSpec }) {
         <line className="plate-tick" key={`tick-${i}`} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} />
       ))}
 
-      {spec.headerLabel ? (
+      {!compact && spec.headerLabel ? (
         <text className="plate-header" x={layout.frame.x + 16} y={layout.frame.y + 22}>
           {spec.headerLabel}
         </text>
       ) : null}
-      {spec.evidenceState ? (
+      {!compact && spec.evidenceState ? (
         <text
           className={`plate-evidence plate-evidence-${spec.evidenceState.toLowerCase().replace(/\s+/g, "-")}`}
           x={layout.frame.x + layout.frame.w - 16}
@@ -109,53 +131,65 @@ export function SchematicPlate({ spec }: { spec: PlateSpec }) {
               <rect className="plate-zone-cap" x={z.x} y={z.y} width={z.w} height={4} />
             ) : null}
 
-            {/* Full labels (>=768px) and short codes (<768px) are both in the
-                DOM; CSS swaps them. Density steps down — type never shrinks
-                below the legibility floor. */}
-            <g className="plate-label-full">
-              {(() => {
-                const lines = wrapPlateLabel(z.label, z.w - ZONE_LABEL_PADDING);
-                // Centre the label block in the upper part of the zone, leaving
-                // the sublabel its own baseline below.
-                const lineHeight = 13;
-                const blockTop = z.y + (z.sublabel ? 26 : 32) - ((lines.length - 1) * lineHeight) / 2;
-                return (
-                  <>
-                    {lines.map((line, i) => (
-                      <text
-                        key={`${z.id}-l${i}`}
-                        className="plate-zone-label"
-                        x={cx}
-                        y={blockTop + i * lineHeight}
-                        textAnchor="middle"
-                      >
-                        {line}
-                      </text>
-                    ))}
-                    {z.sublabel ? (
-                      <text
-                        className="plate-zone-sublabel"
-                        x={cx}
-                        y={blockTop + lines.length * lineHeight + 6}
-                        textAnchor="middle"
-                      >
-                        {z.sublabel}
-                      </text>
-                    ) : null}
-                  </>
-                );
-              })()}
-            </g>
-            <g className="plate-label-short">
+            {compact ? (
+              // Card size: short code only, centred. No full/sublabel pair —
+              // there is no viewport at which a catalog card grows into the
+              // article-page density, so there is nothing for it to step
+              // down from.
               <text className="plate-zone-label" x={cx} y={z.y + z.h / 2 + 4} textAnchor="middle">
                 {z.shortLabel}
               </text>
-            </g>
+            ) : (
+              <>
+                {/* Full labels (>=768px) and short codes (<768px) are both in
+                    the DOM; CSS swaps them. Density steps down — type never
+                    shrinks below the legibility floor. */}
+                <g className="plate-label-full">
+                  {(() => {
+                    const lines = wrapPlateLabel(z.label, z.w - ZONE_LABEL_PADDING);
+                    // Centre the label block in the upper part of the zone,
+                    // leaving the sublabel its own baseline below.
+                    const lineHeight = 13;
+                    const blockTop = z.y + (z.sublabel ? 26 : 32) - ((lines.length - 1) * lineHeight) / 2;
+                    return (
+                      <>
+                        {lines.map((line, i) => (
+                          <text
+                            key={`${z.id}-l${i}`}
+                            className="plate-zone-label"
+                            x={cx}
+                            y={blockTop + i * lineHeight}
+                            textAnchor="middle"
+                          >
+                            {line}
+                          </text>
+                        ))}
+                        {z.sublabel ? (
+                          <text
+                            className="plate-zone-sublabel"
+                            x={cx}
+                            y={blockTop + lines.length * lineHeight + 6}
+                            textAnchor="middle"
+                          >
+                            {z.sublabel}
+                          </text>
+                        ) : null}
+                      </>
+                    );
+                  })()}
+                </g>
+                <g className="plate-label-short">
+                  <text className="plate-zone-label" x={cx} y={z.y + z.h / 2 + 4} textAnchor="middle">
+                    {z.shortLabel}
+                  </text>
+                </g>
+              </>
+            )}
           </g>
         );
       })}
 
-      {spec.legend && spec.legend.length > 0 ? (
+      {!compact && spec.legend && spec.legend.length > 0 ? (
         <g className="plate-legend">
           <line
             className="plate-legend-rule"
@@ -203,4 +237,16 @@ export function PlateFigure({ spec, presentation = "wide" }: { spec: PlateSpec; 
       {spec.caption ? <figcaption>{spec.caption}</figcaption> : null}
     </figure>
   );
+}
+
+/**
+ * Catalog-card thumbnail (bead s41.18) — a plate rendered compact, carrying
+ * the raster thumbnail's own `.guide-card-thumb` class so it inherits the
+ * identical bleed, 16:9 aspect ratio, and bottom-border treatment. No
+ * wrapping element: the SVG *is* the thumbnail, exactly as the `<img>` is on
+ * the raster path, which is what keeps grid layout identical between the
+ * two kinds of card.
+ */
+export function PlateCardThumb({ spec }: { spec: PlateSpec }) {
+  return <SchematicPlate spec={spec} compact className="guide-card-thumb" />;
 }
