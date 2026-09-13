@@ -18,6 +18,10 @@ jobs:
     name: Scorecard analysis
     runs-on: ubuntu-latest
     permissions:
+      contents: read # required for actions/checkout on this private repo --
+        # GITHUB_TOKEN authenticates the initial fetch regardless of
+        # persist-credentials, and without this GitHub returns "repository
+        # not found" instead of a permission error (private-repo behavior)
       security-events: write # upload SARIF results
       id-token: write # publish results to the OpenSSF API
     steps:
