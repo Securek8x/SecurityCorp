@@ -11,6 +11,8 @@ import { ArticleToc } from "@/components/article-toc";
 import { HeadingLink } from "@/components/heading-link";
 import { ShareButton } from "@/components/share-button";
 import { ArticleFigure } from "@/components/article-figure";
+import { PlateFigure } from "@/components/diagrams/schematic-plate";
+import { plateForSlug } from "@/lib/article-plates";
 import { ReportCorrectionLink } from "@/components/report-correction-link";
 
 const CONTENT_TYPE_LABEL: Record<string, string> = {
@@ -220,6 +222,16 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
 
   const tocSections = blocks.map((b, i) => ({ id: b.id, label: b.heading, number: String(i + 1).padStart(2, "0") }));
 
+  // Schematic Plate (bead s41.12). Only the nine bounded-pilot articles have a
+  // plate; every other article renders exactly as before, because visuals are
+  // additive and an article without one must never look unfinished.
+  const plate = plateForSlug(meta.slug);
+  // Mirrors the cover-slot condition below exactly, so a plate can never
+  // displace an approved cinematic cover.
+  const hasLegacyCover = Boolean(
+    article.coverImage && article.coverImage.stage !== "brief" && article.coverImage.src,
+  );
+
   return (
     <>
       <Link href="/knowledge" className="back">
@@ -288,6 +300,12 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
           />
         )}
 
+        {/* Schematic Plate, cover position (bead s41.12). Only articles with
+            no legacy raster cover take this slot; an article that still has an
+            approved cinematic cover keeps it there and receives its plate
+            in-body instead, so no approved cover is displaced. */}
+        {plate && !hasLegacyCover && <PlateFigure spec={plate} />}
+
         {sections.prerequisites && sections.prerequisites.length > 0 && (
           <aside className="prereq-box" aria-labelledby="prereq-heading">
             <strong id="prereq-heading">What you should know first</strong>
@@ -300,6 +318,11 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
         )}
 
         <ArticleToc sections={tocSections} />
+
+        {/* In-body plate for articles that kept a legacy cinematic cover in
+            the slot above. Same framing as the cover, so the two eras read as
+            one deliberate system. */}
+        {plate && hasLegacyCover && <PlateFigure spec={plate} />}
 
         {article.diagram && <InteractiveFlowDiagram spec={article.diagram} />}
 

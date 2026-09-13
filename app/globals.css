@@ -50,6 +50,23 @@
   --ambient-2:rgba(139,92,246,.13);
   --grid-line:rgba(123,210,255,.09);
 
+  /* Schematic Plate (bead s41.12) — semantic aliases over the existing
+     palette. These introduce one new tonal value (--plate-zone-bg, a step
+     between --paper and --surface-raised); everything else is an alias so a
+     palette change still propagates from one place. */
+  --plate-frame:var(--line);
+  --plate-tick:var(--border-strong);
+  --plate-zone-bg:#0e1a28;
+  --plate-zone-border:#2a4a63;
+  --plate-zone-cap:var(--acid);
+  --plate-sealed:var(--accent2);
+  --plate-label:var(--ink);
+  --plate-label-dim:var(--muted);
+  --plate-legend:var(--muted);
+  --evidence-validated:var(--go);
+  --evidence-design-only:var(--accent2);
+  --evidence-unverified:var(--warn);
+
   color-scheme:dark;
 }
 
@@ -72,6 +89,22 @@
   --ambient-1:rgba(10,95,180,.08);
   --ambient-2:rgba(106,69,209,.06);
   --grid-line:rgba(10,95,180,.08);
+
+  /* Schematic Plate, light theme. Not a naive inversion: the zone fill and
+     border take light-surface values so plates read as drawn-on-paper rather
+     than as a dark slab dropped onto a light page. */
+  --plate-frame:var(--line);
+  --plate-tick:var(--border-strong);
+  --plate-zone-bg:var(--surface-raised);
+  --plate-zone-border:var(--border-strong);
+  --plate-zone-cap:var(--acid);
+  --plate-sealed:var(--accent2);
+  --plate-label:var(--ink);
+  --plate-label-dim:var(--muted);
+  --plate-legend:var(--muted);
+  --evidence-validated:var(--go);
+  --evidence-design-only:var(--accent2);
+  --evidence-unverified:var(--warn);
 
   color-scheme:light;
 }
@@ -121,6 +154,56 @@
 .flow-packet-cyan{fill:var(--diagram-line)}
 .flow-packet-violet{fill:var(--accent2)}
 .flow-packet-safe{fill:var(--go)}
+
+/* ---------------------------------------------------------------------------
+   Schematic Plate (bead s41.12, direction B of the s41.5 hybrid).
+   Flat, rectilinear, no glow, no shadow, no texture — depth comes from tonal
+   layering alone. Every value is a token, so both themes and the monochrome
+   print stylesheet are native rather than special-cased.
+   --------------------------------------------------------------------------- */
+.schematic-plate{display:block;width:100%;height:auto;font-family:var(--font-mono)}
+.plate-frame{fill:none;stroke:var(--plate-frame);stroke-width:1}
+.plate-tick{stroke:var(--plate-tick);stroke-width:1}
+.plate-header,.plate-evidence{font-size:9px;letter-spacing:.12em;fill:var(--plate-legend)}
+.plate-evidence-validated{fill:var(--evidence-validated)}
+.plate-evidence-design-only{fill:var(--evidence-design-only)}
+.plate-evidence-unverified{fill:var(--evidence-unverified)}
+
+.plate-zone-body{fill:var(--plate-zone-bg);stroke:var(--plate-zone-border);stroke-width:1}
+.plate-zone-cap{fill:var(--plate-zone-cap);opacity:.6}
+.plate-zone-label{font-size:11px;letter-spacing:.06em;fill:var(--plate-label)}
+.plate-zone-sublabel{font-size:9px;letter-spacing:.04em;fill:var(--plate-label-dim)}
+
+/* The sealed boundary: an unbroken ring with no path touching it. Geometry
+   carries the meaning, not colour alone, so it survives forced-colors,
+   greyscale print and colour-blind reading. */
+.plate-zone-sealed .plate-zone-body{stroke:var(--plate-sealed);stroke-width:1.8}
+.plate-zone-sealed .plate-zone-label{fill:var(--plate-sealed)}
+.plate-zone-sealed .plate-zone-sublabel{fill:var(--plate-sealed)}
+.plate-ring{fill:none;stroke:var(--plate-sealed);stroke-width:.8;opacity:.45}
+.plate-zone-failure .plate-zone-body{stroke:var(--diagram-failure)}
+.plate-zone-failure .plate-zone-cap{fill:var(--diagram-failure)}
+.plate-zone-neutral .plate-zone-cap{fill:var(--plate-label-dim);opacity:.4}
+
+.plate-link{fill:none;stroke:var(--diagram-line);stroke-linecap:butt}
+.plate-link-primary{stroke-width:3}
+.plate-link-secondary{stroke-width:1.2;opacity:.55;stroke-dasharray:3 3}
+.plate-link-failure{stroke:var(--diagram-failure);stroke-dasharray:6 5}
+
+.plate-legend-rule{stroke:var(--plate-frame);stroke-width:1}
+.plate-legend-swatch{fill:var(--diagram-line)}
+.plate-legend-swatch-sealed{fill:none;stroke:var(--plate-sealed);stroke-width:1.4}
+.plate-legend-text{font-size:8.5px;letter-spacing:.08em;fill:var(--plate-legend)}
+
+/* Responsive density: labels step down to short codes; type size never
+   shrinks below the legibility floor. Both label sets are always in the DOM
+   so there is no layout measurement and no JavaScript involved. */
+.plate-label-short{display:none}
+@media(max-width:767px){
+  .plate-label-full{display:none}
+  .plate-label-short{display:block}
+  .plate-legend{display:none}
+}
 
 /* Play-once / play-loop sequences: complete (fully drawn/settled) by
    default. Only once JS has attached data-js-motion to <html> — and only
