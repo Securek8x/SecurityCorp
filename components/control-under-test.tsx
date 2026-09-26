@@ -56,7 +56,7 @@ export function ControlUnderTest({ scenarios }: { scenarios: ResolvedControlScen
   }
 
   return (
-    <section className="cut" id="failure-lab" aria-labelledby="failure-lab-heading">
+    <section className="cut" id="failure-lab" tabIndex={-1} aria-labelledby="failure-lab-heading">
       <p className="section-label">Control under test</p>
       <h2 id="failure-lab-heading">What happens when it breaks.</h2>
       <p className="cut-lede">Pick a failure. See what the control does. Results come from recorded tests and documented designs — none of it is a live simulation.</p>

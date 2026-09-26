@@ -385,6 +385,11 @@ nav a[aria-current="page"]{color:var(--acid)}
 .hero-kicker-left{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
 .hero-tag{color:var(--acid);border:1px solid var(--border-strong);padding:3px 8px;letter-spacing:.1em}
 .hero-copy{align-self:end}
+.hero-failure-link{display:flex;align-items:center;gap:9px;width:fit-content;max-width:100%;min-height:44px;margin-top:16px;font-size:14px;line-height:1.5;text-decoration:underline;text-underline-offset:4px}
+.hero-failure-link svg{flex-shrink:0}
+.hero-failure-link:hover{color:var(--acid)}
+#failure-lab{scroll-margin-top:96px}
+#failure-lab:focus-visible{outline:2px solid var(--focus);outline-offset:-3px}
 .hero h1,.page-intro h1{font-family:var(--font-serif);font-weight:400;font-size:clamp(64px,9vw,132px);line-height:.78;letter-spacing:-.065em;margin:0;color:var(--ink)}
 .hero h1 em,.page-intro h1 em{font-weight:400;font-style:normal;color:var(--acid)}
 .hero-copy>p{max-width:590px;font-size:19px;line-height:1.55;margin:42px 0 30px;color:var(--muted)}
