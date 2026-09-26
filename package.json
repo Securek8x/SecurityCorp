@@ -27,7 +27,7 @@
     "check:visual-regression": "node scripts/check-visual-regression.ts"
   },
   "dependencies": {
-    "lucide-react": "^1.31.0",
+    "lucide-react": "^1.47.0",
     "next": "16.3.3",
     "react": "19.2.6",
     "react-dom": "19.2.6",
