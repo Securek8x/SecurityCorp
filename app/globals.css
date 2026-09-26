@@ -446,7 +446,8 @@ nav a[aria-current="page"]{color:var(--acid)}
    first, or a later unconditional desktop rule silently wins regardless of
    which media query is actually active (the bug fixed here). */
 @media(max-width:900px){.hero-tiger-image{width:clamp(150px,30vw,300px);height:clamp(150px,30vw,300px);top:4%;right:1%}}
-@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:14px;right:10px}.hero-tiger-glow{filter:blur(12px)}.hero h1{margin-top:140px}}
+/* At <=600px, top:44px keeps the tiger below the one-line hero kicker and above the h1 (margin-top 140px). */
+@media(max-width:600px){.hero-tiger-image{width:168px;height:168px;top:44px;right:10px}.hero-tiger-glow{filter:blur(12px)}.hero h1{margin-top:140px}}
 
 /* subtle pointer-driven depth on the scope card: --pointer-x/--pointer-y
    are set directly (no React state) on .hero by the same rAF loop that
