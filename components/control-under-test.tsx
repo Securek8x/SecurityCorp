@@ -2,15 +2,22 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, ArrowUpRight } from "lucide-react";
-import type { ControlScenario } from "@/lib/control-under-test";
+import type { ResolvedControlScenario, ScenarioEvidence } from "@/lib/control-under-test";
+import { EvidenceKey, EvidenceMark, EvidenceUnavailableMark } from "@/components/evidence-mark";
 import { FailurePathDiagram } from "@/components/diagrams/failure-path-diagram";
 
-// The verdict badge is derived from the scenario's own "observed" text — never
-// asserted independently — so the badge can't drift from the underlying claim.
-function verdictOf(observed: string): { label: string; className: string } {
-  return observed.toLowerCase().startsWith("validated")
-    ? { label: "Validated", className: "cut-verdict-validated" }
-    : { label: "Design only", className: "cut-verdict-design" };
+// The evidence mark comes from the authoritative project evidence record the
+// scenario references (resolved server-side), never from prose. Unresolvable
+// evidence reads "Evidence unavailable".
+function Verdict({ evidence }: { evidence: ScenarioEvidence }) {
+  return evidence.status === "resolved" ? <EvidenceMark maturity={evidence.maturity} /> : <EvidenceUnavailableMark />;
+}
+
+// The diagram's end node reads "safe" only for a recorded as-intended
+// outcome — never because the evidence is Validated. A recorded failure is
+// Validated evidence of a failure.
+function safeOutcome(evidence: ScenarioEvidence): boolean {
+  return evidence.status === "resolved" && evidence.outcome === "as-intended";
 }
 
 // Feature-detected, reduced-motion-respecting: a genuine no-op (instant
@@ -29,12 +36,11 @@ function changeScenario(next: () => void) {
   }
 }
 
-export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }) {
+export function ControlUnderTest({ scenarios }: { scenarios: ResolvedControlScenario[] }) {
   const [activeId, setActiveId] = useState(scenarios[0].id);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const active = scenarios.find((s) => s.id === activeId) ?? scenarios[0];
   const activeIndex = scenarios.findIndex((s) => s.id === activeId);
-  const activeVerdict = verdictOf(active.observed);
 
   function focusTab(index: number) {
     const wrapped = (index + scenarios.length) % scenarios.length;
@@ -50,14 +56,19 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
   }
 
   return (
-    <section className="cut">
+    <section className="cut" id="failure-lab" aria-labelledby="failure-lab-heading">
       <p className="section-label">Control under test</p>
-      <h2>What happens when it breaks.</h2>
-      <p className="cut-lede">Pick a failure condition. Every result below is either directly validated or documented as the intended design — none of it is a live simulation.</p>
+      <h2 id="failure-lab-heading">What happens when it breaks.</h2>
+      <p className="cut-lede">Pick a failure. See what the control does. Results come from recorded tests and documented designs — none of it is a live simulation.</p>
+      <ol className="cut-steps" role="list">
+        <li>Choose a failure condition.</li>
+        <li>Compare the expected safe state with what the control does.</li>
+        <li>Check the evidence behind the result:</li>
+      </ol>
+      <EvidenceKey />
 
       <div role="tablist" aria-label="Failure scenarios" className="cut-tabs" onKeyDown={onKeyDown}>
         {scenarios.map((s, i) => {
-          const verdict = verdictOf(s.observed);
           return (
             <button
               key={s.id}
@@ -72,7 +83,7 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
             >
               {s.id === activeId && <CheckCircle2 size={14} aria-hidden="true" />}
               {s.control}
-              <span className={`cut-tab-verdict ${verdict.className}`}>{verdict.label}</span>
+              <span className="cut-tab-verdict"><Verdict evidence={s.evidence} /></span>
             </button>
           );
         })}
@@ -85,7 +96,7 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
         tabIndex={0}
         className="cut-panel"
       >
-        <FailurePathDiagram key={active.id} scenario={active} verdictClassName={activeVerdict.className} />
+        <FailurePathDiagram key={active.id} scenario={active} safe={safeOutcome(active.evidence)} />
         <dl>
           <div>
             <dt>Failure injection</dt>
@@ -98,8 +109,8 @@ export function ControlUnderTest({ scenarios }: { scenarios: ControlScenario[] }
           <div>
             <dt>Observed result</dt>
             <dd>
-              {active.observed}{" "}
-              <span className={`cut-verdict ${activeVerdict.className}`}>{activeVerdict.label}</span>
+              {active.evidence.status === "resolved" ? active.evidence.observed : "No verified evidence record is available."}{" "}
+              <span className="cut-verdict"><Verdict evidence={active.evidence} /></span>
             </dd>
           </div>
           <div>

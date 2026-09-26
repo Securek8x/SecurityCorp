@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import type { IsoDate } from "./content-dates.ts";
 import {
   validateArticleMeta,
   validateCatalogIntegrity,
@@ -95,8 +96,16 @@ test("published content requires publication dates, reviews, and human approval"
 });
 
 test("invalid dates fail validation", () => {
-  const errors = validateArticleMeta(baseMeta({ publishedAt: "not-a-date" }));
-  assert.ok(errors.some((e) => e.includes("not a valid date")));
+  const errors = validateArticleMeta(baseMeta({ publishedAt: "not-a-date" as IsoDate }));
+  assert.ok(errors.some((e) => e.includes("not a canonical YYYY-MM-DD date")));
+});
+
+test("non-canonical but parseable dates fail validation (s41.20.14)", () => {
+  // `new Date()` accepts these, but they are timezone/engine-dependent.
+  for (const value of ["Aug 29, 2026", "2026-8-29", "2026-02-30", "2026-08-29T00:00:00Z"]) {
+    const errors = validateArticleMeta(baseMeta({ updatedAt: value as IsoDate }));
+    assert.ok(errors.some((e) => e.includes(`updatedAt "${value}" is not a canonical`)), value);
+  }
 });
 
 test("draft (non-published) content is never publicly visible, even if otherwise well-formed", () => {

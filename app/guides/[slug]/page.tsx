@@ -12,17 +12,14 @@ import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
 import VpnWorkloadDiagram from "@/components/diagrams/vpn-workload-diagram";
 import ReverseProxyDiagram from "@/components/diagrams/reverse-proxy-diagram";
 import { articles, type Callout } from "@/lib/content";
+import { toIsoTimestamp } from "@/lib/content-dates";
+import { ContentDate } from "@/components/content-date";
 import { pageOgImages, pageTwitterImages } from "@/lib/seo";
 import { articleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/json-ld";
 
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }));
-}
-
-function isoDate(date: string) {
-  const d = new Date(date);
-  return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
 }
 
 function slugify(heading: string) {
@@ -47,7 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const article = articles.find((a) => a.slug === slug);
   if (!article) return {};
   const url = `https://securitycorp.net/guides/${article.slug}`;
-  const published = isoDate(article.date);
+  const published = toIsoTimestamp(article.publishedAt);
   return {
     title: article.title,
     description: article.dek,
@@ -101,8 +98,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <p className="dek">{article.dek}</p>
             <div className="byline">
               <span>By Ravi Teja Thota</span>
-              <span>Published {article.date}</span>
-              {article.lastReviewed !== article.date && <span>Last reviewed {article.lastReviewed}</span>}
+              <span>Published <ContentDate value={article.publishedAt} /></span>
+              {article.lastReviewedAt !== article.publishedAt && <span>Last reviewed <ContentDate value={article.lastReviewedAt} /></span>}
               <span>{article.read} read</span>
               <span>{article.level}</span>
             </div>

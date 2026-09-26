@@ -7,6 +7,7 @@
 // future article authoring.
 import { type CategoryId, type PillarId, categoryById, pillarById } from "./taxonomy.ts";
 import { validateTags } from "./knowledge-tags.ts";
+import { isIsoDate, type IsoDate } from "./content-dates.ts";
 
 export const CONTENT_TYPES = [
   "guide",
@@ -73,9 +74,10 @@ export type KnowledgeArticleMeta = {
   tags: string[];
   audience: Audience[];
   estimatedReadingMinutes: number;
-  publishedAt?: string;
-  updatedAt?: string;
-  lastReviewedAt?: string;
+  /** Canonical YYYY-MM-DD (see ./content-dates.ts); enforced by validateArticleMeta. */
+  publishedAt?: IsoDate;
+  updatedAt?: IsoDate;
+  lastReviewedAt?: IsoDate;
   /** Concise, reader-facing note on what changed — surfaced beside
    * `updatedAt` only when both are set (securitycorp-source-nyu). Optional
    * and additive like the other retrofit-later fields on this type: no
@@ -137,7 +139,7 @@ export function validateArticleMeta(meta: KnowledgeArticleMeta): string[] {
     ["updatedAt", meta.updatedAt],
     ["lastReviewedAt", meta.lastReviewedAt],
   ] as const) {
-    if (!isValidDate(value)) push(`${field} "${value}" is not a valid date`);
+    if (value !== undefined && !isIsoDate(value)) push(`${field} "${value}" is not a canonical YYYY-MM-DD date`);
   }
 
   for (const tagError of validateTags(meta.tags)) push(tagError);

@@ -1,5 +1,6 @@
 import { renderOgImage, OG_IMAGE_SIZE, OG_IMAGE_CONTENT_TYPE } from "@/lib/og-image";
 import { projects } from "@/lib/content";
+import { summarizeEvidence } from "@/lib/evidence";
 
 // See app/knowledge/[slug]/opengraph-image.tsx for why this route shape
 // (force-static + generateStaticParams) is required under static export.
@@ -17,5 +18,5 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   if (!project) {
     return renderOgImage({ kicker: "Projects", title: "SecurityCorp" });
   }
-  return renderOgImage({ kicker: "Project", title: project.title, badge: project.status });
+  return renderOgImage({ kicker: "Project", title: project.title, badge: summarizeEvidence(project.evidence) });
 }
