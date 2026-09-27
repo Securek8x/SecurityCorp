@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowUpRight, Menu, Rss, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, Menu, Rss } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { WordmarkIcon } from "@/components/wordmark-icon";
+import { BrandLockup } from "@/components/brand-lockup";
 import { MotionController } from "@/components/motion-controller";
 import { InteractiveSurfaceController } from "@/components/interactive-surface-controller";
 import { profileLinks } from "@/lib/profile";
@@ -17,13 +17,8 @@ export function Header({ current }: { current?: string }) {
   return (
     <header className="site-header">
       <div className="brand-group">
-        <Link href="/" className="wordmark wordmark-animated">
-          <span className="mark clip-corner-sm">
-            <WordmarkIcon size={18} />
-          </span>
-          <span>
-            SECURITY<span>CORP</span>
-          </span>
+        <Link href="/" className="brand brand-link">
+          <BrandLockup />
         </Link>
       </div>
       <input type="checkbox" id="nav-toggle" className="nav-toggle-input" />
@@ -50,13 +45,8 @@ export function Footer() {
   return (
     <footer>
       <div>
-        <div className="wordmark footer-mark">
-          <span className="mark">
-            <ShieldCheck size={18} aria-hidden="true" />
-          </span>
-          <span>
-            SECURITY<span>CORP</span>
-          </span>
+        <div className="brand footer-mark">
+          <BrandLockup />
         </div>
         <p>Security engineering, documented in the open.</p>
       </div>
