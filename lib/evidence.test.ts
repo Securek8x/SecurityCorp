@@ -11,6 +11,7 @@ import {
   observationRows,
   outcomeBadge,
   summarizeEvidence,
+  verifyOperationalState,
   verifyProjectEvidence,
   type EvidenceRecord,
   type VerifiedEvidence,
@@ -733,4 +734,123 @@ test("the Failure Lab diagram component hard-codes no maturity term and captions
   const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
   assert.equal(code.match(MATURITY_TERMS), null, "maturity terms must come from the evidence model");
   assert.match(code, /failurePathLabel\(scenario\.evidence\)/);
+});
+
+// --- Snapshot boundary: revoked / throwing containers (s41.20.27 follow-up) --
+//
+// Nothing caller-owned may be touched after the snapshot, so a Proxy revoked
+// later in the same read (by a getter further into the input) must yield a
+// controlled rejection, never an uncaught "Cannot perform 'IsArray' on a proxy
+// that has been revoked".
+
+/** Runs the boundary; fails the test if it throws instead of rejecting. */
+function rejectsCleanly(name: string, raw: unknown) {
+  let result: ReturnType<typeof verifyProjectEvidence> | undefined;
+  assert.doesNotThrow(() => (result = verifyProjectEvidence("probe", raw)), name);
+  assert.equal(result?.ok, false, name);
+  const checked = checkProjectEvidence("probe", raw);
+  assert.equal(isVerifiedEvidence(checked), false, name);
+  assert.equal(summarizeEvidence(checked), "Evidence unavailable", name);
+}
+const laterRecordRevoking = (revoke: () => void) => ({
+  get id() {
+    revoke();
+    return "b";
+  },
+  claim: "c",
+  maturity: "documented",
+  observation: { kind: "none" },
+});
+
+test("delayed revocation: a record container revoked by a later record's getter is rejected, not thrown", () => {
+  // Codex review repro: records[0] is an array Proxy (not a record object),
+  // revoked while records[1] is being snapshotted.
+  const { proxy, revoke } = Proxy.revocable([], {});
+  rejectsCleanly("record container", { records: [proxy, laterRecordRevoking(revoke)] });
+});
+
+test("delayed revocation: an observation container revoked by a later record's getter is rejected, not thrown", () => {
+  const { proxy, revoke } = Proxy.revocable([], {});
+  rejectsCleanly("observation container", {
+    records: [{ id: "a", claim: "c", maturity: "documented", observation: proxy }, laterRecordRevoking(revoke)],
+  });
+});
+
+test("revoked or throwing containers and leaves anywhere in the input fail closed", () => {
+  const revoked = () => {
+    const { proxy, revoke } = Proxy.revocable({}, {});
+    revoke();
+    return proxy;
+  };
+  const delayed = () => Proxy.revocable({}, {});
+  const boom = () => {
+    throw new Error("boom");
+  };
+
+  // Leaves revoked later in the read: each field becomes opaque, not re-read.
+  for (const field of ["id", "claim", "maturity"] as const) {
+    const { proxy, revoke } = delayed();
+    rejectsCleanly(`delayed-revoked ${field}`, { records: [{ id: "a", claim: "c", maturity: "documented", observation: { kind: "none" }, [field]: proxy }, laterRecordRevoking(revoke)] });
+  }
+  for (const field of ["kind", "result", "outcome", "note"] as const) {
+    const { proxy, revoke } = delayed();
+    const observation = { kind: "recorded", result: "r", outcome: "as-intended", note: "n", [field]: proxy };
+    rejectsCleanly(`delayed-revoked observation.${field}`, {
+      records: [{ id: "a", claim: "c", maturity: field === "note" ? "documented" : "validated", observation: field === "note" ? { kind: "reported", note: proxy } : observation }, laterRecordRevoking(revoke)],
+    });
+  }
+  {
+    const { proxy, revoke } = delayed();
+    rejectsCleanly("delayed-revoked unit", { unit: proxy, records: [laterRecordRevoking(revoke)] });
+  }
+  // Already-revoked containers at each level.
+  rejectsCleanly("revoked root", revoked());
+  rejectsCleanly("revoked records", { records: revoked() });
+  rejectsCleanly("revoked record", { records: [revoked()] });
+  rejectsCleanly("revoked observation", { records: [{ id: "a", claim: "c", maturity: "documented", observation: revoked() }] });
+  // The records array revoked part-way through its own copy.
+  {
+    const { proxy, revoke } = Proxy.revocable([validRecord, validRecord], {
+      get(t, k, r) {
+        if (k === "1") revoke();
+        return Reflect.get(t, k, r);
+      },
+    });
+    rejectsCleanly("records revoked mid-copy", { records: proxy });
+  }
+  // Throwing length / element accessors.
+  rejectsCleanly("throwing length", { records: new Proxy([], { get: (t, k, r) => (k === "length" ? boom() : Reflect.get(t, k, r)) }) });
+  rejectsCleanly("throwing element", { records: new Proxy([validRecord], { get: (t, k, r) => (k === "0" ? boom() : Reflect.get(t, k, r)) }) });
+  rejectsCleanly("throwing records", withAccessor({}, "records", boom));
+  rejectsCleanly("throwing observation", { records: [withAccessor({ id: "a", claim: "c", maturity: "documented" }, "observation", boom)] });
+});
+
+test("operational state: revoked or throwing fields fail closed to no claim, never throw", () => {
+  const { proxy: asOfProxy, revoke } = Proxy.revocable({}, {});
+  const delayedAsOf = { state: "running", asOf: asOfProxy, get source() {
+    revoke();
+    return "runbook";
+  } };
+  const { proxy: revokedRoot, revoke: revokeRoot } = Proxy.revocable({}, {});
+  revokeRoot();
+  for (const [name, raw] of [
+    ["delayed-revoked asOf", delayedAsOf],
+    ["revoked root", revokedRoot],
+    ["throwing state", withAccessor({ asOf: "2026-09-01", source: "runbook" }, "state", () => {
+      throw new Error("boom");
+    })],
+  ] as const) {
+    let result: ReturnType<typeof verifyOperationalState> | undefined;
+    assert.doesNotThrow(() => (result = verifyOperationalState("probe", raw)), name);
+    assert.equal(result?.ok, false, name);
+  }
+});
+
+test("opaque leaves are reported without invoking the caller's toString", () => {
+  let called = false;
+  const hostile = { toString: () => ((called = true), "validated"), [Symbol.toPrimitive]: () => ((called = true), "validated") };
+  const r = verifyProjectEvidence("probe", { records: [{ id: "a", claim: "c", maturity: hostile, observation: { kind: "none" } }] });
+  assert.equal(r.ok, false);
+  assert.equal(called, false);
+  assert.ok(!r.ok && r.errors.some((e) => e.includes('invalid maturity "[object]"')));
 });

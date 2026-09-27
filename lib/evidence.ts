@@ -89,22 +89,34 @@ const describe = (v: unknown): string => (typeof v === "object" && v !== null ? 
 // Every untrusted object is therefore destructured exactly once into a plain
 // snapshot of data properties; all checks run on, and the verified copy is
 // built from, that snapshot alone. A read that throws rejects the input.
+//
+// Nothing caller-owned survives the snapshot: containers become module-built
+// plain objects (or null when not an object), and any non-primitive leaf
+// becomes OPAQUE. So a Proxy revoked later — even by a getter read further
+// into the same input — is never touched again after the snapshot.
 
 const MAX_RECORDS = 1000;
 
-type ObservationSnapshot = { kind: unknown; result: unknown; outcome: unknown; note: unknown };
-type RecordSnapshot = { id: unknown; claim: unknown; maturity: unknown; observation: unknown };
+/** Module-owned stand-in for a non-primitive leaf: fails every string/enum
+ * check and describes as "[object]". */
+const OPAQUE: object = Object.freeze({});
+const leaf = (v: unknown): unknown => ((typeof v === "object" && v !== null) || typeof v === "function" ? OPAQUE : v);
 
-function snapshotObservation(raw: unknown): unknown {
-  if (!isObject(raw)) return raw;
+type ObservationSnapshot = Readonly<{ kind: unknown; result: unknown; outcome: unknown; note: unknown }>;
+type RecordSnapshot = Readonly<{ id: unknown; claim: unknown; maturity: unknown; observation: ObservationSnapshot | null }>;
+
+/** null = not an object. */
+function snapshotObservation(raw: unknown): ObservationSnapshot | null {
+  if (!isObject(raw)) return null;
   const { kind, result, outcome, note } = raw;
-  return { kind, result, outcome, note } satisfies ObservationSnapshot;
+  return Object.freeze({ kind: leaf(kind), result: leaf(result), outcome: leaf(outcome), note: leaf(note) });
 }
 
-function snapshotRecord(raw: unknown): unknown {
-  if (!isObject(raw)) return raw;
+/** null = not an object. */
+function snapshotRecord(raw: unknown): RecordSnapshot | null {
+  if (!isObject(raw)) return null;
   const { id, claim, maturity, observation } = raw;
-  return { id, claim, maturity, observation: snapshotObservation(observation) } satisfies RecordSnapshot;
+  return Object.freeze({ id: leaf(id), claim: leaf(claim), maturity: leaf(maturity), observation: snapshotObservation(observation) });
 }
 
 /** Reads `length` once and each index once; undefined if not a sane array. */
@@ -117,8 +129,8 @@ function snapshotArray(raw: unknown): unknown[] | undefined {
   return items;
 }
 
-function checkObservation(where: string, raw: unknown, errors: string[]): Observation | undefined {
-  if (!isObject(raw)) {
+function checkObservation(where: string, raw: ObservationSnapshot | null, errors: string[]): Observation | undefined {
+  if (raw === null) {
     errors.push(`${where}: observation must be an object`);
     return undefined;
   }
@@ -152,11 +164,11 @@ function checkObservation(where: string, raw: unknown, errors: string[]): Observ
  */
 export function verifyProjectEvidence(label: string, raw: unknown): { ok: true; evidence: VerifiedEvidence } | { ok: false; errors: string[] } {
   let unit: unknown;
-  let snapshots: unknown[] | undefined;
+  let snapshots: (RecordSnapshot | null)[] | undefined;
   try {
     if (!isObject(raw)) return { ok: false, errors: [`${label}: evidence must be an object`] };
     const { unit: rawUnit, records: rawRecords } = raw;
-    unit = rawUnit;
+    unit = leaf(rawUnit);
     snapshots = snapshotArray(rawRecords)?.map(snapshotRecord);
   } catch {
     return { ok: false, errors: [`${label}: evidence could not be read`] };
@@ -167,7 +179,7 @@ export function verifyProjectEvidence(label: string, raw: unknown): { ok: true; 
 function verifySnapshot(
   label: string,
   unit: unknown,
-  snapshots: unknown[] | undefined,
+  snapshots: (RecordSnapshot | null)[] | undefined,
 ): { ok: true; evidence: VerifiedEvidence } | { ok: false; errors: string[] } {
   const errors: string[] = [];
   if (unit !== undefined && !isNonEmptyString(unit)) errors.push(`${label}: evidence unit must be a non-empty string`);
@@ -175,8 +187,8 @@ function verifySnapshot(
 
   const ids = new Set<string>();
   const records: EvidenceRecord[] = [];
-  snapshots.forEach((r: unknown, i: number) => {
-    if (!isObject(r)) {
+  snapshots.forEach((r, i) => {
+    if (r === null) {
       errors.push(`${label}: evidence record #${i} must be an object`);
       return;
     }
@@ -379,6 +391,7 @@ export function verifyOperationalState(label: string, raw: unknown): { ok: true;
   try {
     if (!isObject(raw)) return { ok: false, errors: [`${label}: operational state must be an object`] };
     ({ state, asOf, source } = raw);
+    [state, asOf, source] = [leaf(state), leaf(asOf), leaf(source)];
   } catch {
     return { ok: false, errors: [`${label}: operational state could not be read`] };
   }
