@@ -1,4 +1,8 @@
 import {
+  LEGEND_INSET,
+  LEGEND_RULE_Y,
+  LEGEND_SLOT_WIDTH,
+  LEGEND_TEXT_Y,
   ZONE_LABEL_PADDING,
   layoutPlate,
   wrapPlateLabel,
@@ -193,14 +197,14 @@ export function SchematicPlate({ spec, compact = false, className }: SchematicPl
         <g className="plate-legend">
           <line
             className="plate-legend-rule"
-            x1={layout.frame.x + 38}
-            y1={layout.frame.y + layout.frame.h - 40}
-            x2={layout.frame.x + layout.frame.w - 38}
-            y2={layout.frame.y + layout.frame.h - 40}
+            x1={layout.frame.x + LEGEND_INSET}
+            y1={LEGEND_RULE_Y}
+            x2={layout.frame.x + layout.frame.w - LEGEND_INSET}
+            y2={LEGEND_RULE_Y}
           />
           {spec.legend.map((item, i) => {
-            const x = layout.frame.x + 38 + i * 186;
-            const y = layout.frame.y + layout.frame.h - 22;
+            const x = layout.frame.x + LEGEND_INSET + i * LEGEND_SLOT_WIDTH;
+            const y = LEGEND_TEXT_Y;
             return (
               <g key={item.label} className={roleClass(item.role)}>
                 {item.role === "sealed" ? (

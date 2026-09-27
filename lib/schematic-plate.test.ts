@@ -11,6 +11,9 @@ import {
   wrapPlateLabel,
   fitsLabel,
   MAX_LABEL_LINES,
+  LEGEND_CLEARANCE,
+  LEGEND_RULE_Y,
+  zoneBottom,
   type PlateSpec,
   type PlateZoneSpec,
 } from "./schematic-plate.ts";
@@ -249,4 +252,59 @@ test("a label that would overflow its zone is a validation error", () => {
     errors.some((e) => e.includes("does not fit")),
     `expected a fit error, got: ${errors.join(" | ") || "(none)"}`,
   );
+});
+
+// --- legend band (s41.22) ----------------------------------------------------
+
+test("no archetype places a zone or ring in the legend band, at any legal zone count", () => {
+  for (const archetype of PLATE_ARCHETYPES) {
+    const { min, max } = ARCHETYPE_ZONE_RANGE[archetype];
+    for (let n = min; n <= max; n++) {
+      const zones: PlateZoneSpec[] = Array.from({ length: n }, (_, i) => ({
+        id: `z${i}`,
+        label: `Zone ${i}`,
+        shortLabel: `Z${i}`,
+        sublabel: "sub",
+        // Exercise the sealed row/ring wherever the archetype has one.
+        role: i === n - 1 && archetype !== "linear-flow" ? "sealed" : "sanctioned",
+      }));
+      const layout = layoutPlate(spec({ archetype, zones, links: [] }));
+      for (const z of layout.zones) {
+        assert.ok(
+          zoneBottom(z) <= LEGEND_RULE_Y - LEGEND_CLEARANCE,
+          `${archetype} n=${n}: zone ${z.id} bottom ${zoneBottom(z)} reaches the legend rule at ${LEGEND_RULE_Y}`,
+        );
+      }
+    }
+  }
+});
+
+test("coverage-field keeps both rows above the legend with sublabels (the s41.22 regression)", () => {
+  const s = spec({
+    archetype: "coverage-field",
+    zones: [
+      { id: "a", label: "Covered one", shortLabel: "A", role: "sanctioned" },
+      { id: "b", label: "Outside one", shortLabel: "B", sublabel: "outside coverage", role: "sealed" },
+    ],
+    links: [],
+    legend: [
+      { role: "sanctioned", label: "COVERED" },
+      { role: "sealed", label: "OUTSIDE COVERAGE" },
+    ],
+  });
+  assert.deepEqual(validatePlateSpec(s), []);
+  const bottom = Math.max(...layoutPlate(s).zones.map(zoneBottom));
+  assert.ok(bottom <= LEGEND_RULE_Y - LEGEND_CLEARANCE);
+});
+
+test("a legend label too long for its slot is a validation error", () => {
+  const errors = validatePlateSpec(
+    spec({
+      legend: [
+        { role: "sanctioned", label: "EXERCISED IN LOOKBACK WINDOW" },
+        { role: "sealed", label: "GRANTED, NOT EXERCISED" },
+      ],
+    }),
+  );
+  assert.ok(errors.some((e) => e.includes("overflows its")), errors.join("; "));
 });
