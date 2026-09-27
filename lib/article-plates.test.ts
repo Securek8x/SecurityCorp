@@ -4,6 +4,7 @@ import {
   ARTICLE_PLATES,
   DIAGRAM_ARTICLE_COUNT,
   FIRST_WAVE_SLUGS,
+  COVER_BATCH_1_SLUGS,
   LEGACY_COVER_SLUGS,
   plateForSlug,
   publishedArticlesWithDiagram,
@@ -37,10 +38,11 @@ test("the first wave is exactly the nine articles fixed by the s41.5 decision", 
   assert.equal(FIRST_WAVE_SLUGS.length, 9);
   assert.equal(new Set(FIRST_WAVE_SLUGS).size, 9, "no duplicates");
   assert.deepEqual(
-    [...FIRST_WAVE_SLUGS].sort(),
+    [...FIRST_WAVE_SLUGS, ...COVER_BATCH_1_SLUGS].sort(),
     Object.keys(ARTICLE_PLATES).sort(),
-    "every wave slug has a plate and every plate belongs to the wave",
+    "every plate belongs to the pilot wave or an approved cover batch, and vice versa",
   );
+  assert.equal(FIRST_WAVE_SLUGS.filter((s) => COVER_BATCH_1_SLUGS.includes(s)).length, 0);
 });
 
 test("every first-wave slug is a genuinely published article", () => {
@@ -157,7 +159,7 @@ test("the wave demonstrates real compositional variety, not one archetype repeat
     counts.set(spec.archetype, (counts.get(spec.archetype) ?? 0) + 1);
   }
   for (const [archetype, count] of counts) {
-    assert.ok(count <= 3, `${archetype} used ${count} times — too repetitive for a 9-article wave`);
+    assert.ok(count <= 3, `${archetype} used ${count} times — too repetitive for the plate catalog`);
   }
 });
 
@@ -188,6 +190,8 @@ test("plate prose carries no placeholder or unsupported-claim markers", () => {
 test("plateForSlug returns a spec for wave members and undefined otherwise", () => {
   assert.ok(plateForSlug("understanding-network-trust-boundaries"));
   assert.equal(plateForSlug("not-a-real-slug"), undefined);
-  // An article outside the bounded wave must not silently acquire a plate.
-  assert.equal(plateForSlug("segmentation-vs-isolation"), undefined);
+  // An article outside every approved wave must not silently acquire a plate.
+  assert.equal(plateForSlug("tls-certificate-validation-explained"), undefined);
+  // Held for re-review (s41.22), so it must not have a plate yet either.
+  assert.equal(plateForSlug("cloud-iam-permission-creep"), undefined);
 });

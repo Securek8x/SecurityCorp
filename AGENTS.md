@@ -72,10 +72,11 @@ explicit authorization. Operational invariants:
   detail, and a visual generic enough to fit ten unrelated articles is
   rejected. No stock hacker imagery, hooded figures, generic locks,
   random code screens, meaningless HUD overlays, or excessive glow.
-- Never self-approve. An agent must never set a visual's `reviewStatus`
-  to `"approved"` or `stage` to `"reviewed"`, nor add a slug to
-  `PLATE_PILOT_APPROVED_SLUGS` or `TEACHING_FIGURE_ASSESSMENTS`; an asset
-  existing, or an agent review, is not human approval.
+- Never self-approve. Without an explicit human decision recorded in
+  Beads, an agent must never set a visual's `reviewStatus` to
+  `"approved"` or `stage` to `"reviewed"`, nor add a record to
+  `PLATE_APPROVALS` or `TEACHING_FIGURE_ASSESSMENTS`; an asset existing,
+  or an agent review, is not human approval.
   `checkAssetApprovalGate` enforces this in CI.
 - `VISUAL_GATE_ENABLED` stays `false` until backfill completes and a
   human decides to enforce; do not flip it or harden coverage as a side

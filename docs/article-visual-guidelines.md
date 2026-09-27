@@ -21,7 +21,7 @@ the record; do not rewrite), **Current implementation** (what the code
 does today), **Current policy** (binding now), and **Proposed** (future
 direction; not binding until a human records a decision in Beads).
 
-## Current state (verified 2026-09-27, `origin/main` e41b81e)
+## Current state (verified 2026-09-27, after cover batch 1)
 
 **Direction (Historical decision, still binding).** Bead
 `securitycorp-source-s41.5`, recorded by Ravi Teja Thota on 2026-09-13,
@@ -41,19 +41,19 @@ report:article-visuals`), with the baseline asserted in its test:
 | Measure | Count |
 |---|---|
 | Published articles | 42 |
-| Articles with a canonical cover | 10 |
+| Articles with a canonical cover | 13 |
 | — approved raster cover (legacy A series) | 3 |
-| — Schematic Plate in the cover position | 7 |
-| Schematic Plates in total (approved pilot wave) | 9 |
+| — Schematic Plate in the cover position | 10 |
+| Schematic Plates in total (9 pilot wave + 3 cover batch 1) | 12 |
 | — plates rendered in-body because a raster cover holds the slot | 2 |
-| Articles with **no** canonical cover | 32 |
-| Covers with a recorded human approval | 10 of 10 |
+| Articles with **no** canonical cover | 29 |
+| Covers with a recorded human approval | 13 of 13 |
 | Articles with a code-native teaching diagram | 29 |
 | Articles without one, teaching-figure need not yet assessed | 13 |
 
 The two overlap articles (`understanding-network-trust-boundaries`,
 `protecting-main-branch-beyond-pr-approval`) have a raster cover *and* a
-plate: 3 + 9 − 2 = 10 covered articles. A teaching diagram is **not** a
+plate: 3 + 12 − 2 = 13 covered articles. A teaching diagram is **not** a
 cover; the 29 diagram articles are counted independently of cover state.
 
 **Hybrid cover model (Current policy).** Owner decision
@@ -473,11 +473,12 @@ independent states:
 - **Cover approval**: `human-approved`, `pending-human-review`, or
   `not-applicable`. A raster cover is approved only when its own
   provenance is `stage: "reviewed"` + `reviewStatus: "approved"`
-  (`isVisualProductionEligible`). A plate is approved only if its slug is
-  in `PLATE_PILOT_APPROVED_SLUGS`, which records the s41.12 approval
-  (Ravi Teja Thota, 2026-09-13) for exactly nine plates. **An asset
-  existing in the repository is not approval, and an agent review is not
-  human approval.** Only a human may add a slug to that list.
+  (`isVisualProductionEligible`). A plate is approved only if it has a
+  record in `PLATE_APPROVALS` (reviewer, date, source bead): the s41.12
+  pilot wave (Ravi Teja Thota, 2026-09-13, nine plates) and cover batch 1
+  (Ravi Teja Thota, 2026-09-27, three plates, d4e). **An asset existing in
+  the repository is not approval, and an agent review is not human
+  approval.** Only a human decision may add a record.
 - **Teaching figure**: `present` (a code-native diagram exists),
   `recommended`, `unnecessary`, or `not-assessed`. `recommended` and
   `unnecessary` come only from `TEACHING_FIGURE_ASSESSMENTS`, which a
@@ -518,8 +519,10 @@ Thota, 2026-09-27), amending s41.5:
   briefs/specifications for Ravi's review; nothing is generated or
   integrated until he approves that batch. Figma is not introduced yet.
 
-Plate expansion stays bounded too: the s41.12 approval covers exactly nine
-plates, and a new plate is not recorded as approved until a human says so.
+Plate expansion stays bounded too: each plate needs its own recorded human
+approval in `PLATE_APPROVALS` (nine from the s41.12 pilot, three from cover
+batch 1, see `docs/article-cover-batch-1.md`); `cloud-iam-permission-creep`
+is on hold pending s41.22 and re-review.
 
 ### Former raster-cover freeze (Historical decision)
 

@@ -290,6 +290,84 @@ export const ARTICLE_PLATES: Record<string, PlateSpec> = {
       { from: "roe", to: "window", weight: "primary" },
     ],
   },
+
+  // ===== Cover batch 1 (bead securitycorp-source-d4e) ========================
+  // Approved by Ravi Teja Thota, 2026-09-27, exactly as reviewed in
+  // docs/article-cover-batch-1.md. cloud-iam-permission-creep is ON HOLD
+  // pending s41.22 and a re-review, so it is deliberately absent here.
+
+  "segmentation-vs-isolation": {
+    plateId: "segmentation-isolation-pair",
+    archetype: "divergent-pair",
+    headerLabel: "PLATE / RULE OR NO ROUTE",
+    title: "Fictional zone architecture contrasting segmentation with isolation",
+    desc:
+      "A shared services zone reaches a finance zone through a segmentation gateway, on a controlled, filtered path that exists because a named requirement needs it. On the other track, a legacy control zone is enclosed by an unbroken boundary: no route to it was ever built, so there is nothing to filter.",
+    caption: "A strict rule still describes a path. Isolation means the path was never built.",
+    zones: [
+      { id: "shared", label: "Shared services zone", shortLabel: "SHARE", role: "sanctioned" },
+      { id: "gateway", label: "Segmentation gateway", shortLabel: "GWAY", sublabel: "filtered, logged", role: "sanctioned" },
+      { id: "finance", label: "Finance zone", shortLabel: "FIN", role: "sanctioned" },
+      { id: "legacy", label: "Legacy control zone", shortLabel: "LEGCY", sublabel: "no path exists", role: "sealed" },
+    ],
+    links: [
+      { from: "shared", to: "gateway", weight: "primary" },
+      { from: "gateway", to: "finance", weight: "primary" },
+    ],
+    legend: [
+      { role: "sanctioned", label: "SEGMENTED: CONTROLLED PATH" },
+      { role: "sealed", label: "ISOLATED: NO PATH" },
+    ],
+  },
+
+  "dependency-confusion-package-trust": {
+    plateId: "registry-resolution-gates",
+    archetype: "gate-sequence",
+    headerLabel: "PLATE / WHICH REGISTRY ANSWERS",
+    title: "Fictional package-name resolution gated to one authoritative registry",
+    desc:
+      "An install request for an internal-sounding package name reaches the package manager, passes a scope mapping that assigns the name to exactly one authoritative registry, and resolves to the internal registry. A same-named package published to the public registry is never consulted, because resolution fails rather than falling through to a second source.",
+    caption: "The internal package was never the flaw. Ambiguous resolution chooses the source.",
+    zones: [
+      { id: "request", label: "Install request", shortLabel: "REQ", sublabel: "internal name", role: "sanctioned" },
+      { id: "pm", label: "Package manager", shortLabel: "PKGM", role: "sanctioned" },
+      { id: "scope", label: "Scope mapping", shortLabel: "SCOPE", sublabel: "one per name", role: "sanctioned" },
+      { id: "internal", label: "Internal registry", shortLabel: "INT", role: "sanctioned" },
+      { id: "public", label: "Public lookalike", shortLabel: "LOOK", sublabel: "never consulted", role: "sealed" },
+    ],
+    links: [
+      { from: "request", to: "pm", weight: "primary" },
+      { from: "pm", to: "scope", weight: "primary" },
+      { from: "scope", to: "internal", weight: "primary" },
+    ],
+    legend: [
+      { role: "sanctioned", label: "AUTHORITATIVE RESOLUTION" },
+      { role: "sealed", label: "NO FALL-THROUGH" },
+    ],
+  },
+
+  "turning-attack-hypothesis-into-detection": {
+    plateId: "hypothesis-to-detection",
+    archetype: "linear-flow",
+    headerLabel: "PLATE / HYPOTHESIS FIRST",
+    title: "Fictional progression from an attack hypothesis to a maintained detection",
+    desc:
+      "A falsifiable hypothesis names a technique and the telemetry it should produce. The telemetry is confirmed to exist before any logic is written, the logic is tested against a labeled synthetic corpus that includes known gaps, and only then is it tuned. Each stage depends on the one before it.",
+    caption: "State what the rule should catch, then prove the telemetry exists, before writing logic.",
+    zones: [
+      { id: "hypo", label: "Falsifiable hypothesis", shortLabel: "HYPO", role: "sanctioned" },
+      { id: "telem", label: "Telemetry confirmed", shortLabel: "TELEM", sublabel: "fields populated", role: "sanctioned" },
+      { id: "logic", label: "Detection logic", shortLabel: "LOGIC", role: "sanctioned" },
+      { id: "corpus", label: "Synthetic test corpus", shortLabel: "TEST", sublabel: "incl. known gaps", role: "sanctioned" },
+      { id: "tune", label: "Tuning", shortLabel: "TUNE", role: "sanctioned" },
+    ],
+    links: [
+      { from: "hypo", to: "telem", weight: "primary" },
+      { from: "telem", to: "logic", weight: "primary" },
+      { from: "logic", to: "corpus", weight: "primary" },
+      { from: "corpus", to: "tune", weight: "primary" },
+    ],
+  },
 };
 
 /** The bounded first wave: 4 Build Securely + 4 Defend Systems + 1 without a
@@ -304,6 +382,14 @@ export const FIRST_WAVE_SLUGS: readonly string[] = [
   "designing-fail-closed-security-automation",
   "understanding-network-trust-boundaries",
   "scoping-authorized-security-assessment",
+] as const;
+
+/** Cover batch 1 plates approved by Ravi Teja Thota on 2026-09-27 (bead
+ *  securitycorp-source-d4e; hybrid cover model, decision s41.21). */
+export const COVER_BATCH_1_SLUGS: readonly string[] = [
+  "segmentation-vs-isolation",
+  "dependency-confusion-package-trust",
+  "turning-attack-hypothesis-into-detection",
 ] as const;
 
 /** Articles in the wave that keep an approved legacy cinematic cover. The

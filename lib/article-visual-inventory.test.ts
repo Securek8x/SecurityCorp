@@ -1,14 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  PLATE_PILOT_APPROVED_SLUGS,
+  PLATE_APPROVALS,
   TEACHING_FIGURE_ASSESSMENTS,
   VISUAL_INVENTORY_BASELINE,
   inventoryRow,
   publishedVisualInventory,
   summarizeVisualInventory,
 } from "./article-visual-inventory.ts";
-import { ARTICLE_PLATES, FIRST_WAVE_SLUGS, publishedArticlesWithDiagram } from "./article-plates.ts";
+import { ARTICLE_PLATES, COVER_BATCH_1_SLUGS, FIRST_WAVE_SLUGS, publishedArticlesWithDiagram } from "./article-plates.ts";
 import { publishedKnowledgeArticles } from "./knowledge-content.ts";
 import { checkCoverImageGate } from "./article-visuals.ts";
 import type { KnowledgeArticle } from "./knowledge-content.ts";
@@ -44,9 +44,18 @@ test("a raster cover keeps the cover slot and its plate moves in-body", () => {
   }
 });
 
-test("plate approval covers exactly the approved pilot wave", () => {
-  assert.deepEqual([...PLATE_PILOT_APPROVED_SLUGS].sort(), [...FIRST_WAVE_SLUGS].sort());
-  assert.deepEqual(Object.keys(ARTICLE_PLATES).sort(), [...FIRST_WAVE_SLUGS].sort());
+test("plate approvals cover exactly the approved pilot wave and cover batch 1", () => {
+  const approved = [...FIRST_WAVE_SLUGS, ...COVER_BATCH_1_SLUGS].sort();
+  assert.deepEqual(Object.keys(PLATE_APPROVALS).sort(), approved);
+  assert.deepEqual(Object.keys(ARTICLE_PLATES).sort(), approved);
+  for (const [slug, a] of Object.entries(PLATE_APPROVALS)) {
+    assert.ok(a.reviewer.trim() && /^\d{4}-\d{2}-\d{2}$/.test(a.reviewedAt) && a.source.trim(), slug);
+  }
+});
+
+test("the held IAM plate is neither registered nor approved", () => {
+  assert.equal(ARTICLE_PLATES["cloud-iam-permission-creep"], undefined);
+  assert.equal(PLATE_APPROVALS["cloud-iam-permission-creep"], undefined);
 });
 
 test("asset existence never implies approval", () => {
