@@ -16,7 +16,7 @@ import {
   type VerifiedEvidence,
 } from "./evidence.ts";
 import { buildProjects, projectInputs, projectIntegrityErrors, projects, type Project } from "./content.ts";
-import { controlScenarios, resolveControlScenarios, resolveScenarioEvidence } from "./control-under-test.ts";
+import { controlScenarios, failurePathLabel, resolveControlScenarios, resolveScenarioEvidence, type ScenarioEvidence } from "./control-under-test.ts";
 import { buildLog } from "./build-log.ts";
 import { projectEvidenceManifest } from "./build-info.ts";
 
@@ -479,4 +479,258 @@ test("Failure Lab resolution carries the recorded outcome separately from maturi
   const p03 = byId["proxy-migration-fails"];
   assert.equal(p03.status === "resolved" && p03.maturity, "documented");
   assert.equal(p03.status === "resolved" && "outcome" in p03, false, "no outcome without a recorded result");
+});
+
+// --- Snapshot boundary: accessor / Proxy / post-verification mutation (s41.20.27)
+//
+// Invariant: what was verified is exactly what downstream code presents.
+
+/** A getter that answers values[0] on the first read, values[1] on the
+ * second, … and the last value thereafter; `reads()` counts reads. */
+function flipping(values: unknown[]) {
+  let n = 0;
+  return {
+    get: () => values[Math.min(n++, values.length - 1)],
+    reads: () => n,
+  };
+}
+function withAccessor<T extends object>(target: T, key: string, getter: () => unknown): T {
+  Object.defineProperty(target, key, { get: getter, enumerable: true, configurable: true });
+  return target;
+}
+/** Every verified record must satisfy the maturity/observation invariant. */
+function assertConsistent(evidence: VerifiedEvidence) {
+  for (const r of evidence.records) {
+    assert.equal(r.maturity === "validated", r.observation.kind === "recorded", JSON.stringify(r));
+  }
+}
+
+test("review repro: a maturity accessor that flips to validated after the checks cannot render Validated", () => {
+  // Independent .23 review reproduction: "documented" for the first four
+  // reads, "validated" afterwards, with no recorded observation.
+  const m = flipping(["documented", "documented", "documented", "documented", "validated"]);
+  const rec = withAccessor({ id: "x", claim: "c", observation: { kind: "none" } }, "maturity", m.get);
+  const res = verifyProjectEvidence("probe", { records: [rec] });
+  assert.equal(m.reads(), 1, "maturity is read exactly once");
+  assert.ok(res.ok);
+  assert.equal(summarizeEvidence(res.evidence), "1 Documented");
+  assert.equal(describeEvidenceRecord(res.evidence, "x")?.maturity, "documented");
+  assertConsistent(res.evidence);
+});
+
+test("a maturity flip at any read position never yields a stronger maturity than was checked", () => {
+  for (let flipAt = 0; flipAt <= 6; flipAt += 1) {
+    for (const [before, after, observation] of [
+      ["documented", "validated", { kind: "none" }],
+      ["design", "validated", { kind: "reported", note: "n" }],
+      ["validated", "documented", { kind: "recorded", result: "r", outcome: "as-intended" }],
+      ["validated", "design", { kind: "none" }],
+    ] as const) {
+      const m = flipping([...Array(flipAt).fill(before), after]);
+      const rec = withAccessor({ id: "x", claim: "c", observation: { ...observation } }, "maturity", m.get);
+      const res = verifyProjectEvidence("probe", { records: [rec] });
+      assert.ok(m.reads() <= 1, `maturity read ${m.reads()} times`);
+      if (!res.ok) continue; // fail closed is acceptable
+      assertConsistent(res.evidence);
+      const checked = flipAt === 0 ? after : before;
+      assert.equal(res.evidence.records[0].maturity, checked, `flipAt=${flipAt} ${before}->${after}`);
+    }
+  }
+});
+
+test("an observation-kind flip cannot create, or strip, authoritative recorded evidence", () => {
+  for (let flipAt = 0; flipAt <= 4; flipAt += 1) {
+    // documented + kind "none" that later claims "recorded" with a result.
+    const toRecorded = flipping([...Array(flipAt).fill("none"), "recorded"]);
+    const a = verifyProjectEvidence("probe", {
+      records: [{ id: "x", claim: "c", maturity: "documented", observation: withAccessor({ result: "seen", outcome: "as-intended" }, "kind", toRecorded.get) }],
+    });
+    assert.ok(toRecorded.reads() <= 1);
+    if (a.ok) {
+      assertConsistent(a.evidence);
+      assert.equal(summarizeEvidence(a.evidence), "1 Documented");
+      assert.equal(describeEvidenceRecord(a.evidence, "x")?.outcome, undefined);
+      assert.equal(observationRows(a.evidence)[0].kind, "none");
+    }
+    // validated + kind "recorded" that later claims "none".
+    const toNone = flipping([...Array(flipAt).fill("recorded"), "none"]);
+    const b = verifyProjectEvidence("probe", {
+      records: [{ id: "x", claim: "c", maturity: "validated", observation: withAccessor({ result: "seen", outcome: "as-intended" }, "kind", toNone.get) }],
+    });
+    assert.ok(toNone.reads() <= 1);
+    if (b.ok) {
+      assertConsistent(b.evidence);
+      assert.equal(summarizeEvidence(b.evidence), "1 Validated");
+      assert.equal(describeEvidenceRecord(b.evidence, "x")?.observed, "seen");
+    }
+  }
+});
+
+test("an outcome or result flip cannot alter the verified presentation", () => {
+  const outcome = flipping(["failed", "as-intended"]);
+  const result = flipping(["Outbound access continued.", "Blocked as expected."]);
+  const obs = withAccessor(withAccessor({ kind: "recorded" }, "outcome", outcome.get), "result", result.get);
+  const res = verifyProjectEvidence("probe", { records: [{ id: "x", claim: "c", maturity: "validated", observation: obs }] });
+  assert.equal(outcome.reads(), 1);
+  assert.equal(result.reads(), 1);
+  assert.ok(res.ok);
+  assert.deepEqual(describeEvidenceRecord(res.evidence, "x"), { maturity: "validated", observed: "Outbound access continued.", outcome: "failed" });
+  assert.equal(outcomeBadge(res.evidence).tone, "failed");
+  assert.deepEqual(observationRows(res.evidence)[0], { claim: "c", maturity: "validated", kind: "recorded", text: "Outbound access continued.", outcome: "failed" });
+});
+
+test("Proxy-backed evidence: every untrusted field is read at most once", () => {
+  const reads = new Map<string, number>();
+  const counted = <T extends object>(name: string, target: T): T =>
+    new Proxy(target, {
+      get(t, key, receiver) {
+        if (typeof key === "string") reads.set(`${name}.${key}`, (reads.get(`${name}.${key}`) ?? 0) + 1);
+        return Reflect.get(t, key, receiver);
+      },
+    });
+  const observation = counted("observation", { kind: "recorded", result: "r", outcome: "as-intended", note: undefined });
+  const record = counted("record", { id: "x", claim: "c", maturity: "validated", observation });
+  const records = counted("records", [record]);
+  const res = verifyProjectEvidence("probe", counted("evidence", { unit: "failure path", records }));
+  assert.ok(res.ok);
+  const repeated = [...reads].filter(([, n]) => n > 1);
+  assert.deepEqual(repeated, [], `fields read more than once: ${JSON.stringify(repeated)}`);
+  for (const field of ["evidence.unit", "evidence.records", "records.length", "records.0", "record.id", "record.claim", "record.maturity", "record.observation", "observation.kind", "observation.result", "observation.outcome"]) {
+    assert.equal(reads.get(field), 1, field);
+  }
+});
+
+test("a throwing accessor or unreadable input fails closed, never throws or renders", () => {
+  const boom = () => {
+    throw new Error("boom");
+  };
+  const { proxy: revoked, revoke } = Proxy.revocable({}, {});
+  revoke();
+  for (const raw of [
+    withAccessor({ records: [] }, "unit", boom),
+    { records: [withAccessor({ id: "x", claim: "c", observation: { kind: "none" } }, "maturity", boom)] },
+    { records: [{ id: "x", claim: "c", maturity: "documented", observation: withAccessor({}, "kind", boom) }] },
+    { records: [revoked] },
+    revoked,
+    { records: new Proxy([], { get: (t, k) => (k === "length" ? 1e9 : Reflect.get(t, k)) }) },
+  ]) {
+    const checked = checkProjectEvidence("probe", raw);
+    assert.equal(isVerifiedEvidence(checked), false);
+    assert.equal(summarizeEvidence(checked), "Evidence unavailable");
+  }
+});
+
+test("mutating the original input after verification cannot alter rendered evidence", () => {
+  const observation: Record<string, unknown> = { kind: "recorded", result: "Blocked.", outcome: "as-intended" };
+  const record: Record<string, unknown> = { id: "x", claim: "c", maturity: "validated", observation };
+  const other: Record<string, unknown> = { id: "y", claim: "d", maturity: "documented", observation: { kind: "none" } };
+  const raw: Record<string, unknown> = { unit: "failure path", records: [record, other] };
+  const res = verifyProjectEvidence("probe", raw);
+  assert.ok(res.ok);
+  const render = (e: unknown) => ({
+    summary: summarizeEvidence(e),
+    parts: evidenceDistributionParts(e),
+    x: describeEvidenceRecord(e, "x"),
+    y: describeEvidenceRecord(e, "y"),
+    rows: observationRows(e),
+    badge: outcomeBadge(e),
+    unit: evidenceDistribution(e),
+  });
+  const before = structuredClone(render(res.evidence));
+
+  observation.kind = "none";
+  observation.outcome = "failed";
+  observation.result = "Leaked.";
+  record.maturity = "design";
+  record.claim = "rewritten";
+  other.maturity = "validated";
+  other.observation = { kind: "recorded", result: "forged", outcome: "as-intended" };
+  (raw.records as unknown[]).push({ id: "z", claim: "z", maturity: "validated", observation: { kind: "recorded", result: "z", outcome: "as-intended" } });
+  raw.unit = "something else";
+  raw.records = [];
+
+  assert.deepEqual(render(res.evidence), before);
+  assert.equal(before.summary, "1 Validated · 1 Documented");
+  assert.ok(Object.isFrozen(res.evidence) && Object.isFrozen(res.evidence.records));
+});
+
+test("operational state is read once: a flipping state/asOf/source cannot change the stored claim", () => {
+  const state = flipping(["running", "in-service"]);
+  const asOf = flipping(["2026-09-01", "not a date"]);
+  const source = flipping(["runbook", ""]);
+  const raw = withAccessor(withAccessor(withAccessor({}, "state", state.get), "asOf", asOf.get), "source", source.get);
+  const { projects: built, errors } = buildProjects(inputsWith("P-04", () => {}).map((p) => {
+    const c = p as Record<string, unknown>;
+    return c.index === "P-04" ? { ...c, operationalState: raw } : c;
+  }));
+  assert.deepEqual(errors, []);
+  assert.deepEqual(project(built, "P-04").operationalState, { state: "running", asOf: "2026-09-01", source: "runbook" });
+  assert.equal(state.reads() + asOf.reads() + source.reads(), 3);
+});
+
+test("a project index that flips after verification cannot rebind verified evidence to another project", () => {
+  const index = flipping(["P-01", "P-03"]);
+  const inputs = inputsWith("P-01", () => {}).map((p) => {
+    const c = p as Record<string, unknown>;
+    if (c.index !== "P-01") return c;
+    const { index: _drop, ...rest } = c;
+    void _drop;
+    return withAccessor(rest, "index", index.get);
+  });
+  const { projects: built, errors } = buildProjects(inputs);
+  assert.deepEqual(errors, []);
+  assert.equal(index.reads(), 1);
+  assert.equal(built.filter((p) => p.index === "P-01").length, 1);
+  assert.equal(summarizeEvidence(project(built, "P-01").evidence), "1 Validated · 4 Documented");
+  assert.deepEqual(renderedMaturityClaims(built), renderedMaturityClaims(projects));
+});
+
+test("legitimate authored evidence verifies and renders identically to its plain source", () => {
+  const { projects: rebuilt, errors } = buildProjects(projectInputs.map((p) => clone(p)));
+  assert.deepEqual(errors, []);
+  assert.deepEqual(renderedMaturityClaims(rebuilt), renderedMaturityClaims(projects));
+  for (const input of projectInputs) {
+    const p = project(projects, input.index);
+    assert.deepEqual(clone(verifiedRecords(p)), clone(input.evidence.records), input.index);
+    assert.equal(project(rebuilt, input.index).evidence && summarizeEvidence(project(rebuilt, input.index).evidence), summarizeEvidence(p.evidence));
+  }
+  assert.equal(summarizeEvidence(project(projects, "P-01").evidence), "1 Validated · 4 Documented");
+});
+
+// --- Failure Lab diagram caption (s41.20.26) --------------------------------
+
+const MATURITY_TERMS = /\b(Design|Documented|Validated)\b/g;
+
+test("Failure Lab diagram caption uses exactly the maturity of the authoritative record, never another", () => {
+  const resolved = resolveControlScenarios(controlScenarios, projects);
+  for (const s of resolved) {
+    assert.equal(s.evidence.status, "resolved", s.id);
+    if (s.evidence.status !== "resolved") continue;
+    const terms = failurePathLabel(s.evidence).match(MATURITY_TERMS) ?? [];
+    assert.deepEqual(terms, [evidenceApi.evidenceMaturityLabel[s.evidence.maturity]], s.id);
+  }
+  // The default (first) tab is P-01's scanner outage: Validated, recorded as intended.
+  assert.equal(resolved[0].id, "scanner-unavailable");
+  assert.equal(failurePathLabel(resolved[0].evidence), "Validated failure path");
+  assert.equal(failurePathLabel(resolved.find((s) => s.id === "proxy-migration-fails")!.evidence), "Documented failure path");
+});
+
+test("Failure Lab diagram caption follows the supplied record for every maturity, and names none when unavailable", () => {
+  for (const maturity of evidenceApi.EVIDENCE_MATURITIES) {
+    const evidence: ScenarioEvidence = { status: "resolved", maturity, observed: "x" };
+    assert.deepEqual(failurePathLabel(evidence).match(MATURITY_TERMS), [evidenceApi.evidenceMaturityLabel[maturity]]);
+  }
+  assert.equal(failurePathLabel({ status: "unavailable", reason: "r" }), "Failure path");
+  // Unverified evidence resolves to unavailable, so it can't lend the caption a maturity.
+  const { projects: broken } = buildProjects(inputsWith("P-01", (p) => (recordsOf(p)[0].maturity = "VALIDATED")));
+  const lab = resolveControlScenarios(controlScenarios, broken).find((s) => s.id === "scanner-unavailable")!;
+  assert.equal(failurePathLabel(lab.evidence).match(MATURITY_TERMS), null);
+});
+
+test("the Failure Lab diagram component hard-codes no maturity term and captions from the scenario's evidence", async () => {
+  const { readFile } = await import("node:fs/promises");
+  const source = await readFile(new URL("../components/diagrams/failure-path-diagram.tsx", import.meta.url), "utf8");
+  const code = source.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+  assert.equal(code.match(MATURITY_TERMS), null, "maturity terms must come from the evidence model");
+  assert.match(code, /failurePathLabel\(scenario\.evidence\)/);
 });

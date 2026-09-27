@@ -95,19 +95,24 @@ export function buildProjects(inputs: readonly unknown[]): { projects: Project[]
   const errors: string[] = [];
   const built: Project[] = [];
   inputs.forEach((raw, i) => {
-    if (typeof raw !== "object" || raw === null || typeof (raw as ProjectInput).index !== "string") {
+    // One read per field: the index the evidence is verified under is the
+    // index the Failure Lab later looks it up by.
+    let snapshot: Record<string, unknown>;
+    try {
+      snapshot = typeof raw === "object" && raw !== null ? { ...raw } : {};
+    } catch {
+      snapshot = {};
+    }
+    const { index, evidence: rawEvidence, operationalState: rawOperational, ...rest } = snapshot;
+    if (typeof index !== "string") {
       errors.push(`project #${i}: not a project object with an index — excluded`);
       return;
     }
-    const input = raw as ProjectInput;
-    const label = input.index;
-    const evidence = checkProjectEvidence(label, input.evidence);
+    const evidence = checkProjectEvidence(index, rawEvidence);
     if ("unavailable" in evidence) errors.push(...evidence.errors);
-    const operational = verifyOperationalState(label, input.operationalState);
+    const operational = verifyOperationalState(index, rawOperational);
     if (!operational.ok) errors.push(...operational.errors);
-    const { operationalState: _ignored, ...rest } = input;
-    void _ignored;
-    built.push({ ...rest, evidence, ...(operational.ok && operational.value ? { operationalState: operational.value } : {}) } as Project);
+    built.push({ ...rest, index, evidence, ...(operational.ok && operational.value ? { operationalState: operational.value } : {}) } as Project);
   });
   return { projects: built, errors };
 }

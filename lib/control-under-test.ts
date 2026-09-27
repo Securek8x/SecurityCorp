@@ -1,4 +1,4 @@
-import { describeEvidenceRecord, type EvidenceMaturity, type TestOutcome } from "./evidence.ts";
+import { describeEvidenceRecord, evidenceMaturityLabel, type EvidenceMaturity, type TestOutcome } from "./evidence.ts";
 
 export type ControlScenario = {
   id: string;
@@ -67,6 +67,15 @@ export function resolveScenarioEvidence(scenario: ControlScenario, projects: Evi
     observed: described.observed,
     ...(described.outcome ? { outcome: described.outcome } : {}),
   });
+}
+
+/**
+ * The Failure Lab diagram's caption. Its maturity term comes from the same
+ * resolved evidence as the scenario's EvidenceMark, so the two can never
+ * disagree; unresolved evidence gets no maturity term at all.
+ */
+export function failurePathLabel(evidence: ScenarioEvidence): string {
+  return evidence.status === "resolved" ? `${evidenceMaturityLabel[evidence.maturity]} failure path` : "Failure path";
 }
 
 export function resolveControlScenarios(scenarios: readonly ControlScenario[], projects: EvidenceSource): ResolvedControlScenario[] {
