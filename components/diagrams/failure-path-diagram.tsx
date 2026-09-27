@@ -1,4 +1,4 @@
-import type { ControlScenario } from "@/lib/control-under-test";
+import { failurePathLabel, type ResolvedControlScenario } from "@/lib/control-under-test";
 
 // Stage labels are a compact paraphrase of each scenario's own trigger/
 // expected text in lib/control-under-test.ts — nothing here asserts a fact
@@ -28,13 +28,12 @@ function wrapLabel(label: string): [string] | [string, string] {
  * via `key={scenario.id}` by the caller so its short draw-in sequence
  * restarts on every tab change without stealing focus.
  */
-export function FailurePathDiagram({ scenario, verdictClassName }: { scenario: ControlScenario; verdictClassName: string }) {
+export function FailurePathDiagram({ scenario, safe }: { scenario: ResolvedControlScenario; safe: boolean }) {
   const stages = STAGES[scenario.id] ?? [scenario.control, "Trigger", "Response", "Outcome"];
-  const isValidated = verdictClassName === "cut-verdict-validated";
 
   return (
     <figure className="failure-path-diagram diagram-sequence diagram-sequence-auto" aria-hidden="true">
-      <p className="mono-label failure-path-label">Documented failure path</p>
+      <p className="mono-label failure-path-label">{failurePathLabel(scenario.evidence)}</p>
       <svg viewBox="0 0 640 100" width="100%" focusable="false">
         <path className="flow-path" d={ROUTE} style={{ "--path-length": ROUTE_LENGTH, "--draw-duration": "700ms" } as React.CSSProperties} />
         <circle
@@ -49,7 +48,7 @@ export function FailurePathDiagram({ scenario, verdictClassName }: { scenario: C
           return (
             <g key={label}>
               <rect
-                className={`flow-node flow-pulse-once${isLast && isValidated ? " flow-node-safe" : ""}`}
+                className={`flow-node flow-pulse-once${isLast && safe ? " flow-node-safe" : ""}`}
                 x={x - 42}
                 y="27"
                 width="84"

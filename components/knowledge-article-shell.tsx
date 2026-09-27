@@ -14,6 +14,7 @@ import { ArticleFigure } from "@/components/article-figure";
 import { PlateFigure } from "@/components/diagrams/schematic-plate";
 import { plateForSlug } from "@/lib/article-plates";
 import { ReportCorrectionLink } from "@/components/report-correction-link";
+import { ContentDate } from "@/components/content-date";
 
 const CONTENT_TYPE_LABEL: Record<string, string> = {
   guide: "Guide",
@@ -248,8 +249,8 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
           <p className="dek">{meta.summary}</p>
           <div className="byline">
             <span>By Ravi Teja Thota</span>
-            {meta.publishedAt && <span>Published {meta.publishedAt}</span>}
-            {meta.lastReviewedAt && meta.lastReviewedAt !== meta.publishedAt && <span>Last reviewed {meta.lastReviewedAt}</span>}
+            {meta.publishedAt && <span>Published <ContentDate value={meta.publishedAt} /></span>}
+            {meta.lastReviewedAt && meta.lastReviewedAt !== meta.publishedAt && <span>Last reviewed <ContentDate value={meta.lastReviewedAt} /></span>}
             <span>{meta.estimatedReadingMinutes} min read</span>
             <span>{meta.difficulty}</span>
             <span>{EVIDENCE_LABEL[meta.evidenceState]}</span>
@@ -260,7 +261,7 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             </div>
           </div>
           {meta.updatedAt && meta.changeNote && meta.updatedAt !== meta.publishedAt && (
-            <p className="section-label change-note">What changed ({meta.updatedAt}): {renderInline(meta.changeNote)}</p>
+            <p className="section-label change-note">What changed (<ContentDate value={meta.updatedAt} />): {renderInline(meta.changeNote)}</p>
           )}
           {freshness && (freshness.appliesTo?.length || freshness.testedWith?.length) ? (
             <p className="section-label">

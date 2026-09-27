@@ -1,5 +1,6 @@
 import { profile } from "@/lib/profile";
 import type { Article } from "@/lib/content";
+import { toIsoTimestamp } from "@/lib/content-dates";
 import type { KnowledgeArticleMeta } from "@/lib/knowledge-schema";
 
 const siteUrl = "https://securitycorp.net";
@@ -30,10 +31,8 @@ export function personJsonLd() {
 
 export function articleJsonLd(article: Article) {
   const url = `${siteUrl}/guides/${article.slug}/`;
-  const published = new Date(article.date);
-  const publishedIso = Number.isNaN(published.getTime()) ? undefined : published.toISOString();
-  const reviewed = new Date(article.lastReviewed);
-  const reviewedIso = Number.isNaN(reviewed.getTime()) ? undefined : reviewed.toISOString();
+  const publishedIso = toIsoTimestamp(article.publishedAt);
+  const reviewedIso = toIsoTimestamp(article.lastReviewedAt);
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -42,7 +41,7 @@ export function articleJsonLd(article: Article) {
     url,
     mainEntityOfPage: url,
     datePublished: publishedIso,
-    dateModified: reviewedIso ?? publishedIso,
+    dateModified: reviewedIso,
     author: { "@type": "Person", name: "Ravi Teja Thota", url: `${siteUrl}/about/` },
     publisher: { "@type": "Organization", name: "SecurityCorp", url: siteUrl },
     image: `${siteUrl}/opengraph-image.png`,

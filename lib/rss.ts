@@ -1,4 +1,5 @@
 import { articles } from "./content.ts";
+import { compareIsoDates, toIsoTimestamp } from "./content-dates.ts";
 import { publishedKnowledgeArticles } from "./knowledge-content.ts";
 
 const siteUrl = "https://securitycorp.net";
@@ -20,7 +21,7 @@ function toRfc822(date: string): string {
 export function buildRssFeed(): string {
   // Sorted newest-first from each article's own real date — no invented
   // publishing cadence, no dates beyond what's already in lib/content.ts.
-  const sorted = [...articles].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sorted = [...articles].sort((a, b) => compareIsoDates(b.publishedAt, a.publishedAt));
 
   // publishedKnowledgeArticles is already filtered to status==="published"
   // and schema-valid (see isPubliclyVisible) — nothing draft, in-review, or
@@ -29,7 +30,7 @@ export function buildRssFeed(): string {
     (a, b) => new Date(b.meta.publishedAt ?? 0).getTime() - new Date(a.meta.publishedAt ?? 0).getTime(),
   );
 
-  const newestDate = [sorted[0]?.date, knowledgeItems[0]?.meta.publishedAt].filter((d): d is string => Boolean(d)).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0];
+  const newestDate = [sorted[0] && toIsoTimestamp(sorted[0].publishedAt), knowledgeItems[0]?.meta.publishedAt].filter((d): d is string => Boolean(d)).sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0];
   const lastBuildDate = newestDate ? toRfc822(newestDate) : new Date().toUTCString();
 
   const guideItems = sorted
@@ -40,7 +41,7 @@ export function buildRssFeed(): string {
       <link>${escapeXml(url)}</link>
       <guid isPermaLink="true">${escapeXml(url)}</guid>
       <description>${escapeXml(a.dek)}</description>
-      <pubDate>${toRfc822(a.date)}</pubDate>
+      <pubDate>${toRfc822(toIsoTimestamp(a.publishedAt))}</pubDate>
     </item>`;
     });
 

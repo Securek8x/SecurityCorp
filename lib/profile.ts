@@ -6,7 +6,36 @@ export const profile = {
   education: "MS in Cybersecurity Engineering",
 };
 
-export const certifications = ["CKA", "CKS", "CKAD", "CRTP", "AWS SAA", "CySA+", "Security+", "Network+"];
+export type Certification = {
+  name: string;
+  /** Public verification page. Add only a real, confirmed https URL from the
+   * issuer or its credential platform — never a placeholder. Absent = the
+   * name renders without a link (s41.20.19). */
+  verifyUrl?: string;
+};
+
+export const certifications: Certification[] = [
+  { name: "CKA" },
+  { name: "CKS" },
+  { name: "CKAD" },
+  { name: "CRTP" },
+  { name: "AWS SAA" },
+  { name: "CySA+" },
+  { name: "Security+" },
+  { name: "Network+" },
+];
+
+/** A verify link is rendered only for an absolute https URL with a real host. */
+export function verifiableUrl(c: Certification): string | undefined {
+  if (!c.verifyUrl) return undefined;
+  try {
+    const u = new URL(c.verifyUrl);
+    if (u.protocol !== "https:" || !u.hostname.includes(".") || /(^|\.)(example\.(com|org|net)|localhost)$/i.test(u.hostname)) return undefined;
+    return u.toString();
+  } catch {
+    return undefined;
+  }
+}
 
 // Homepage strip shows a compact subset; About shows the full list — both
 // slice from this one array rather than hand-copying it.

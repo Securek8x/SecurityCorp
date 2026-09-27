@@ -1,40 +1,64 @@
-export type BuildLogStatus = "published" | "validated" | "documented" | "planned";
+import { formatDisplayDate, type IsoDate } from "./content-dates.ts";
+import { articles } from "./content.ts";
+
+// Build log (s41.20.12): what changed, and when. Event type is its own
+// vocabulary — never an evidence maturity (Design/Documented/Validated live
+// on project records only) and never a test outcome.
+export const BUILD_LOG_EVENT_TYPES = ["publication", "plan"] as const;
+export type BuildLogEventType = (typeof BUILD_LOG_EVENT_TYPES)[number];
+
+export const buildLogEventLabel: Record<BuildLogEventType, string> = {
+  publication: "Publication",
+  plan: "Plan",
+};
+
+/** A dated event stores a canonical day; an undated plan stores only the
+ * year it is aimed at — never an invented day. */
+export type BuildLogDate = { precision: "day"; value: IsoDate } | { precision: "year"; value: number };
+
+export function formatBuildLogDate(date: BuildLogDate): string {
+  return date.precision === "day" ? formatDisplayDate(date.value) : String(date.value);
+}
 
 export type BuildLogEntry = {
-  date: string;
+  date: BuildLogDate;
+  type: BuildLogEventType;
+  /** What changed, in one line. */
   title: string;
-  summary?: string;
-  status: BuildLogStatus;
   href?: string;
 };
 
-export const buildLog: BuildLogEntry[] = [
+type BuildLogSource =
+  /** Resolved from the guide record: its publishedAt and title. */
+  | { type: "publication"; guideSlug: string }
+  | { type: "plan"; date: BuildLogDate; title: string; href?: string };
+
+const sources: BuildLogSource[] = [
+  { type: "publication", guideSlug: "malware-gate-for-automated-downloads" },
+  { type: "publication", guideSlug: "vpn-bound-container-stack" },
+  { type: "publication", guideSlug: "reverse-proxy-home-lab" },
   {
-    date: "Aug 28, 2026",
-    title: "Fail-closed malware gate architecture",
-    summary: "Staged intake, explicit state machine, and release verification, written up as a full guide.",
-    status: "published",
-    href: "/guides/malware-gate-for-automated-downloads",
-  },
-  {
-    date: "Aug 24, 2026",
-    title: "VPN-bound container egress, verified",
-    summary: "Namespace sharing, egress proof, and kill-switch testing documented and confirmed against a live stack.",
-    status: "validated",
-    href: "/guides/vpn-bound-container-stack",
-  },
-  {
-    date: "Aug 18, 2026",
-    title: "Private reverse-proxy rollback pattern",
-    summary: "Split DNS, constrained management plane, and commit-confirm rollback, written up as a guide.",
-    status: "documented",
-    href: "/guides/reverse-proxy-home-lab",
-  },
-  {
-    date: "2026",
-    title: "Kubernetes parity migration",
-    summary: "A zero-change migration plan for existing services — still in design, no production cutover yet.",
-    status: "planned",
+    type: "plan",
+    date: { precision: "year", value: 2026 },
+    title: "Kubernetes parity migration plan — in design, no production cutover yet",
     href: "/projects",
   },
 ];
+
+/** Publication events take their date and title from the guide itself, so
+ * the log can't drift from the published record. Unknown slugs throw. */
+export function resolveBuildLog(list: readonly BuildLogSource[] = sources): BuildLogEntry[] {
+  return list.map((s) => {
+    if (s.type === "plan") return { date: s.date, type: "plan", title: s.title, ...(s.href ? { href: s.href } : {}) };
+    const guide = articles.find((a) => a.slug === s.guideSlug);
+    if (!guide) throw new Error(`build log: unknown guide "${s.guideSlug}"`);
+    return {
+      date: { precision: "day", value: guide.publishedAt },
+      type: "publication",
+      title: `Published “${guide.title}”`,
+      href: `/guides/${guide.slug}`,
+    };
+  });
+}
+
+export const buildLog: BuildLogEntry[] = resolveBuildLog();

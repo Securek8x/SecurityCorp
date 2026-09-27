@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Article } from "@/lib/content";
+import { ContentDate } from "@/components/content-date";
 
 const FILTERS = ["All", "Detection Engineering", "Container Security", "Home Lab Security", "Foundational", "Intermediate"];
 
@@ -47,7 +48,7 @@ export function GuidesFilter({ articles }: { articles: Article[] }) {
               <h2>{a.title}</h2>
               <p>{a.dek}</p>
               <div className="guide-foot">
-                <span>{a.date} · {a.read} read</span>
+                <span><ContentDate value={a.publishedAt} /> · {a.read} read</span>
                 <ArrowUpRight aria-hidden="true" />
               </div>
             </Link>

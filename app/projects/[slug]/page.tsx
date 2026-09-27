@@ -10,20 +10,22 @@ import { JsonLd } from "@/components/json-ld";
 import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
 import { EvidencePanel, type Evidence } from "@/components/evidence-panel";
 import { CaseTimeline, type TimelineStage } from "@/components/case-timeline";
+import { observationRows, outcomeBadge, summarizeEvidence } from "@/lib/evidence";
+import type { Project } from "@/lib/content";
 
 const diagrams: Record<string, () => React.ReactNode> = {
   "fail-closed-file-intake": () => <MalwareIntakeDiagram />,
 };
 
-const timelines: Record<string, TimelineStage[]> = {
-  "fail-closed-file-intake": [
+const timelines: Record<string, (p: Project) => TimelineStage[]> = {
+  "fail-closed-file-intake": (p) => [
     { stage: "Initial assumption", summary: "A successful move command was assumed to mean the file was safely in its final location." },
     { stage: "First implementation", summary: "The intake used an explicit state machine, but the release step trusted the move operation's reported success." },
     { stage: "Failure discovered", summary: "Testing showed a move could report success without the destination file actually existing under load — an ambiguous outcome the design didn't account for." },
     { stage: "Root cause", summary: "The release step checked the move command's return code, not the actual state of the destination." },
     { stage: "Control added", summary: "A verification step was added: confirm the destination exists and matches the expected size before a release counts as complete, with a bounded retry policy." },
-    { stage: "Validation", summary: "Incomplete transfers, a scanner outage, a known-bad test file, and two workers racing the same item were all tested against the new verification step.", detail: "Every one of these was tested deliberately, not assumed safe — see the full failure-path testing in the guide." },
-    { stage: "Current state", summary: "Validated: every ambiguous outcome now leaves the file quarantined rather than released. Scan latency under heavy load remains a known, bounded limitation." },
+    { stage: "Validation", summary: "A scanner outage was simulated against the new verification step and the release step never ran — the one failure path with a recorded observed result.", detail: "Incomplete transfers, a known-bad test file, two workers racing the same item, and a false-success move were reported as exercised too, but without a recorded observed result; each stays Documented until one is recorded." },
+    { stage: "Current state", summary: `Evidence across the five failure paths: ${summarizeEvidence(p.evidence)}. The design routes every ambiguous outcome to quarantine rather than release. Scan latency under heavy load remains a known, bounded limitation.` },
   ],
 };
 
@@ -33,9 +35,9 @@ function toEvidence(p: (typeof projects)[number]): Evidence | null {
     control: p.caseStudy.architecture,
     claim: p.caseStudy.problem,
     test: p.caseStudy.validation,
-    expected: "Every ambiguous or failed condition leaves the system in its safe state, never the exposed one.",
-    observed: p.caseStudy.evidence,
-    result: p.status === "Validated" ? "passed" : p.status === "Design" ? "planned" : "partial",
+    expected: p.caseStudy.designExpectation,
+    observations: observationRows(p.evidence),
+    outcome: outcomeBadge(p.evidence),
     limitations: [p.caseStudy.limitations],
   };
 }
@@ -65,7 +67,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
   const cs = project.caseStudy;
   const evidence = toEvidence(project);
   const Diagram = diagrams[slug];
-  const stages = timelines[slug];
+  const stages = timelines[slug]?.(project);
 
   return (
     <Shell current="/projects">
@@ -82,7 +84,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
         </Link>
         <article>
           <header>
-            <p className="section-label">{project.status} / {project.index}</p>
+            <p className="section-label">{project.index} / Evidence: {summarizeEvidence(project.evidence)}</p>
             <h1>{project.title}</h1>
             <p className="dek">{project.text}</p>
           </header>

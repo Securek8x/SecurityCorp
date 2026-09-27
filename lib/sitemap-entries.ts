@@ -7,6 +7,7 @@
 // wrapper so there is one source of truth for what belongs in the sitemap.
 import type { MetadataRoute } from "next";
 import { articles, projects } from "./content.ts";
+import { compareIsoDates, parseIsoDate } from "./content-dates.ts";
 import { pillars, categories } from "./taxonomy.ts";
 import { publishedKnowledgeArticles } from "./knowledge-content.ts";
 
@@ -18,13 +19,8 @@ function toDate(date: string): Date {
 }
 
 export function buildSitemapEntries(): MetadataRoute.Sitemap {
-  const latestArticleDate = articles.reduce(
-    (latest, a) => {
-      const d = toDate(a.date);
-      return d > latest ? d : latest;
-    },
-    toDate(articles[0]?.date ?? new Date().toISOString()),
-  );
+  const latestGuide = [...articles].sort((a, b) => compareIsoDates(b.publishedAt, a.publishedAt))[0];
+  const latestArticleDate = latestGuide ? parseIsoDate(latestGuide.publishedAt) : new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: `${SITE_URL}/`, lastModified: latestArticleDate, changeFrequency: "monthly", priority: 1 },
@@ -52,7 +48,7 @@ export function buildSitemapEntries(): MetadataRoute.Sitemap {
 
   const articleRoutes: MetadataRoute.Sitemap = articles.map((article) => ({
     url: `${SITE_URL}/guides/${article.slug}/`,
-    lastModified: toDate(article.date),
+    lastModified: parseIsoDate(article.publishedAt),
     changeFrequency: "yearly",
     priority: 0.7,
   }));

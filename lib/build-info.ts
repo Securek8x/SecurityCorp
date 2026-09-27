@@ -11,7 +11,8 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { publishedKnowledgeArticles } from "./knowledge-content.ts";
-import { articles, projects } from "./content.ts";
+import { articles, projects, type Project } from "./content.ts";
+import { isVerifiedEvidence } from "./evidence.ts";
 
 function resolveCommitSha(): string {
   // Cloudflare Pages injects this at build time (documented system
@@ -27,6 +28,27 @@ function resolveCommitSha(): string {
   }
 }
 
+// Evidence status is published content, so the receipt must change when it
+// does: record identity, maturity, observation kind and outcome, plus the
+// operational claim with its date and source. Prose is excluded, as for
+// articles; evidence that failed verification is hashed as "unavailable".
+export function projectEvidenceManifest(list: readonly Pick<Project, "index" | "evidence" | "operationalState">[]) {
+  return list
+    .map((p) => ({
+      index: p.index,
+      evidence: isVerifiedEvidence(p.evidence)
+        ? p.evidence.records.map((r) => ({
+            id: r.id,
+            maturity: r.maturity,
+            observation: r.observation.kind,
+            outcome: r.observation.kind === "recorded" ? r.observation.outcome : null,
+          }))
+        : "unavailable",
+      operationalState: p.operationalState ?? null,
+    }))
+    .sort((a, b) => a.index.localeCompare(b.index));
+}
+
 function contentManifestHash(): string {
   // Only public identifiers and dates — never raw article bodies (unbounded
   // size) or anything not already public once published.
@@ -34,8 +56,8 @@ function contentManifestHash(): string {
     knowledge: publishedKnowledgeArticles
       .map((a) => ({ slug: a.meta.slug, publishedAt: a.meta.publishedAt, lastReviewedAt: a.meta.lastReviewedAt }))
       .sort((a, b) => a.slug.localeCompare(b.slug)),
-    guides: articles.map((a) => ({ slug: a.slug, date: a.date })).sort((a, b) => a.slug.localeCompare(b.slug)),
-    projects: projects.map((p) => ({ index: p.index, status: p.status })).sort((a, b) => a.index.localeCompare(b.index)),
+    guides: articles.map((a) => ({ slug: a.slug, publishedAt: a.publishedAt })).sort((a, b) => a.slug.localeCompare(b.slug)),
+    projects: projectEvidenceManifest(projects),
   };
   return createHash("sha256").update(JSON.stringify(manifest)).digest("hex");
 }

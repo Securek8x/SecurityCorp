@@ -25,10 +25,6 @@ export function Header({ current }: { current?: string }) {
             SECURITY<span>CORP</span>
           </span>
         </Link>
-        <span className="header-status signal">
-          <i aria-hidden="true" />
-          Publication active
-        </span>
       </div>
       <input type="checkbox" id="nav-toggle" className="nav-toggle-input" />
       <label htmlFor="nav-toggle" className="nav-toggle-label">
@@ -42,7 +38,7 @@ export function Header({ current }: { current?: string }) {
           </Link>
         ))}
       </nav>
-      <Link href="/about" className="field-link">
+      <Link href="/guides" className="field-link">
         Field notes <ArrowUpRight size={14} aria-hidden="true" />
       </Link>
       <ThemeToggle />
