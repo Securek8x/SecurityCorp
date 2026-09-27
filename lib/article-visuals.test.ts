@@ -4,6 +4,8 @@ import {
   validateArticleVisual,
   checkCoverImageGate,
   checkAssetApprovalGate,
+  coverSlotOccupant,
+  hasCanonicalCover,
   isVisualProductionEligible,
   type ArticleVisual,
   type VisualBrief,
@@ -179,6 +181,67 @@ test("validateArticleVisual flags a private IP leaking through the alt text", ()
 test("checkCoverImageGate is a no-op while VISUAL_GATE_ENABLED is false", () => {
   const errors = checkCoverImageGate([{ meta: { slug: "a", status: "published" } }]);
   assert.deepEqual(errors, []);
+});
+
+// --- canonical cover definition (hybrid cover model, s41.21) ---------------
+
+function rasterAsset(approved: boolean): ArticleVisual {
+  return visual({
+    stage: approved ? "reviewed" : "asset",
+    src: "/article-visuals/test-article-cover.webp",
+    provenance: {
+      source: "ai-generated",
+      createdAt: "2026-09-03",
+      license: "site-original-all-rights-reserved",
+      editableSourceRef: "source.png",
+      generatingModel: "external",
+      prompt: "p",
+      reviewStatus: approved ? "approved" : "pending",
+      ...(approved ? { reviewer: "Named Human", reviewedAt: "2026-09-05" } : {}),
+    },
+  });
+}
+
+test("hasCanonicalCover accepts an approved raster cover and a plate in the cover slot", () => {
+  assert.equal(hasCanonicalCover({ coverImage: rasterAsset(true) }), true);
+  assert.equal(hasCanonicalCover({ hasPlate: true }), true);
+  assert.equal(coverSlotOccupant({ hasPlate: true }), "plate");
+});
+
+test("hasCanonicalCover rejects an unapproved raster, a brief, and no cover at all", () => {
+  assert.equal(hasCanonicalCover({ coverImage: rasterAsset(false) }), false);
+  assert.equal(hasCanonicalCover({ coverImage: visual() }), false, "a brief is not a cover");
+  assert.equal(hasCanonicalCover({}), false);
+});
+
+test("an unapproved raster holds the slot, so its plate is in-body and does not count", () => {
+  const a = { coverImage: rasterAsset(false), hasPlate: true };
+  assert.equal(coverSlotOccupant(a), "raster");
+  assert.equal(hasCanonicalCover(a), false);
+  const approved = { coverImage: rasterAsset(true), hasPlate: true };
+  assert.equal(hasCanonicalCover(approved), true);
+});
+
+test("an asset without a src (file merely declared) does not occupy the slot", () => {
+  const noSrc = { ...rasterAsset(true), src: undefined };
+  assert.equal(coverSlotOccupant({ coverImage: noSrc }), "none");
+  assert.equal(hasCanonicalCover({ coverImage: noSrc }), false);
+});
+
+test("checkCoverImageGate, when enabled, enforces the canonical definition on published articles only", () => {
+  const errors = checkCoverImageGate(
+    [
+      { meta: { slug: "plate-cover", status: "published" }, hasPlate: true },
+      { meta: { slug: "approved-raster", status: "published" }, coverImage: rasterAsset(true) },
+      { meta: { slug: "pending-raster", status: "published" }, coverImage: rasterAsset(false) },
+      { meta: { slug: "brief-only", status: "published" }, coverImage: visual() },
+      { meta: { slug: "nothing", status: "published" } },
+      { meta: { slug: "draft-without-cover", status: "drafting" } },
+    ],
+    true,
+  );
+  const failed = errors.map((e) => e.split(":")[0]).sort();
+  assert.deepEqual(failed, ["brief-only", "nothing", "pending-raster"]);
 });
 
 test("validateArticleVisual flags a mismatched brief.visualType", () => {

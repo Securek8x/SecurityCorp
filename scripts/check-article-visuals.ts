@@ -28,7 +28,8 @@ import { readFileSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { knowledgeArticles } from "../lib/knowledge-content.ts";
-import { validateArticleVisual, checkCoverImageGate, checkAssetApprovalGate, type ArticleVisual } from "../lib/article-visuals.ts";
+import { validateArticleVisual, checkCoverImageGate, checkAssetApprovalGate, hasCanonicalCover, type ArticleVisual } from "../lib/article-visuals.ts";
+import { plateForSlug } from "../lib/article-plates.ts";
 import {
   RASTER_EXTENSIONS,
   SUPPORTED_ASSET_EXTENSIONS,
@@ -125,12 +126,18 @@ for (const article of knowledgeArticles) {
   if (article.coverImage) {
     errors.push(...validateArticleVisual(article.coverImage, slug));
     await checkAssetFile(article.coverImage, slug);
-  } else if (article.meta.status === "published") {
-    warnings.push(`${slug}: published with no coverImage at all — not yet required (migration period), but worth a brief`);
+  }
+  const gateInput = { coverImage: article.coverImage, hasPlate: Boolean(plateForSlug(slug)) };
+  if (article.meta.status === "published" && !hasCanonicalCover(gateInput)) {
+    warnings.push(`${slug}: published without a canonical cover — not yet required (migration period), but worth a brief`);
   }
 }
 
-errors.push(...checkCoverImageGate(knowledgeArticles.map((a) => ({ meta: a.meta, coverImage: a.coverImage }))));
+errors.push(
+  ...checkCoverImageGate(
+    knowledgeArticles.map((a) => ({ meta: a.meta, coverImage: a.coverImage, hasPlate: Boolean(plateForSlug(a.meta.slug)) })),
+  ),
+);
 // Always-on, independent of VISUAL_GATE_ENABLED: a present-but-unapproved
 // asset must never pass, on any branch, published or not.
 errors.push(...checkAssetApprovalGate(knowledgeArticles.map((a) => ({ meta: a.meta, coverImage: a.coverImage }))));

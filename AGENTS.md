@@ -50,6 +50,37 @@ infrastructure-only, documentation-only, or nonvisual security work.
 The Impeccable hook is project-local in `.codex/hooks.json`; Codex still
 requires the human `/hooks` trust approval and MUST NOT bypass it.
 
+## Article visual guidelines
+
+Covers and in-body teaching visuals for knowledge articles follow
+[docs/article-visual-guidelines.md](docs/article-visual-guidelines.md) —
+the single authoritative policy (current state, approval, freeze,
+inventory, migration). Read it before any article-visual work; do not
+duplicate it here or create a parallel visual policy or system without
+explicit authorization. Operational invariants:
+
+- Cover, teaching figure, and human approval are separate states. A
+  code-native diagram is a teaching figure, not a cover. Check
+  `npm run report:article-visuals` rather than counting by hand.
+- Hybrid covers (owner decision s41.21, amending s41.5): Schematic
+  Plates (`lib/article-plates.ts`) are the preferred/default cover where a
+  schematic fits; a raster/editorial cover is allowed only where it is
+  the stronger treatment, and only within an approved batch. "Has a
+  cover" means `hasCanonicalCover` (approved raster or plate in the cover
+  slot) — never a teaching diagram or an unapproved asset.
+- Generated raster art never carries factual labels/commands/protocol
+  detail, and a visual generic enough to fit ten unrelated articles is
+  rejected. No stock hacker imagery, hooded figures, generic locks,
+  random code screens, meaningless HUD overlays, or excessive glow.
+- Never self-approve. An agent must never set a visual's `reviewStatus`
+  to `"approved"` or `stage` to `"reviewed"`, nor add a slug to
+  `PLATE_PILOT_APPROVED_SLUGS` or `TEACHING_FIGURE_ASSESSMENTS`; an asset
+  existing, or an agent review, is not human approval.
+  `checkAssetApprovalGate` enforces this in CI.
+- `VISUAL_GATE_ENABLED` stays `false` until backfill completes and a
+  human decides to enforce; do not flip it or harden coverage as a side
+  effect of other work.
+
 ## Mandatory Ruflo Editorial Routing
 
 At the beginning of every substantive SecurityCorp editorial task, Codex MUST

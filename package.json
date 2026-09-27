@@ -24,7 +24,8 @@
     "check:security-txt": "node scripts/check-security-txt-expiry.ts",
     "check:route-integrity": "node scripts/check-route-integrity.ts",
     "check:article-visuals": "node scripts/check-article-visuals.ts",
-    "check:visual-regression": "node scripts/check-visual-regression.ts"
+    "check:visual-regression": "node scripts/check-visual-regression.ts",
+    "report:article-visuals": "node scripts/report-article-visual-inventory.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",

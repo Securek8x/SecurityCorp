@@ -9,6 +9,60 @@ this whole guide there.
 Type-safe data shape lives in `lib/article-visuals.ts` (policy, workflow,
 and data are kept separate per this document's own rule below).
 
+This document is authoritative for **what** may ship and **when**: cover
+policy, approval, the hybrid cover model, inventory, and migration. The visual *language*
+those visuals are drawn in (shape, palette semantics, the five plate
+archetypes, the review checklist) is defined in
+[`graphic-and-diagram-language.md`](graphic-and-diagram-language.md), which
+defers to this document on policy. Do not create a competing policy file.
+
+Sections are labelled where it matters: **Historical decision** (kept as
+the record; do not rewrite), **Current implementation** (what the code
+does today), **Current policy** (binding now), and **Proposed** (future
+direction; not binding until a human records a decision in Beads).
+
+## Current state (verified 2026-09-27, `origin/main` e41b81e)
+
+**Direction (Historical decision, still binding).** Bead
+`securitycorp-source-s41.5`, recorded by Ravi Teja Thota on 2026-09-13,
+selected a hybrid: **B — Schematic Plate** (code-native SVG) is *the* core
+production system for covers, diagrams, catalog thumbnails, and social
+cards; **C — Figure Budget** supplies in-body teaching figures for
+high-value articles only; **A — Deep Field** (the cinematic raster covers)
+is retained for existing brand moments only and is "explicitly NOT the
+ongoing catalog-cover production model." The three approved raster covers
+are kept unchanged as a legacy series. The raster-cover freeze in this
+decision was amended on 2026-09-27 by s41.21 (see Hybrid cover model).
+
+**Inventory (Current implementation).** Derived from the compiled
+catalog by `lib/article-visual-inventory.ts` (`npm run
+report:article-visuals`), with the baseline asserted in its test:
+
+| Measure | Count |
+|---|---|
+| Published articles | 42 |
+| Articles with a canonical cover | 10 |
+| — approved raster cover (legacy A series) | 3 |
+| — Schematic Plate in the cover position | 7 |
+| Schematic Plates in total (approved pilot wave) | 9 |
+| — plates rendered in-body because a raster cover holds the slot | 2 |
+| Articles with **no** canonical cover | 32 |
+| Covers with a recorded human approval | 10 of 10 |
+| Articles with a code-native teaching diagram | 29 |
+| Articles without one, teaching-figure need not yet assessed | 13 |
+
+The two overlap articles (`understanding-network-trust-boundaries`,
+`protecting-main-branch-beyond-pr-approval`) have a raster cover *and* a
+plate: 3 + 9 − 2 = 10 covered articles. A teaching diagram is **not** a
+cover; the 29 diagram articles are counted independently of cover state.
+
+**Hybrid cover model (Current policy).** Owner decision
+`securitycorp-source-s41.21` (Ravi Teja Thota, 2026-09-27) amended s41.5
+and lifted the blanket raster-cover freeze: Schematic Plates stay the
+preferred/default cover where a schematic fits; a raster/editorial cover
+is permitted when it is the stronger treatment, and always needs human
+visual approval. See [Hybrid cover model](#hybrid-cover-model) below.
+
 ## Why this exists
 
 Every knowledge article on this site was originally text-only. That is
@@ -19,6 +73,19 @@ This system adds **purposeful** visuals — a cover per article, and
 teaching diagrams where a workflow, boundary, or comparison is genuinely
 easier to understand drawn than described — without turning the site
 into a generic content-marketing blog.
+
+## Visual roles and their mechanisms (Current implementation)
+
+| Role | Mechanism | Rendered by |
+|---|---|---|
+| Teaching figure | `KnowledgeArticle["diagram"]` (code-native) | `components/diagrams/interactive-flow-diagram.tsx` |
+| Cover — Schematic Plate | `ARTICLE_PLATES` in `lib/article-plates.ts` (code-native) | `components/diagrams/schematic-plate.tsx` via `knowledge-article-shell.tsx` |
+| Cover — legacy raster | `KnowledgeArticle["coverImage"]` (`ArticleVisual`) | `components/article-figure.tsx` |
+
+Cover, teaching figure, and human approval are tracked as three
+independent states. The subsections below predate the Schematic Plate
+system and describe the teaching-figure and `ArticleVisual` mechanisms;
+they remain accurate for those two.
 
 ## Two kinds of visual, two different mechanisms
 
@@ -41,7 +108,9 @@ document is mostly about that surface.
 
 - Every published article should eventually have one purposeful
   cover/hero visual. Not every article needs one *today* — see Migration
-  state below.
+  state below. Under the s41.5 direction that cover is a Schematic Plate
+  by default; a raster/editorial cover is a selective alternative (see
+  Hybrid cover model).
 - Articles should have one or two in-body teaching visuals when they
   materially improve understanding — not to break up text for its own
   sake.
@@ -78,6 +147,15 @@ document is mostly about that surface.
 
 ## Capability status (read this before writing a brief)
 
+> **Historical record, still the raster path.** This section records the
+> s41.12 raster pilot (2026-09-04/05). The s41.5 decision (2026-09-13)
+> froze this path; owner decision s41.21 (2026-09-27) re-admitted it as a
+> *selective* cover path under the [hybrid cover model](#hybrid-cover-model)
+> — never the automatic one, and never without human visual approval. The Figma note
+> below is also historical: a Figma MCP may be available in an individual
+> agent environment, but nothing in this repository depends on it (see
+> [Figma](#figma-optional-future-finishing-layer-proposed)).
+
 **This repository has no installed/MCP-integrated image-generation
 tool** — the `ui-ux-pro-max` plugin's `banner-design` skill depends on a
 separate `ai-multimodal` skill and a Python venv (`.claude/skills/.venv/`)
@@ -99,9 +177,10 @@ and Claude normalizes the source through the exactly-pinned
 `sharp@0.35.4` devDependency (`scripts/normalize-cover-source.ts`) into
 the final `webp` — verifying real decoded dimensions and stripped
 metadata from the actual output bytes, not the declared numbers (see
-`scripts/check-article-visuals.ts`). This is the current, real
-generation path; it does not require installing any new MCP server,
-plugin, or automated generation service.
+`scripts/check-article-visuals.ts`). This was the pilot's generation
+path; it does not require installing any new MCP server, plugin, or
+automated generation service. It was frozen for new covers from
+2026-09-13 to 2026-09-27 and is now a selective path (see above).
 
 **Until an asset is actually produced this way**, every cover stays at
 `stage: "brief"` — a complete, generation-ready brief with no image
@@ -116,19 +195,60 @@ below).
 `lib/article-visuals.ts` exports `VISUAL_GATE_ENABLED = false`. While
 false, `checkCoverImageGate` (and therefore `npm run check:article-
 visuals`) never fails a published article for lacking a cover — it only
-warns. This is deliberate: the catalog has 32 published articles and 3
-pilot briefs; requiring every article to have a cover today would either
-block all future publishing or force rushed, generic briefs to satisfy a
-gate, which is exactly what this system exists to prevent.
+warns. This is deliberate: 32 of the 42 published articles have no
+cover (see Current state); requiring every article to have a cover today
+would either block all future publishing or force rushed, generic visuals
+to satisfy a gate, which is exactly what this system exists to prevent.
+(When this section was first written the catalog had 32 published
+articles and the 3 pilot covers were still briefs; both are now stale.)
 
 **Do not flip `VISUAL_GATE_ENABLED` to `true` until:**
 1. A real image-generation capability is approved and installed (see
-   above), and
-2. Ravi has approved the pilot visual direction (the three-article pilot
-   this document accompanies), and
+   above) — *met: the external human-in-the-loop path, a selective cover
+   path under the hybrid model (s41.21)*, and
+2. Ravi has approved the pilot visual direction — *met: raster pilot
+   approved 2026-09-05; B + C direction recorded 2026-09-13 (s41.5); plate
+   pilot approved 2026-09-13 (s41.12)*, and
 3. An approved backfill pass has given the existing catalog real
    covers — or an explicit decision has been made that some articles are
-   exempt (a decision recorded in Beads, not assumed).
+   exempt (a decision recorded in Beads, not assumed) — **not met**: 32
+   published articles have no cover.
+
+**Canonical cover definition (Current implementation, fixed 2026-09-27).**
+`hasCanonicalCover` in `lib/article-visuals.ts` is the single definition
+of "this article has a cover", used by `checkCoverImageGate`, the audit's
+migration warning, and the inventory. It is true only for:
+
+- a **human-approved raster cover** in the cover slot (stage `"reviewed"`
+  + `reviewStatus: "approved"`), or
+- a **Schematic Plate in the cover slot** (`coverSlotOccupant`, which
+  mirrors `knowledge-article-shell.tsx`: a rendered raster takes the slot
+  and pushes any plate in-body).
+
+It is false for an unapproved raster asset, a brief, a file merely on
+disk, a plate pushed in-body by an unapproved raster, and a teaching
+diagram. Before this fix the gate recognised only a raster `coverImage`
+(and counted an unapproved `"asset"` as a cover), so enabling it would
+have failed the 7 plate-covered articles; the audit also warned about
+them. Regression tests in `lib/article-visuals.test.ts` and
+`lib/article-visual-inventory.test.ts` pin the distinction, including a
+check that the enforced gate would fail exactly the 32 uncovered articles.
+`VISUAL_GATE_ENABLED` remains `false`.
+
+### Staged migration (Proposed — each stage needs a human decision)
+
+1. **Now — inventory only.** The gate stays off. Missing covers are
+   visible through `npm run report:article-visuals` and the audit's
+   warnings; nothing is blocked. Existing published articles are backfill
+   candidates, not failures.
+2. **Transition — new articles warn.** Now that the gate recognises
+   plates, a newly published article without a cover produces a visible
+   warning (not an error) while backfill proceeds in bounded, human-
+   approved waves like the nine-article plate pilot.
+3. **After backfill — enforce.** Only once every published article has a
+   human-approved cover or a Beads-recorded exemption may
+   `VISUAL_GATE_ENABLED` become `true`. That flip is a **future policy
+   decision** for Ravi, not something an agent introduces.
 
 ## The brief template
 
@@ -218,7 +338,16 @@ place.
 
 ## Where a cover renders
 
-`components/knowledge-article-shell.tsx` renders `article.coverImage`
+**Schematic Plates (Current implementation).** When an article has a plate
+in `lib/article-plates.ts` and no rendered raster cover, the shell renders
+the plate in the cover position. When a rendered raster cover exists, the
+raster keeps the cover slot and the plate renders in-body before the
+teaching diagram (the designated legacy/new coexistence case).
+`lib/knowledge-catalog.ts`'s `toCard()` gives catalog cards a discriminated
+thumbnail: a production-eligible raster cover wins; otherwise the plate
+(bead s41.18). Social cards from plates (s41.19) are not built yet.
+
+**Raster `coverImage`.** `components/knowledge-article-shell.tsx` renders `article.coverImage`
 (when present and past `stage: "brief"`, regardless of `reviewStatus` —
 see Lifecycle above) right after the lead paragraph and before the
 prerequisites box — after the article's own intro, before the first
@@ -230,9 +359,8 @@ by default. `components/knowledge-catalog-filter.tsx` renders the same
 asset as a card thumbnail, but only once it's production-eligible (see
 Lifecycle above) — `alt=""` there deliberately, since the card's own
 heading already gives the link an accessible name and the meaningful alt
-text lives on the full-size cover. Neither component invents a second
-place for a cover to appear; do not add one without updating this
-document.
+text lives on the full-size cover. No component invents another place
+for a cover to appear; do not add one without updating this document.
 
 `presentation="wide"` and `presentation="inline"` on `ArticleFigure`
 currently render **identically** within the article shell — both sit
@@ -328,6 +456,136 @@ Run the full suite (`lint`, `typecheck`, `test`, `check:route-integrity`,
 `check:public-terms`, `check:privacy-leak-gate`, `guard:release`,
 `build:pages`, `check:article-visuals`) before shipping any
 article-visual change.
+
+## Visual inventory (Current implementation)
+
+`lib/article-visual-inventory.ts` derives one row per published article
+from the compiled catalog — never from source text — with three
+independent states:
+
+- **Cover**: `raster` (a rendered `coverImage`), `plate` (a Schematic Plate
+  in the cover position), or `none`. A raster cover that holds the slot
+  while its plate renders in-body is flagged `inBodyPlate`. Occupying the
+  slot is not the same as having a cover: `canonicalCover` applies
+  `hasCanonicalCover`, the same definition the gate enforces. A
+  "requires review/migration" state is expressed through approval, below,
+  not a fourth cover value.
+- **Cover approval**: `human-approved`, `pending-human-review`, or
+  `not-applicable`. A raster cover is approved only when its own
+  provenance is `stage: "reviewed"` + `reviewStatus: "approved"`
+  (`isVisualProductionEligible`). A plate is approved only if its slug is
+  in `PLATE_PILOT_APPROVED_SLUGS`, which records the s41.12 approval
+  (Ravi Teja Thota, 2026-09-13) for exactly nine plates. **An asset
+  existing in the repository is not approval, and an agent review is not
+  human approval.** Only a human may add a slug to that list.
+- **Teaching figure**: `present` (a code-native diagram exists),
+  `recommended`, `unnecessary`, or `not-assessed`. `recommended` and
+  `unnecessary` come only from `TEACHING_FIGURE_ASSESSMENTS`, which a
+  human fills in; it is empty today, so all 13 articles without a diagram
+  are `not-assessed`.
+
+`npm run report:article-visuals` prints the table (`npm run
+report:article-visuals -- --json` for machine output).
+`lib/article-visual-inventory.test.ts` asserts the live summary equals
+`VISUAL_INVENTORY_BASELINE`; when the catalog changes, update that
+constant and the Current state table above in the same change. The
+inventory is a report, not a gate: it never fails the build on a missing
+cover.
+
+## Hybrid cover model
+
+**Current policy — owner decision `securitycorp-source-s41.21`** (Ravi Teja
+Thota, 2026-09-27), amending s41.5:
+
+- The blanket freeze on new raster/editorial covers is **lifted**. Raster
+  does **not** become the universal or automatic cover format.
+- **Schematic Plates remain the preferred/default cover** when a technical
+  schematic meaningfully represents the article.
+- **Raster/editorial AI-generated artwork is permitted** when it gives a
+  stronger cover treatment than a plate. The choice is made per article on
+  what communicates it best — no quota between the two formats.
+- Teaching figures are independent of covers; an article may have a cover
+  and one or more teaching figures.
+- Every generated or imported cover goes through the existing human
+  visual approval process (`stage: "reviewed"` + `reviewStatus:
+  "approved"`, set only by a named human). Agent review is not human
+  approval.
+- Privacy, publication, technical, asset, and CI gates are unchanged;
+  generated raster art still never carries factual labels.
+- Long-term objective: every published article has an intentional
+  canonical cover (see Migration state for how that becomes enforced).
+- Rollout is bounded: the first step is a controlled five-article batch of
+  briefs/specifications for Ravi's review; nothing is generated or
+  integrated until he approves that batch. Figma is not introduced yet.
+
+Plate expansion stays bounded too: the s41.12 approval covers exactly nine
+plates, and a new plate is not recorded as approved until a human says so.
+
+### Former raster-cover freeze (Historical decision)
+
+Kept as the record; it governed the s41.12 pilot and is no longer in force.
+
+**Source.** The `securitycorp-source-s41.5` decision (Ravi Teja Thota,
+recorded 2026-09-13T03:45Z): A — Deep Field is "explicitly NOT the ongoing
+catalog-cover production model. No additional Deep Field covers during this
+pilot." Restated in
+[`graphic-and-diagram-language.md`](graphic-and-diagram-language.md) §1.
+
+**Why.** The s41.5 decision text records the choice, not a separate
+rationale. The recorded rationale in the design specs is that code-native
+plates are their own editable source — typed, diffable in PRs,
+deterministic, and accessible by construction — without the external
+prompt/provenance/review burden of generated raster art
+(`graphic-and-diagram-language.md` §8, following the s41.3 audit and s41.4
+three-direction exploration).
+
+**How it ended.** Amended by owner decision s41.21 on 2026-09-27, before
+the pilot's closing gates (s41.13 QA, s41.14 workflow decision) ran. Those
+beads remain open; s41.21 does not satisfy their acceptance criteria.
+
+## Cover production workflow
+
+The hybrid model itself is current policy (s41.21); the staffing and
+tooling below remain proposed. The pipeline:
+
+article → visual classification → visual brief → asset production (plate
+spec by default; raster/editorial generation where it is the stronger
+treatment) → human
+visual review → optimization → metadata/integration → CI validation →
+publication.
+
+| Party | Responsibility |
+|---|---|
+| Claude / Codex | Understand the article; classify its archetype; write the technical brief; check technical meaning against the article's cited sources; integrate approved assets; write metadata and alt text; validate repository state; prepare the PR. |
+| Image-generation system (raster/editorial covers only) | Produce editorial artwork from an approved brief. Never carries factual labels. |
+| Repository / CI | Asset contract, metadata validation, format/dimension checks, approval gates, publishing safeguards (`check:article-visuals`, `checkAssetApprovalGate`, inventory baseline test). |
+| Human (Ravi) | Final visual approval wherever this policy requires it. |
+
+No agent converts its own review, or another agent's, into human approval.
+
+**Archetypes.** Plate composition uses the five structural archetypes in
+`graphic-and-diagram-language.md` §5 (Linear Flow, Sealed Enclosure,
+Coverage Field, Gate Sequence, Divergent Pair), selected deterministically
+from the article's structure. That taxonomy is authoritative. A proposed
+topic taxonomy — network/architecture; application/code/supply chain;
+identity/authn/authz; threat/exploitation; detection/response/operations;
+governance/risk/compliance — may be used as a *classification aid* when
+writing a brief (for example, to keep a backfill wave varied), but it
+does not replace the structural archetypes and must not introduce a
+second visual system. All of it stays inside the established language:
+deep navy / near-black ground, restrained cyan with violet as a semantic
+term, limited threat/emphasis colours, technical schematic geometry,
+strong negative space, no glow, no generic hacker imagery.
+
+## Figma: optional future finishing layer (Proposed)
+
+Figma may later serve as an optional design-system and finishing layer —
+reusable cover templates, layout grids and safe zones, brand overlays, a
+component library, social/OG layouts, and deterministic derived assets.
+It is **not** a publication dependency, not a source of truth for any
+published visual (the typed spec in the repository is), and no Figma
+tooling or dependency is added to this repository without a separate,
+explicit decision.
 
 ## Keep policy, workflow, and data separated
 
