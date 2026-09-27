@@ -335,21 +335,22 @@ a:focus-visible,button:focus-visible,.nav-toggle-label:focus-within{outline:2px 
 .site-header{height:76px;padding:0 clamp(22px,5vw,76px);display:flex;align-items:center;border-bottom:1px solid var(--line);justify-content:space-between;position:relative;z-index:5;background:color-mix(in srgb,var(--paper) 85%,transparent);backdrop-filter:blur(10px)}
 .site-header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,var(--acid) 45%,var(--accent2) 55%,transparent);opacity:.5}
 .brand-group{display:flex;align-items:center;gap:22px}
-.wordmark{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;letter-spacing:.04em}
-.wordmark>span:last-child>span{color:var(--muted)}
-.mark{width:32px;height:32px;display:grid;place-items:center;background:var(--acid);color:var(--primary-foreground);box-shadow:0 0 18px var(--glow);transition:box-shadow var(--motion-standard) var(--ease-system)}
-
-/* ---- logo microanimation: draws once on header entrance, never loops ---- */
-.wordmark-shield-outline,.wordmark-shield-check{stroke-dasharray:var(--path-length,50);stroke-dashoffset:0}
+/* ---- site logo: tiger mark + original lettering (components/brand-lockup.tsx) ---- */
+.brand{display:flex;align-items:center;gap:12px}
+.brand-tiger{width:44px;height:44px;display:block;flex:none;transition:filter var(--motion-fast) var(--ease-system),transform var(--motion-fast) var(--ease-system)}
+.brand-lettering{position:relative;display:block;flex:none;height:20px;aspect-ratio:924/60}
+.brand-lettering>span{position:absolute;inset:0}
+.brand-lettering-ink{background:var(--ink);-webkit-mask:url(/brand/wordmark-mask.png) center/100% 100% no-repeat;mask:url(/brand/wordmark-mask.png) center/100% 100% no-repeat}
+.brand-lettering-net{background:url(/brand/wordmark-net.webp) center/100% 100% no-repeat}
+.brand-link:hover .brand-tiger,.brand-link:focus-visible .brand-tiger{filter:drop-shadow(0 0 10px var(--glow))}
 @media(prefers-reduced-motion:no-preference){
-  .wordmark-animated .wordmark-shield-outline{stroke-dashoffset:var(--path-length,50);animation:flow-draw var(--motion-draw) var(--ease-flow) 120ms forwards}
-  .wordmark-animated .wordmark-shield-check{stroke-dashoffset:var(--path-length,50);animation:flow-draw var(--motion-standard) var(--ease-system) calc(var(--motion-draw) + 120ms) forwards}
+  .brand-link:hover .brand-tiger,.brand-link:focus-visible .brand-tiger{transform:scale(1.06)}
 }
-.wordmark-animated .mark{transition:box-shadow var(--motion-fast) var(--ease-system),transform var(--motion-fast) var(--ease-system)}
-.wordmark-animated:hover .mark,.wordmark-animated:focus-visible .mark{box-shadow:0 0 22px var(--glow),0 0 0 3px color-mix(in srgb,var(--acid) 35%,transparent)}
-@media(prefers-reduced-motion:no-preference){
-  .wordmark-animated:hover .mark,.wordmark-animated:focus-visible .mark{transform:scale(1.06)}
-}
+@media(forced-colors:active){.brand-lettering-ink{forced-color-adjust:none;background:CanvasText}}
+@media(max-width:600px){.brand{gap:8px}.brand-tiger{width:36px;height:36px}.brand-lettering{height:14px}}
+@media(max-width:420px){.brand-tiger{width:32px;height:32px}.brand-lettering{height:10px}}
+@media(max-width:374px){.brand-lettering{height:9px}}
+@media(max-width:349px){.site-header .brand-lettering{display:none}}
 .header-status{padding-left:20px;border-left:1px solid var(--line)}
 @media(max-width:1100px){.brand-group .header-status{display:none}}
 nav{display:flex;align-items:center;gap:34px;font-size:13px;font-weight:700}
