@@ -16,6 +16,13 @@ const eslintConfig = defineConfig([
     // application source; keep their upstream lint warnings out of CI.
     ".agents/skills/impeccable/**",
     ".claude/skills/impeccable/**",
+    // Machine-local, untracked workspace state: nested agent worktrees are
+    // full checkouts of other branches, and .sites-runtime / .claude-flow
+    // hold generated runtime artifacts. Linting them duplicates or pollutes
+    // results for the application source in this checkout.
+    ".claude/worktrees/**",
+    ".sites-runtime/**",
+    ".claude-flow/**",
   ]),
 ]);
 
