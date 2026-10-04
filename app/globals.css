@@ -954,6 +954,47 @@ h2:hover .heading-link-btn,h2:focus-within .heading-link-btn,.heading-link-btn:f
 @media(prefers-reduced-motion:reduce){
   .hero::before{animation:none}
 }
+/* Forced colors (Windows Contrast Themes and similar), bead 65q. HTML text,
+   borders, links and focus rings are already remapped by the browser, but SVG
+   fill/stroke keep their author colours, so diagrams drawn for the dark
+   theme can vanish on a light Canvas. Map every diagram role to system
+   colours. Meaning stays carried by geometry and stroke pattern: sanctioned
+   paths are solid Highlight, failure paths and zones are dashed, the sealed
+   boundary is the unbroken ring, and inactive nodes keep their reduced
+   opacity (a luminance change, which forced colors preserves). */
+@media(forced-colors:active){
+  .schematic-plate .plate-frame,.schematic-plate .plate-tick,.schematic-plate .plate-legend-rule{stroke:CanvasText}
+  .schematic-plate text{fill:CanvasText}
+  .plate-zone-body{fill:Canvas;stroke:CanvasText}
+  .plate-zone-cap,.plate-zone-neutral .plate-zone-cap{fill:CanvasText;opacity:1}
+  .plate-zone-failure .plate-zone-cap{fill:CanvasText}
+  .plate-zone-failure .plate-zone-body{stroke:CanvasText;stroke-dasharray:6 5}
+  .plate-zone-sealed .plate-zone-body,.plate-ring{stroke:CanvasText}
+  .plate-zone-sealed .plate-zone-label,.plate-zone-sealed .plate-zone-sublabel{fill:CanvasText}
+  .plate-ring{opacity:1}
+  .plate-link{stroke:Highlight}
+  .plate-link-secondary{opacity:1}
+  .plate-link-failure{stroke:CanvasText}
+  .plate-legend-swatch{fill:Highlight}
+  .plate-legend-swatch-sealed,.plate-legend-swatch-failure{stroke:CanvasText}
+
+  .arch-diagram-svg text,.failure-path-diagram text{fill:CanvasText}
+  .arch-diagram-svg marker path{fill:CanvasText}
+  .flow-path,.flow-path-secondary,.flow-path-safe{stroke:Highlight}
+  .flow-path-failure{stroke:CanvasText}
+  .flow-node{fill:Canvas;stroke:CanvasText}
+  .flow-node-active,.flow-node-safe{stroke:Highlight}
+  .flow-node-blocked{stroke:CanvasText;stroke-dasharray:6 5}
+  .flow-packet-cyan,.flow-packet-violet,.flow-packet-safe{fill:Highlight}
+  .flow-node-group:focus-visible .flow-node,.flow-node-explored .flow-node{filter:none;stroke:Highlight;stroke-width:3}
+}
+
+/* Increased contrast preference: hairline borders and rules use the muted
+   text colour, which clears 3:1 against the page in both themes. */
+@media(prefers-contrast:more){
+  :root{--line:var(--muted);--border-strong:var(--muted)}
+}
+
 /* Print stylesheet (securitycorp-source-1ng). Scoped to article/guide pages
    (.article-page) — the rest of the site (homepage, catalog) has no
    printable-content requirement. Forces the light monochrome palette
