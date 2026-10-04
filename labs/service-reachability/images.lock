@@ -1,0 +1,8 @@
+# Container images used by run.sh, pinned by digest. Changing any line
+# changes this file's sha256, which marks every validation receipt bound to
+# this harness stale (lib/validation-receipts.ts).
+# Resolved 2026-10-04 from the tags noted at the end of each line.
+SERVICE_IMAGE=busybox@sha256:bdf57e528e45e4433820e045b29b4597825a1c9e38353532d90a01445013f82e
+PROXY_IMAGE=nginx@sha256:42a516af16b852e33b7682d5ef8acbd5d13fe08fecadc7ed98605ba5e3b26ab8
+FORWARDER_IMAGE=alpine/socat@sha256:beb4a68d9e4fe6b0f21ea774a0fde6c31f580dde6368939ed70100c5385b015e
+# SERVICE_IMAGE: busybox:1.37.0 · PROXY_IMAGE: nginx:1.29.1-alpine · FORWARDER_IMAGE: alpine/socat:1.8.0.3
