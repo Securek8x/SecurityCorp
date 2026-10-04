@@ -187,6 +187,34 @@ export const LEGEND_FONT_SIZE = 8.5;
 export const LEGEND_LETTER_SPACING_EM = 0.08;
 /** Minimum gap between the lowest zone edge (or sealed ring) and the rule. */
 export const LEGEND_CLEARANCE = 8;
+/** Legend label x-offset from its slot start; swatches must end before it. */
+export const LEGEND_TEXT_OFFSET = 20;
+/** Width of a legend swatch; every role's swatch keeps this footprint so
+ *  labels sit at the same distance from their swatch. */
+export const LEGEND_SWATCH_WIDTH = 12;
+/** Failure links render dashed (`.plate-link-failure`). The legend swatch
+ *  carries the same dashed language scaled to the swatch footprint:
+ *  dash, gap, dash = 11px. */
+export const LEGEND_FAILURE_DASH = [4, 3] as const;
+export const LEGEND_FAILURE_SWATCH_LENGTH = LEGEND_FAILURE_DASH[0] * 2 + LEGEND_FAILURE_DASH[1];
+
+/** Which swatch a legend entry draws. Each role's swatch must use that role's
+ *  colour and stroke pattern, so the legend never contradicts the zone or
+ *  path it explains (bead s41.23: failure entries used to draw the cyan
+ *  sanctioned bar). Colour is never the only channel: failure is also dashed
+ *  and sealed is an outline. */
+export type LegendSwatchKind = "solid-bar" | "sealed-ring" | "failure-dash";
+
+export function legendSwatchKind(role: PlateRole): LegendSwatchKind {
+  switch (role) {
+    case "sealed":
+      return "sealed-ring";
+    case "failure":
+      return "failure-dash";
+    default:
+      return "solid-bar";
+  }
+}
 
 function ticksFor(seed: string) {
   // Tick phase is the one hash-driven value. It shifts marks by at most a few
