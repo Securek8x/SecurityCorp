@@ -9,6 +9,7 @@
 import { validateCatalogIntegrity } from "./knowledge-schema.ts";
 import type { KnowledgeArticleMeta } from "./knowledge-schema.ts";
 import type { UniversalSections } from "./knowledge-content-types.ts";
+import { findCycle } from "./learning-tracks.ts";
 
 export type KnowledgeArticleForIntegrity = { meta: KnowledgeArticleMeta; sections: UniversalSections };
 export type Guide = { slug: string };
@@ -68,6 +69,33 @@ export function checkKnowledgeGraphReferences(published: KnowledgeArticleForInte
   return errors;
 }
 
+/** Article-level learning-sequence integrity (Bead securitycorp-source-4zl.73):
+ * prerequisiteSlugs must resolve to published articles; no article may
+ * point any navigation link at itself; and the two DIRECTED graphs —
+ * nextSlug ("read this next") and prerequisiteSlugs ("read these first") —
+ * must be acyclic, so a reader following them always reaches an end rather
+ * than looping. relatedSlugs is undirected "see also" and may be mutual. */
+export function checkKnowledgeSequenceGraph(published: KnowledgeArticleForIntegrity[]): string[] {
+  const errors: string[] = [];
+  const publishedSlugs = new Set(published.map((a) => a.meta.slug));
+  for (const article of published) {
+    const slug = article.meta.slug;
+    for (const pre of article.sections.prerequisiteSlugs ?? []) {
+      if (pre === slug) errors.push(`${slug}: prerequisiteSlugs references itself`);
+      else if (!publishedSlugs.has(pre)) errors.push(`${slug}: prerequisiteSlugs references unknown or unpublished slug "${pre}"`);
+    }
+    if (article.sections.nextSlug === slug) errors.push(`${slug}: nextSlug references itself`);
+    if ((article.sections.relatedSlugs ?? []).includes(slug)) errors.push(`${slug}: relatedSlugs references itself`);
+  }
+  const nextGraph = new Map(published.map((a) => [a.meta.slug, a.sections.nextSlug && a.sections.nextSlug !== a.meta.slug ? [a.sections.nextSlug] : []]));
+  const nextCycle = findCycle(nextGraph);
+  if (nextCycle) errors.push(`nextSlug links form a cycle: ${nextCycle.join(" -> ")}`);
+  const preGraph = new Map(published.map((a) => [a.meta.slug, (a.sections.prerequisiteSlugs ?? []).filter((p) => p !== a.meta.slug)]));
+  const preCycle = findCycle(preGraph);
+  if (preCycle) errors.push(`prerequisiteSlugs form a cycle: ${preCycle.join(" -> ")}`);
+  return errors;
+}
+
 /** A project's guideSlug (linking a case study to its walkthrough) must
  * resolve to a real guide. */
 export function checkProjectGuideReferences(projects: ProjectRef[], guides: Guide[]): string[] {
@@ -105,11 +133,13 @@ export function checkKnowledgeGraphOrphans(published: KnowledgeArticleForIntegri
   const referenced = new Set<string>();
   for (const a of published) {
     for (const rel of a.sections.relatedSlugs ?? []) referenced.add(rel);
+    for (const pre of a.sections.prerequisiteSlugs ?? []) referenced.add(pre);
     if (a.sections.nextSlug) referenced.add(a.sections.nextSlug);
   }
   const warnings: OrphanWarning[] = [];
   for (const a of published) {
-    const hasOutgoing = (a.sections.relatedSlugs?.length ?? 0) > 0 || Boolean(a.sections.nextSlug);
+    const hasOutgoing =
+      (a.sections.relatedSlugs?.length ?? 0) > 0 || (a.sections.prerequisiteSlugs?.length ?? 0) > 0 || Boolean(a.sections.nextSlug);
     const hasIncoming = referenced.has(a.meta.slug);
     if (!hasOutgoing && !hasIncoming) {
       warnings.push({
