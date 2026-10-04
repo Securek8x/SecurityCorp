@@ -193,6 +193,7 @@
 .plate-legend-rule{stroke:var(--plate-frame);stroke-width:1}
 .plate-legend-swatch{fill:var(--diagram-line)}
 .plate-legend-swatch-sealed{fill:none;stroke:var(--plate-sealed);stroke-width:1.4}
+.plate-legend-swatch-failure{stroke:var(--diagram-failure);stroke-width:3;stroke-linecap:butt}
 .plate-legend-text{font-size:8.5px;letter-spacing:.08em;fill:var(--plate-legend)}
 
 /* Responsive density: labels step down to short codes; type size never
