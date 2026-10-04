@@ -121,6 +121,14 @@ export function checkUrlsPresent(expectedUrls: string[], present: Set<string> | 
   return errors;
 }
 
+/** The content of a rendered HTML document's robots meta tag (Next
+ * renders metadata.robots as `<meta name="robots" content="noindex, follow"/>`),
+ * or undefined when the page has none. Reads the tag itself, not the word
+ * appearing anywhere in the page. */
+export function robotsMetaContent(html: string): string | undefined {
+  return /<meta\s+name="robots"\s+content="([^"]*)"/i.exec(html)?.[1];
+}
+
 export type OrphanWarning = { slug: string; message: string };
 
 /** Soft, non-blocking signal: a published article with no related-content

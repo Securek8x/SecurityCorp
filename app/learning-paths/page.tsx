@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Shell } from "@/components/site-shell";
 import { ogImages, twitterImages } from "@/lib/seo";
+import { isLearningPathsIndexable, robotsMetadataFor } from "@/lib/taxonomy-indexing";
 
 export const metadata: Metadata = {
   title: "Learning Paths",
   description: "Goal-oriented sequences of published SecurityCorp articles, once enough content exists to sequence.",
   alternates: { canonical: "/learning-paths" },
+  ...robotsMetadataFor(isLearningPathsIndexable()),
   openGraph: { type: "website", url: "https://securitycorp.net/learning-paths", siteName: "SecurityCorp", title: "Learning Paths | SecurityCorp", description: "Goal-oriented sequences of published SecurityCorp articles.", images: ogImages("Learning Paths | SecurityCorp") },
   twitter: { card: "summary_large_image", title: "Learning Paths | SecurityCorp", description: "Goal-oriented sequences of published SecurityCorp articles.", images: twitterImages("Learning Paths | SecurityCorp") },
 };

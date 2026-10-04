@@ -6,6 +6,7 @@ import { KnowledgeCatalogFilter } from "@/components/knowledge-catalog-filter";
 import { categories, categoryById, categoriesForPillar, pillarById, type CategoryId, type PillarId } from "@/lib/taxonomy";
 import { cardsForCategory } from "@/lib/knowledge-catalog";
 import { ogImages, twitterImages } from "@/lib/seo";
+import { isCategoryIndexable, robotsMetadataFor } from "@/lib/taxonomy-indexing";
 
 export function generateStaticParams() {
   return categories.map((c) => ({ pillar: c.pillar, category: c.id }));
@@ -20,6 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ pillar: s
     title: category.name,
     description,
     alternates: { canonical: `/topics/${category.pillar}/${category.id}` },
+    ...robotsMetadataFor(isCategoryIndexable(category.id)),
     openGraph: { type: "website", url: `https://securitycorp.net/topics/${category.pillar}/${category.id}`, siteName: "SecurityCorp", title: `${category.name} | SecurityCorp`, description, images: ogImages(`${category.name} | SecurityCorp`) },
     twitter: { card: "summary_large_image", title: `${category.name} | SecurityCorp`, description, images: twitterImages(`${category.name} | SecurityCorp`) },
   };

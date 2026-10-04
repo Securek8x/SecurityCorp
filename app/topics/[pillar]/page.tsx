@@ -6,6 +6,7 @@ import { Shell } from "@/components/site-shell";
 import { pillars, categoriesForPillar, pillarById, type PillarId } from "@/lib/taxonomy";
 import { cardsForPillar, publishedCountForCategory } from "@/lib/knowledge-catalog";
 import { ogImages, twitterImages } from "@/lib/seo";
+import { isPillarIndexable, robotsMetadataFor } from "@/lib/taxonomy-indexing";
 
 export function generateStaticParams() {
   return pillars.map((p) => ({ pillar: p.id }));
@@ -20,6 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ pillar: s
     title: pillar.name,
     description,
     alternates: { canonical: `/topics/${pillar.id}` },
+    ...robotsMetadataFor(isPillarIndexable(pillar.id)),
     openGraph: { type: "website", url: `https://securitycorp.net/topics/${pillar.id}`, siteName: "SecurityCorp", title: `${pillar.name} | SecurityCorp`, description, images: ogImages(`${pillar.name} | SecurityCorp`) },
     twitter: { card: "summary_large_image", title: `${pillar.name} | SecurityCorp`, description, images: twitterImages(`${pillar.name} | SecurityCorp`) },
   };
