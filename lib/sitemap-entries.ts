@@ -10,6 +10,7 @@ import { articles, projects } from "./content.ts";
 import { compareIsoDates, parseIsoDate } from "./content-dates.ts";
 import { pillars, categories } from "./taxonomy.ts";
 import { publishedKnowledgeArticles } from "./knowledge-content.ts";
+import { isCategoryIndexable, isLearningPathsIndexable, isPillarIndexable } from "./taxonomy-indexing.ts";
 
 const SITE_URL = "https://securitycorp.net";
 
@@ -29,17 +30,21 @@ export function buildSitemapEntries(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/about/`, lastModified: latestArticleDate, changeFrequency: "yearly", priority: 0.4 },
     { url: `${SITE_URL}/topics/`, lastModified: latestArticleDate, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/knowledge/`, lastModified: latestArticleDate, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${SITE_URL}/learning-paths/`, lastModified: latestArticleDate, changeFrequency: "monthly", priority: 0.4 },
+    ...(isLearningPathsIndexable()
+      ? [{ url: `${SITE_URL}/learning-paths/`, lastModified: latestArticleDate, changeFrequency: "monthly" as const, priority: 0.4 }]
+      : []),
   ];
 
-  const pillarRoutes: MetadataRoute.Sitemap = pillars.map((p) => ({
+  // Empty taxonomy routes stay reachable but are noindex and excluded here
+  // (lib/taxonomy-indexing.ts) — the sitemap lists only pages with content.
+  const pillarRoutes: MetadataRoute.Sitemap = pillars.filter((p) => isPillarIndexable(p.id)).map((p) => ({
     url: `${SITE_URL}/topics/${p.id}/`,
     lastModified: latestArticleDate,
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  const categoryRoutes: MetadataRoute.Sitemap = categories.map((c) => ({
+  const categoryRoutes: MetadataRoute.Sitemap = categories.filter((c) => isCategoryIndexable(c.id)).map((c) => ({
     url: `${SITE_URL}/topics/${c.pillar}/${c.id}/`,
     lastModified: latestArticleDate,
     changeFrequency: "monthly",

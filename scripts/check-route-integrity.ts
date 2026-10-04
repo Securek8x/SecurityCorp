@@ -3,7 +3,7 @@
 // references, sitemap/RSS inclusion, and (when a static build exists)
 // that every published route actually produced a file. See
 // lib/route-integrity.ts for the pure check functions this wires together.
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { knowledgeArticles, publishedKnowledgeArticles } from "../lib/knowledge-content.ts";
 import { articles as guides, projects } from "../lib/content.ts";
@@ -17,7 +17,10 @@ import {
   checkProjectGuideReferences,
   checkUrlsPresent,
   checkKnowledgeGraphOrphans,
+  robotsMetaContent,
 } from "../lib/route-integrity.ts";
+import { pillars, categories } from "../lib/taxonomy.ts";
+import { isCategoryIndexable, isLearningPathsIndexable, isPillarIndexable } from "../lib/taxonomy-indexing.ts";
 
 const SITE_URL = "https://securitycorp.net";
 const errors: string[] = [];
@@ -60,6 +63,28 @@ if (existsSync(outDir)) {
     if (!p.slug) continue;
     const file = path.join(outDir, "projects", p.slug, "index.html");
     if (!existsSync(file)) errors.push(`project "${p.index}": expected static output not found at out/projects/${p.slug}/index.html`);
+  }
+  // Taxonomy indexing (securitycorp-source-th8): the built page's robots
+  // meta must agree with the sitemap decision — exactly "noindex, follow"
+  // when the route is empty and the inherited "index, follow" when it is
+  // populated, so a page can't be excluded from the sitemap yet still
+  // advertise itself as indexable, nor silently lose its robots tag.
+  const taxonomyRoutes: { route: string; indexable: boolean }[] = [
+    ...pillars.map((p) => ({ route: `topics/${p.id}`, indexable: isPillarIndexable(p.id) })),
+    ...categories.map((c) => ({ route: `topics/${c.pillar}/${c.id}`, indexable: isCategoryIndexable(c.id) })),
+    { route: "learning-paths", indexable: isLearningPathsIndexable() },
+  ];
+  for (const { route, indexable } of taxonomyRoutes) {
+    const file = path.join(outDir, route, "index.html");
+    if (!existsSync(file)) {
+      errors.push(`/${route}/: expected static output not found at out/${route}/index.html`);
+      continue;
+    }
+    const expected = indexable ? "index, follow" : "noindex, follow";
+    const actual = robotsMetaContent(readFileSync(file, "utf8"));
+    if (actual !== expected) {
+      errors.push(`/${route}/: robots meta is ${actual === undefined ? "missing" : `"${actual}"`}, expected "${expected}" for ${indexable ? "a populated" : "an empty"} route`);
+    }
   }
 } else {
   warnings.push("no static build found at out/ — skipping static-output verification; run npm run build:pages first for full coverage.");
