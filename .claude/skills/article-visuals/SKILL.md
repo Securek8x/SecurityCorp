@@ -102,6 +102,12 @@ treated as capability.
   happen directly from it later, with the `mustShow`/`mustNotShow`/
   composition/crop fields as the generation contract. Do not create a
   placeholder image and present it as final.
+- **Hybrid cover model (check first)**: Schematic Plates are the
+  preferred/default cover; a raster/editorial cover is allowed only where
+  it is the stronger treatment (owner decision s41.21, which lifted the
+  s41.5 freeze) and only for articles in a batch Ravi has approved.
+  Otherwise stop at the brief. See `docs/article-visual-guidelines.md`,
+  "Hybrid cover model".
 - **Capability available (the established path)**: as of the s41.12
   pilot, this means Ravi generates externally (e.g. an image-generation
   tool such as ChatGPT/Codex, outside this repo) and hands off the raw

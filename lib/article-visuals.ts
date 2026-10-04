@@ -292,20 +292,59 @@ export function checkAssetApprovalGate(articles: QueueableVisualArticle[]): stri
   return errors;
 }
 
-export type QueueableVisualArticle = { meta: { slug: string; status: string }; coverImage?: ArticleVisual };
+export type QueueableVisualArticle = {
+  meta: { slug: string; status: string };
+  coverImage?: ArticleVisual;
+  /** Whether a Schematic Plate exists for this article (`plateForSlug` in
+   *  lib/article-plates.ts). Supplied by the caller so this module stays
+   *  free of catalog imports. A plate is not a teaching figure: an article's
+   *  `diagram` never counts toward a cover. */
+  hasPlate?: boolean;
+};
+
+export type CoverSlotOccupant = "raster" | "plate" | "none";
+
+/** What renders in the canonical cover slot, mirroring
+ * components/knowledge-article-shell.tsx exactly: a raster `coverImage`
+ * past stage "brief" with a `src` takes the slot (whatever its approval —
+ * that is what makes preview review possible) and any plate moves in-body;
+ * otherwise a plate takes the slot. */
+export function coverSlotOccupant(article: Pick<QueueableVisualArticle, "coverImage" | "hasPlate">): CoverSlotOccupant {
+  const c = article.coverImage;
+  if (c && c.stage !== "brief" && c.src) return "raster";
+  return article.hasPlate ? "plate" : "none";
+}
+
+/** The canonical definition of "this article has a cover" (bead
+ * securitycorp-source-d4e; hybrid cover model, decision s41.21). True only
+ * for a human-approved raster cover in the cover slot, or a Schematic Plate
+ * in the cover slot. An unapproved raster asset, a brief, a file merely on
+ * disk, an in-body plate, or a teaching diagram never satisfies it. */
+export function hasCanonicalCover(article: Pick<QueueableVisualArticle, "coverImage" | "hasPlate">): boolean {
+  const slot = coverSlotOccupant(article);
+  if (slot === "plate") return true;
+  if (slot === "raster") return isVisualProductionEligible(article.coverImage);
+  return false;
+}
 
 /** Publication-gate check (disabled by default during migration — see
  * VISUAL_GATE_ENABLED below). Once enabled, a published article without a
- * cover at stage "asset" or later fails this check. */
+ * canonical cover (`hasCanonicalCover`) fails this check. `enabled` exists
+ * so tests can exercise the enforced path; production callers omit it. */
 export const VISUAL_GATE_ENABLED = false;
 
-export function checkCoverImageGate(articles: QueueableVisualArticle[]): string[] {
-  if (!VISUAL_GATE_ENABLED) return [];
+export function checkCoverImageGate(
+  articles: QueueableVisualArticle[],
+  enabled: boolean = VISUAL_GATE_ENABLED,
+): string[] {
+  if (!enabled) return [];
   const errors: string[] = [];
   for (const a of articles) {
     if (a.meta.status !== "published") continue;
-    if (!a.coverImage || a.coverImage.stage === "brief") {
-      errors.push(`${a.meta.slug}: published without a cover image asset (VISUAL_GATE_ENABLED is on)`);
+    if (!hasCanonicalCover(a)) {
+      errors.push(
+        `${a.meta.slug}: published without a canonical cover (needs a human-approved raster cover or a Schematic Plate in the cover slot; VISUAL_GATE_ENABLED is on)`,
+      );
     }
   }
   return errors;

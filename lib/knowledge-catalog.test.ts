@@ -149,8 +149,8 @@ test("toCard uses a plate thumbnail for a bounded-wave article with no raster co
 });
 
 test("toCard has no thumbnail for an article outside the plate wave and with no raster cover", () => {
-  const card = toCard(article({ slug: "segmentation-vs-isolation" }));
-  assert.equal(card.thumbnail, undefined, "segmentation-vs-isolation carries a diagram but is not in the s41.12 plate wave");
+  const card = toCard(article({ slug: "tls-certificate-validation-explained" }));
+  assert.equal(card.thumbnail, undefined, "tls-certificate-validation-explained carries a diagram but has no approved plate");
 });
 
 test("a legacy article's approved raster cover wins over its own plate — legacy covers keep their existing card treatment", () => {

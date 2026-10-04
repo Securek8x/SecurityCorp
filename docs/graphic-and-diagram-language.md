@@ -18,7 +18,7 @@ document defines the *visual language* those briefs are written in.
 | **Build-time raster** (`sharp` from SVG) | Social cards only (1200×630), because static export has no runtime image service | In-page content |
 | **CSS-generated** | Ambient page atmosphere already in `globals.css` (`--ambient-*`, `--grid-line`) | Anything carrying meaning |
 | **Existing components** | `InteractiveFlowDiagram`, `DiagramControls`, `ArticleFigure` | — |
-| **Externally generated raster** | **Frozen.** The three approved legacy covers only. No new ones during this pilot. | New catalog covers |
+| **Externally generated raster** | Pilot-era rule (s41.5): **Frozen**, the three approved legacy covers only. **Amended 2026-09-27 (s41.21):** permitted selectively as an editorial cover where it beats a plate, with human approval — see `article-visual-guidelines.md`, Hybrid cover model. | Factual labels or diagrams; automatic/default covers |
 
 **The decisive rule:** anything that carries a factual label, command, protocol
 detail or comparison is code-native. Generated raster art never carries factual

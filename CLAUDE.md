@@ -55,35 +55,35 @@ move it into a shared machine configuration without explicit authorization.
 
 ## Article visual guidelines
 
-Cover images and in-body teaching visuals for knowledge articles follow
-[docs/article-visual-guidelines.md](docs/article-visual-guidelines.md) — the
-authoritative policy, brief template, and migration-state rules. Do not
-duplicate that guide here; a few invariants worth remembering without
-opening it:
+Covers and in-body teaching visuals for knowledge articles follow
+[docs/article-visual-guidelines.md](docs/article-visual-guidelines.md) —
+the single authoritative policy (current state, approval, freeze,
+inventory, migration). Read it before any article-visual work; do not
+duplicate it here or create a parallel visual policy or system without
+explicit authorization. Operational invariants:
 
-- A visual generic enough to fit ten unrelated articles is rejected, not
-  shipped. No stock hacker imagery, hooded figures, generic locks, random
-  code screens, meaningless HUD overlays, or excessive glow.
+- Cover, teaching figure, and human approval are separate states. A
+  code-native diagram is a teaching figure, not a cover. Check
+  `npm run report:article-visuals` rather than counting by hand.
+- Hybrid covers (owner decision s41.21, amending s41.5): Schematic
+  Plates (`lib/article-plates.ts`) are the preferred/default cover where a
+  schematic fits; a raster/editorial cover is allowed only where it is
+  the stronger treatment, and only within an approved batch. "Has a
+  cover" means `hasCanonicalCover` (approved raster or plate in the cover
+  slot) — never a teaching diagram or an unapproved asset.
 - Generated raster art never carries factual labels/commands/protocol
-  detail — that content stays code-native (SVG/React), matching the
-  existing `KnowledgeArticle["diagram"]` mechanism.
-- `lib/article-visuals.ts`'s `VISUAL_GATE_ENABLED` stays `false` until an
-  approved backfill gives the rest of the catalog real covers. The other
-  two preconditions are now met: an image-generation capability exists
-  (external human-in-the-loop generation, normalized/verified through
-  the `sharp@0.35.4` pipeline in `scripts/normalize-cover-source.ts` and
-  `scripts/check-article-visuals.ts`), and Ravi approved the pilot
-  direction — all three pilot covers (`understanding-network-trust-
-  boundaries`, `protecting-main-branch-beyond-pr-approval`, `secrets-
-  detection-scanner-limits`) are `stage: "reviewed"`/`reviewStatus:
-  "approved"` as of 2026-09-05. Do not flip the gate as a side effect of
-  unrelated work — the remaining 38 published articles still have no
-  cover at all.
-- An agent must never set a visual's `reviewStatus` to `"approved"` or
-  its `stage` to `"reviewed"` — both are for a named human reviewer only.
-  `checkAssetApprovalGate` enforces this at CI regardless of
-  `VISUAL_GATE_ENABLED`: an "asset"-stage cover renders for review but
-  is never production-eligible until a human promotes it.
+  detail, and a visual generic enough to fit ten unrelated articles is
+  rejected. No stock hacker imagery, hooded figures, generic locks,
+  random code screens, meaningless HUD overlays, or excessive glow.
+- Never self-approve. Without an explicit human decision recorded in
+  Beads, an agent must never set a visual's `reviewStatus` to
+  `"approved"` or `stage` to `"reviewed"`, nor add a record to
+  `PLATE_APPROVALS` or `TEACHING_FIGURE_ASSESSMENTS`; an asset existing,
+  or an agent review, is not human approval.
+  `checkAssetApprovalGate` enforces this in CI.
+- `VISUAL_GATE_ENABLED` stays `false` until backfill completes and a
+  human decides to enforce; do not flip it or harden coverage as a side
+  effect of other work.
 
 ## Mandatory Ruflo Editorial Routing
 

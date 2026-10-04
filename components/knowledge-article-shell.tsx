@@ -228,9 +228,10 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
 
   const tocSections = blocks.map((b, i) => ({ id: b.id, label: b.heading, number: String(i + 1).padStart(2, "0") }));
 
-  // Schematic Plate (bead s41.12). Only the nine bounded-pilot articles have a
-  // plate; every other article renders exactly as before, because visuals are
-  // additive and an article without one must never look unfinished.
+  // Schematic Plate (bead s41.12; cover batch 1, d4e). Only articles in
+  // lib/article-plates.ts have a plate; every other article renders exactly
+  // as before, because visuals are additive and an article without one must
+  // never look unfinished.
   const plate = plateForSlug(meta.slug);
   // Mirrors the cover-slot condition below exactly, so a plate can never
   // displace an approved cinematic cover.

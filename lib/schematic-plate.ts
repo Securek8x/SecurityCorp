@@ -174,6 +174,20 @@ export type PlateLayout = {
 
 const FRAME = { x: 28, y: 24, w: 744, h: 252 } as const;
 
+/** Legend band geometry, shared by layout, validation and the renderer so the
+ *  zones and the legend can never be positioned from two different numbers
+ *  (bead s41.22: coverage-field and divergent-pair rows used to sit on the
+ *  legend rule). */
+export const LEGEND_INSET = 38;
+export const LEGEND_RULE_Y = FRAME.y + FRAME.h - 40;
+export const LEGEND_TEXT_Y = FRAME.y + FRAME.h - 22;
+export const LEGEND_SLOT_WIDTH = 186;
+export const LEGEND_FONT_SIZE = 8.5;
+/** `.plate-legend-text` letter-spacing, in em. */
+export const LEGEND_LETTER_SPACING_EM = 0.08;
+/** Minimum gap between the lowest zone edge (or sealed ring) and the rule. */
+export const LEGEND_CLEARANCE = 8;
+
 function ticksFor(seed: string) {
   // Tick phase is the one hash-driven value. It shifts marks by at most a few
   // units so two adjacent plates in a catalog grid are not pixel-identical at
@@ -260,8 +274,9 @@ export function layoutPlate(spec: PlateSpec): PlateLayout {
           placed.push({ ...z, x: startX + i * (zw + gap), y, w: zw, h: 58 });
         });
       };
-      row(covered, 78);
-      row(uncovered, 186);
+      // Rows end LEGEND_CLEARANCE above the legend rule (s41.22).
+      row(covered, 70);
+      row(uncovered, 158);
       break;
     }
     case "gate-sequence": {
@@ -292,7 +307,7 @@ export function layoutPlate(spec: PlateSpec): PlateLayout {
         placed.push({
           ...z,
           x: trackStartX + col * (zw + gap),
-          y: isTop ? 66 : 176,
+          y: isTop ? 66 : 166,
           w: zw,
           h: 62,
         });
@@ -350,6 +365,16 @@ export const MAX_LABEL_LINES = 2;
 
 export function estimateTextWidth(text: string, fontSize = ZONE_LABEL_FONT_SIZE): number {
   return text.length * fontSize * MONO_ADVANCE_RATIO;
+}
+
+/** Legend text is tracked (letter-spaced), so it is wider than plain mono. */
+export function legendTextWidth(text: string): number {
+  return estimateTextWidth(text, LEGEND_FONT_SIZE) + text.length * LEGEND_FONT_SIZE * LEGEND_LETTER_SPACING_EM;
+}
+
+/** Lowest drawn edge of a placed zone, including a sealed zone's ring. */
+export function zoneBottom(z: PlacedZone): number {
+  return Math.max(z.y + z.h, z.ring ? z.ring.y + z.ring.h : 0);
 }
 
 /**
@@ -464,6 +489,24 @@ export function validatePlateSpec(spec: PlateSpec): string[] {
           `${where}: zone "${placed.id}" sublabel ${JSON.stringify(placed.sublabel)} does not fit ${Math.round(placed.w)}px`,
         );
       }
+    }
+  }
+
+  // Legend band (s41.22): no zone may reach into it, and each legend label
+  // must fit its fixed slot rather than running into the next entry.
+  if (errors.length === 0 && spec.legend && spec.legend.length > 0) {
+    for (const placed of layoutPlate(spec).zones) {
+      if (zoneBottom(placed) > LEGEND_RULE_Y - LEGEND_CLEARANCE) {
+        errors.push(`${where}: zone "${placed.id}" reaches into the legend band`);
+      }
+    }
+    for (const item of spec.legend) {
+      if (legendTextWidth(item.label) > LEGEND_SLOT_WIDTH - 28) {
+        errors.push(`${where}: legend label ${JSON.stringify(item.label)} overflows its ${LEGEND_SLOT_WIDTH}px slot`);
+      }
+    }
+    if (LEGEND_INSET + spec.legend.length * LEGEND_SLOT_WIDTH > FRAME.w - LEGEND_INSET + 28) {
+      errors.push(`${where}: ${spec.legend.length} legend entries do not fit the frame`);
     }
   }
 
