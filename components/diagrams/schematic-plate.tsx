@@ -1,10 +1,15 @@
 import {
+  LEGEND_FAILURE_DASH,
+  LEGEND_FAILURE_SWATCH_LENGTH,
   LEGEND_INSET,
   LEGEND_RULE_Y,
   LEGEND_SLOT_WIDTH,
+  LEGEND_SWATCH_WIDTH,
+  LEGEND_TEXT_OFFSET,
   LEGEND_TEXT_Y,
   ZONE_LABEL_PADDING,
   layoutPlate,
+  legendSwatchKind,
   wrapPlateLabel,
   PLATE_VIEWBOX,
   type PlateRole,
@@ -205,14 +210,24 @@ export function SchematicPlate({ spec, compact = false, className }: SchematicPl
           {spec.legend.map((item, i) => {
             const x = layout.frame.x + LEGEND_INSET + i * LEGEND_SLOT_WIDTH;
             const y = LEGEND_TEXT_Y;
+            const swatch = legendSwatchKind(item.role);
             return (
               <g key={item.label} className={roleClass(item.role)}>
-                {item.role === "sealed" ? (
+                {swatch === "sealed-ring" ? (
                   <rect className="plate-legend-swatch-sealed" x={x} y={y - 9} width={10} height={10} />
+                ) : swatch === "failure-dash" ? (
+                  <line
+                    className="plate-legend-swatch-failure"
+                    x1={x}
+                    y1={y - 4.5}
+                    x2={x + LEGEND_FAILURE_SWATCH_LENGTH}
+                    y2={y - 4.5}
+                    strokeDasharray={LEGEND_FAILURE_DASH.join(" ")}
+                  />
                 ) : (
-                  <rect className="plate-legend-swatch" x={x} y={y - 6} width={12} height={3} />
+                  <rect className="plate-legend-swatch" x={x} y={y - 6} width={LEGEND_SWATCH_WIDTH} height={3} />
                 )}
-                <text className="plate-legend-text" x={x + 20} y={y}>
+                <text className="plate-legend-text" x={x + LEGEND_TEXT_OFFSET} y={y}>
                   {item.label}
                 </text>
               </g>

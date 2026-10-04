@@ -59,3 +59,6 @@ jobs:
 
       - name: Article visual audit
         run: npm run check:article-visuals
+
+      - name: VALIDATED evidence receipt gate
+        run: npm run check:validation-receipts

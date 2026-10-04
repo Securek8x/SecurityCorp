@@ -18,9 +18,11 @@ import {
   checkUrlsPresent,
   checkKnowledgeGraphOrphans,
   robotsMetaContent,
+  checkKnowledgeSequenceGraph,
 } from "../lib/route-integrity.ts";
 import { pillars, categories } from "../lib/taxonomy.ts";
 import { isCategoryIndexable, isLearningPathsIndexable, isPillarIndexable } from "../lib/taxonomy-indexing.ts";
+import { learningTracks, validateLearningTracks } from "../lib/learning-tracks.ts";
 
 const SITE_URL = "https://securitycorp.net";
 const errors: string[] = [];
@@ -31,6 +33,14 @@ errors.push(...checkDuplicateGuideSlugs(guides));
 errors.push(...checkDuplicateProjectSlugs(projects));
 errors.push(...checkKnowledgeGraphReferences(publishedKnowledgeArticles));
 errors.push(...checkProjectGuideReferences(projects, guides));
+errors.push(...checkKnowledgeSequenceGraph(publishedKnowledgeArticles));
+errors.push(
+  ...validateLearningTracks(
+    learningTracks,
+    new Set(knowledgeArticles.map((a) => a.meta.slug)),
+    new Set(publishedKnowledgeArticles.map((a) => a.meta.slug)),
+  ),
+);
 
 const sitemapUrls = new Set(buildSitemapEntries().map((entry) => entry.url));
 const knowledgeUrls = publishedKnowledgeArticles.map((a) => `${SITE_URL}/knowledge/${a.meta.slug}/`);
@@ -102,5 +112,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `[route-integrity] OK: ${knowledgeArticles.length} knowledge articles, ${guides.length} guides, ${projects.length} projects checked. No duplicate slugs, no broken internal references, sitemap/RSS inclusion confirmed.`,
+  `[route-integrity] OK: ${knowledgeArticles.length} knowledge articles, ${guides.length} guides, ${projects.length} projects, ${learningTracks.length} learning tracks checked. No duplicate slugs, no broken internal references, no navigation cycles, sitemap/RSS inclusion confirmed.`,
 );

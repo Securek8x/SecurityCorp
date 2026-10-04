@@ -22,6 +22,11 @@ export type UniversalSections = Partial<{
   references: string[];
   relatedSlugs: string[];
   nextSlug: string;
+  /** Published articles a reader should read BEFORE this one (ordered
+   * learning dependency, must be acyclic) — distinct from relatedSlugs,
+   * which is an unordered "see also" set. The prose `prerequisites` above
+   * describes required knowledge; this links to where to get it. */
+  prerequisiteSlugs: string[];
 }>;
 
 // Content-type-specific modules. One reusable shell component switches on

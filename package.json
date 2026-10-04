@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test lib/*.test.ts",
     "design:audit": "impeccable detect --json app components",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build:pages && npm run check:draft-isolation && npm run check:article-visuals",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build:pages && npm run check:draft-isolation && npm run check:article-visuals && npm run check:validation-receipts",
     "check:draft-isolation": "node scripts/check-draft-isolation.ts",
     "guard:release": "node scripts/check-release-guard.ts",
     "audit:knowledge-tags": "node scripts/audit-knowledge-tags.ts",
@@ -25,6 +25,7 @@
     "check:route-integrity": "node scripts/check-route-integrity.ts",
     "check:article-visuals": "node scripts/check-article-visuals.ts",
     "check:visual-regression": "node scripts/check-visual-regression.ts",
+    "check:validation-receipts": "node scripts/check-validation-receipts.ts",
     "report:article-visuals": "node scripts/report-article-visual-inventory.ts"
   },
   "dependencies": {
