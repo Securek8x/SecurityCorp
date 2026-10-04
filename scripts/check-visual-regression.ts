@@ -104,6 +104,23 @@ const VIEWPORTS: ViewportSpec[] = [
 
 const THEMES = ["dark", "light"] as const;
 
+/** Pages that once widened the document past the viewport (unbroken
+ * reference URLs; a four-column checklist table). Checked for page-level
+ * horizontal overflow at every viewport, with no screenshot baselines. The
+ * PAGES fixtures above get the same check. */
+const OVERFLOW_GUARD_PATHS = [
+  "/knowledge/workload-identities-vs-long-lived-credentials/",
+  "/knowledge/secure-internal-reverse-proxy-design/",
+  "/knowledge/safely-analyzing-packet-captures/",
+];
+
+async function documentOverflow(page: Page): Promise<{ scrollWidth: number; clientWidth: number }> {
+  return page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+}
+
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -423,6 +440,12 @@ async function main(): Promise<void> {
         for (const theme of THEMES) {
           const page = await preparePage(browser, theme, viewport);
           await loadAndSettle(page, `${server.url}${spec.path}`);
+          const overflow = await documentOverflow(page);
+          if (overflow.scrollWidth > overflow.clientWidth) {
+            const line = `[${spec.slug}__${viewport.name}__${theme}] FAIL — page overflows horizontally (scrollWidth ${overflow.scrollWidth} > clientWidth ${overflow.clientWidth})`;
+            console.error(line);
+            domFailures.push(line);
+          }
           // Viewport-height clip, not full-page: this is what a reader
           // actually sees without scrolling on each device class, and it
           // keeps committed baseline size bounded regardless of article
@@ -461,6 +484,22 @@ async function main(): Promise<void> {
               if (fullResult.status === "created") created++;
             }
           }
+        }
+      }
+    }
+
+    for (const guardPath of OVERFLOW_GUARD_PATHS) {
+      for (const viewport of VIEWPORTS) {
+        const page = await preparePage(browser, "dark", viewport);
+        await loadAndSettle(page, `${server.url}${guardPath}`);
+        const overflow = await documentOverflow(page);
+        await page.close();
+        const line = `[overflow ${guardPath} ${viewport.name}] ${overflow.scrollWidth > overflow.clientWidth ? "FAIL" : "OK"} — scrollWidth ${overflow.scrollWidth}, clientWidth ${overflow.clientWidth}`;
+        if (overflow.scrollWidth > overflow.clientWidth) {
+          console.error(line);
+          domFailures.push(line);
+        } else {
+          console.log(line);
         }
       }
     }
