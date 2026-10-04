@@ -60,6 +60,9 @@ import { article as buildingAlertTriageDecisionTree } from "./articles/building-
 import { article as containerManagementInterfacesSecurityRisks } from "./articles/container-management-interfaces-security-risks.ts";
 import { article as evidenceCollectionBeforeContainment } from "./articles/evidence-collection-before-containment.ts";
 import { article as writingSecurityFindingsDevelopersCanFix } from "./articles/writing-security-findings-developers-can-fix.ts";
+import { article as writingEvidenceBasedRootCauseAnalysis } from "./articles/writing-an-evidence-based-root-cause-analysis.ts";
+import { article as postIncidentDetectionImprovements } from "./articles/post-incident-detection-improvements.ts";
+import { article as designingIncidentResponseChecklist } from "./articles/designing-an-incident-response-checklist.ts";
 
 export type KnowledgeArticle = {
   meta: KnowledgeArticleMeta;
@@ -232,6 +235,9 @@ export const knowledgeArticles: KnowledgeArticle[] = [
   containerManagementInterfacesSecurityRisks,
   evidenceCollectionBeforeContainment,
   writingSecurityFindingsDevelopersCanFix,
+  writingEvidenceBasedRootCauseAnalysis,
+  postIncidentDetectionImprovements,
+  designingIncidentResponseChecklist,
 ];
 
 export const publishedKnowledgeArticles: KnowledgeArticle[] = knowledgeArticles.filter((a) => isPubliclyVisible(a.meta));
