@@ -86,9 +86,21 @@ Once the `*.pages.dev` deployment is verified:
 5. Verify HTTP redirects to HTTPS, `www` redirects to the apex, and there
    are no redirect loops or mixed-content warnings.
 
-## Optional: Cloudflare Web Analytics
+## Cloudflare Web Analytics
 
-If visit analytics are wanted without third-party tracking, Cloudflare Web
-Analytics can be enabled from the dashboard for the zone — it doesn't
-require adding a tracking script dependency to the codebase. Not enabled
-by default; enable it only if desired, and note it in this file once done.
+Enabled. Owner decision 2026-10-04 (bead `securitycorp-source-t4r`): keep
+Cloudflare Web Analytics and allow its beacon in the CSP, rather than
+disabling auto-injection.
+
+- Cloudflare Pages auto-injects the beacon from
+  `https://static.cloudflareinsights.com/beacon.min.js/<version>`. The
+  versioned path means an exact-path CSP source would not match, so
+  `public/_headers` allows the origin `https://static.cloudflareinsights.com`
+  in `script-src`. Nothing else is added: the auto-injected beacon reports
+  to this site's own `/cdn-cgi/rum` endpoint, which `default-src 'self'`
+  already covers.
+- No tracking script is added to the codebase.
+- Privacy stance: Cloudflare states that Web Analytics "does not collect or
+  use your visitors' personal data"
+  (https://developers.cloudflare.com/web-analytics/about/, checked
+  2026-10-04). Re-check that statement if the product changes.
