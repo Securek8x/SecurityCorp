@@ -13,6 +13,10 @@ import {
   MAX_LABEL_LINES,
   LEGEND_CLEARANCE,
   LEGEND_RULE_Y,
+  LEGEND_FAILURE_SWATCH_LENGTH,
+  LEGEND_TEXT_OFFSET,
+  LEGEND_SWATCH_WIDTH,
+  legendSwatchKind,
   zoneBottom,
   type PlateSpec,
   type PlateZoneSpec,
@@ -307,4 +311,22 @@ test("a legend label too long for its slot is a validation error", () => {
     }),
   );
   assert.ok(errors.some((e) => e.includes("overflows its")), errors.join("; "));
+});
+
+// --- legend swatches (s41.23) -------------------------------------------------
+
+test("each legend role draws its own swatch; failure is the dashed failure swatch, not the sanctioned bar", () => {
+  assert.equal(legendSwatchKind("failure"), "failure-dash");
+  assert.equal(legendSwatchKind("sealed"), "sealed-ring");
+  assert.equal(legendSwatchKind("sanctioned"), "solid-bar");
+  assert.equal(legendSwatchKind("neutral"), "solid-bar");
+  assert.notEqual(legendSwatchKind("failure"), legendSwatchKind("sanctioned"));
+});
+
+test("the failure swatch keeps the standard swatch footprint, clear of its label", () => {
+  assert.ok(
+    LEGEND_FAILURE_SWATCH_LENGTH <= LEGEND_SWATCH_WIDTH,
+    `failure swatch ${LEGEND_FAILURE_SWATCH_LENGTH}px is wider than the ${LEGEND_SWATCH_WIDTH}px swatch footprint`,
+  );
+  assert.ok(LEGEND_SWATCH_WIDTH < LEGEND_TEXT_OFFSET);
 });
