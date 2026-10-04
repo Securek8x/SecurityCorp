@@ -148,26 +148,31 @@ function moduleBlocks(module: ContentModule | undefined): Block[] {
           id: "mod-checklist",
           heading: "Checklist",
           node: (
-            <table>
-              <thead>
-                <tr>
-                  <th>Control</th>
-                  <th>Verification method</th>
-                  <th>Required evidence</th>
-                  <th>Result</th>
-                </tr>
-              </thead>
-              <tbody>
-                {module.items.map((item) => (
-                  <tr key={item.control}>
-                    <td>{renderInline(item.control)}</td>
-                    <td>{renderInline(item.verificationMethod)}</td>
-                    <td>{renderInline(item.requiredEvidence)}</td>
-                    <td>{renderInline(item.result)}</td>
+            // Contained horizontal scroll keeps the four-column table readable
+            // on phones without widening the page; focusable so keyboard users
+            // can scroll it.
+            <div className="table-scroll" role="region" aria-label="Checklist table" tabIndex={0}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Control</th>
+                    <th>Verification method</th>
+                    <th>Required evidence</th>
+                    <th>Result</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {module.items.map((item) => (
+                    <tr key={item.control}>
+                      <td>{renderInline(item.control)}</td>
+                      <td>{renderInline(item.verificationMethod)}</td>
+                      <td>{renderInline(item.requiredEvidence)}</td>
+                      <td>{renderInline(item.result)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ),
         },
       ];
