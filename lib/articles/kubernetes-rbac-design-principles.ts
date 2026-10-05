@@ -238,7 +238,13 @@ const sections: UniversalSections = {
     // instead of the bot-blocked direct PDF URL.
     "NSA and CISA, Kubernetes Hardening Guidance, announced: https://www.cisa.gov/news-events/alerts/2022/03/15/updated-kubernetes-hardening-guide",
   ],
-  relatedSlugs: ["docker-to-k3s-migration-zero-change", "least-privilege-for-pipeline-identities", "cloud-iam-permission-creep"],
+  relatedSlugs: [
+    "docker-to-k3s-migration-zero-change",
+    "least-privilege-for-pipeline-identities",
+    "cloud-iam-permission-creep",
+    "workload-identities-vs-long-lived-credentials",
+  ],
+  nextSlug: "docker-to-k3s-migration-zero-change",
 };
 
 const module_: GuideModule = {

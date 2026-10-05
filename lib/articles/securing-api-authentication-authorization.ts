@@ -75,6 +75,8 @@ const sections: UniversalSections = {
     "RFC 9068, JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens: https://www.rfc-editor.org/rfc/rfc9068",
     "NIST SP 800-63B, Digital Identity Guidelines — Authentication and Lifecycle Management: https://pages.nist.gov/800-63-3/sp800-63b.html",
   ],
+  relatedSlugs: ["input-validation-not-complete-control", "workload-identities-vs-long-lived-credentials"],
+  nextSlug: "secrets-detection-scanner-limits",
 };
 
 const module_: GuideModule = {

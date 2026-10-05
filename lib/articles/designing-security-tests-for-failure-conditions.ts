@@ -96,6 +96,7 @@ const sections: UniversalSections = {
     "OWASP Web Security Testing Guide: https://owasp.org/www-project-web-security-testing-guide/",
   ],
   relatedSlugs: ["sast-vs-dast-vs-software-composition-analysis", "securing-api-authentication-authorization", "input-validation-not-complete-control"],
+  nextSlug: "logs-are-not-proof-verifying-automated-actions",
 };
 
 const module_: GuideModule = {

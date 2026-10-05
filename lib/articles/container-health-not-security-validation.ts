@@ -133,6 +133,7 @@ const sections: UniversalSections = {
     "docker-sock-mounting-security-risks",
     "input-validation-not-complete-control",
   ],
+  nextSlug: "kubernetes-rbac-design-principles",
 };
 
 const module_: GuideModule = {

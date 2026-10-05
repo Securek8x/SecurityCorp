@@ -90,7 +90,13 @@ const sections: UniversalSections = {
     "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     "NIST SP 800-53 Rev. 5, control SI-7, Software, Firmware, and Information Integrity: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
   ],
-  relatedSlugs: ["least-privilege-for-pipeline-identities", "build-runners-untrusted", "sboms-what-they-solve", "dependency-confusion-package-trust"],
+  relatedSlugs: [
+    "least-privilege-for-pipeline-identities",
+    "build-runners-untrusted",
+    "sboms-what-they-solve",
+    "dependency-confusion-package-trust",
+  ],
+  nextSlug: "designing-human-approval-gates-for-production-changes",
 };
 
 const module_: GuideModule = {

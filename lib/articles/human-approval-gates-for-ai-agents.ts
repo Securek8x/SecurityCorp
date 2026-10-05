@@ -117,6 +117,7 @@ const sections: UniversalSections = {
     "least-privilege-for-pipeline-identities",
     "protecting-main-branch-beyond-pr-approval",
   ],
+  nextSlug: "preventing-sensitive-data-leakage-ai-tools",
 };
 
 const module_: GuideModule = {

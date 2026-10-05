@@ -102,6 +102,7 @@ export const article: KnowledgeArticle = {
       "MITRE ATT&CK T1490, Inhibit System Recovery: https://attack.mitre.org/techniques/T1490/",
       "CISA, FBI, NSA, and MS-ISAC, #StopRansomware Guide (backup testing and offline/immutable backup guidance): https://www.cisa.gov/stopransomware/ransomware-guide",
     ],
+    relatedSlugs: ["logs-are-not-proof-verifying-automated-actions", "designing-fail-closed-security-automation"],
   },
   module: {
     kind: "checklist",

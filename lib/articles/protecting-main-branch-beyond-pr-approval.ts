@@ -329,6 +329,8 @@ export const article: KnowledgeArticle = {
       "SLSA (Supply-chain Levels for Software Artifacts): https://slsa.dev/",
       "OWASP Top 10 CI/CD Security Risks: https://owasp.org/www-project-top-10-ci-cd-security-risks/",
     ],
+    relatedSlugs: ["designing-human-approval-gates-for-production-changes", "build-runners-untrusted"],
+    nextSlug: "build-runners-untrusted",
   },
   module: module_,
   diagram,

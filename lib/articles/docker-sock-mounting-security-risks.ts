@@ -110,6 +110,7 @@ const sections: UniversalSections = {
     "CIS Docker Benchmark: https://www.cisecurity.org/benchmark/docker",
   ],
   relatedSlugs: ["docker-to-k3s-migration-zero-change", "least-privilege-for-pipeline-identities", "understanding-network-trust-boundaries"],
+  nextSlug: "container-health-not-security-validation",
 };
 
 const module_: GuideModule = {

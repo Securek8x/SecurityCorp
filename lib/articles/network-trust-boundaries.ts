@@ -178,6 +178,8 @@ export const article: KnowledgeArticle = {
       "NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations (see the SC-7 Boundary Protection control): https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
       "OWASP Threat Modeling Cheat Sheet (trust boundaries in data-flow analysis): https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html",
     ],
+    relatedSlugs: ["segmentation-vs-isolation", "building-firewall-rules-from-documented-requirements"],
+    nextSlug: "segmentation-vs-isolation",
   },
   module: {
     kind: "guide",

@@ -122,6 +122,7 @@ const sections: UniversalSections = {
     "least-privilege-for-pipeline-identities",
     "designing-fail-closed-security-automation",
   ],
+  nextSlug: "threat-modeling-ai-agents-tool-access",
 };
 
 const module_: GuideModule = {

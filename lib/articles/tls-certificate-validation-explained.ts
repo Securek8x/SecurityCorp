@@ -115,6 +115,7 @@ export const article: KnowledgeArticle = {
       "CA/Browser Forum, Baseline Requirements for the Issuance and Management of Publicly-Trusted Certificates: https://cabforum.org/baseline-requirements/",
     ],
     relatedSlugs: ["understanding-network-trust-boundaries", "dns-security-control-and-attack-surface"],
+    nextSlug: "secure-internal-reverse-proxy-design",
   },
   module: {
     kind: "guide",
