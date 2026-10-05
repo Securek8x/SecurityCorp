@@ -107,6 +107,7 @@ export const article: KnowledgeArticle = {
       "NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations (see the SC-7 Boundary Protection and AC-4 Information Flow Enforcement controls): https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     ],
     relatedSlugs: ["understanding-network-trust-boundaries"],
+    nextSlug: "building-firewall-rules-from-documented-requirements",
   },
   module: {
     kind: "guide",

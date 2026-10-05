@@ -206,6 +206,7 @@ const sections: UniversalSections = {
     "SLSA — Supply-chain Levels for Software Artifacts: https://slsa.dev/",
   ],
   relatedSlugs: ["dependency-confusion-package-trust", "build-runners-untrusted", "practical-secure-code-review-checklist"],
+  nextSlug: "threat-modeling-cicd-pipeline",
 };
 
 const module_: GuideModule = {

@@ -161,6 +161,7 @@ export const article: KnowledgeArticle = {
       "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     ],
     relatedSlugs: ["secure-internal-reverse-proxy-design", "build-runners-untrusted", "protecting-main-branch-beyond-pr-approval"],
+    nextSlug: "designing-fail-closed-security-automation",
   },
   module: module_,
 };

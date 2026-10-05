@@ -170,6 +170,8 @@ export const knowledgeArticles: KnowledgeArticle[] = [
         "OWASP Code Review Guide: https://owasp.org/www-project-code-review-guide/",
         "NIST SP 800-218, Secure Software Development Framework: https://csrc.nist.gov/pubs/sp/800/218/final",
       ],
+      relatedSlugs: ["input-validation-not-complete-control", "sast-vs-dast-vs-software-composition-analysis"],
+      nextSlug: "sast-vs-dast-vs-software-composition-analysis",
     },
     module: {
       kind: "checklist",

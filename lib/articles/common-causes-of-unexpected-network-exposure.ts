@@ -112,6 +112,7 @@ export const article: KnowledgeArticle = {
       "CIS Critical Security Controls (see Control 4, Secure Configuration of Enterprise Assets and Software, and Control 12, Network Infrastructure Management): https://www.cisecurity.org/controls",
     ],
     relatedSlugs: ["validating-a-service-is-not-publicly-reachable"],
+    nextSlug: "validating-a-service-is-not-publicly-reachable",
   },
   module: {
     kind: "checklist",

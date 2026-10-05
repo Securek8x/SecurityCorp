@@ -94,6 +94,7 @@ const sections: UniversalSections = {
     "OWASP Top 10:2021 — A06: Vulnerable and Outdated Components: https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/",
   ],
   relatedSlugs: ["secrets-detection-scanner-limits", "securing-api-authentication-authorization", "practical-secure-code-review-checklist"],
+  nextSlug: "sboms-what-they-solve",
 };
 
 const module_: GuideModule = {

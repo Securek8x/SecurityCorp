@@ -106,6 +106,8 @@ export const article: KnowledgeArticle = {
       "NIST SP 800-41 Rev. 1, Guidelines on Firewalls and Firewall Policy: https://csrc.nist.gov/pubs/sp/800/41/r1/final",
       "NIST SP 800-115, Technical Guide to Information Security Testing and Assessment: https://csrc.nist.gov/pubs/sp/800/115/final",
     ],
+    relatedSlugs: ["common-causes-of-unexpected-network-exposure", "designing-security-tests-for-failure-conditions"],
+    nextSlug: "dns-security-control-and-attack-surface",
   },
   module: {
     kind: "checklist",

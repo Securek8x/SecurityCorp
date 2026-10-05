@@ -105,6 +105,7 @@ const sections: UniversalSections = {
     "GitHub Docs, Using secrets in GitHub Actions (masking behavior and limits): https://docs.github.com/actions/security-guides/using-secrets-in-github-actions",
   ],
   relatedSlugs: ["secrets-detection-scanner-limits", "least-privilege-for-pipeline-identities", "verifying-build-artifacts-before-deployment"],
+  nextSlug: "verifying-build-artifacts-before-deployment",
 };
 
 const module_: GuideModule = {

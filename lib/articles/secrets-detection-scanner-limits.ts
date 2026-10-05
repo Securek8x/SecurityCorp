@@ -171,6 +171,7 @@ const sections: UniversalSections = {
     "Gitleaks (open-source secret scanner): https://github.com/gitleaks/gitleaks",
   ],
   relatedSlugs: ["securing-api-authentication-authorization", "practical-secure-code-review-checklist"],
+  nextSlug: "practical-secure-code-review-checklist",
 };
 
 const module_: GuideModule = {

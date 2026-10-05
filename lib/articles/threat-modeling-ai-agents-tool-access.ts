@@ -123,6 +123,7 @@ const sections: UniversalSections = {
     "threat-modeling-cicd-pipeline",
     "logs-are-not-proof-verifying-automated-actions",
   ],
+  nextSlug: "human-approval-gates-for-ai-agents",
 };
 
 const module_: GuideModule = {

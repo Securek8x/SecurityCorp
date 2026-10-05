@@ -229,6 +229,8 @@ export const article: KnowledgeArticle = {
       "NIST SP 800-218, Secure Software Development Framework: https://csrc.nist.gov/pubs/sp/800/218/final",
       "CISA and NSA, Defending Continuous Integration/Continuous Delivery (CI/CD) Environments: https://www.cisa.gov/news-events/alerts/2023/06/28/cisa-and-nsa-release-joint-guidance-defending-continuous-integrationcontinuous-delivery-cicd",
     ],
+    relatedSlugs: ["build-runners-untrusted", "threat-modeling-ai-agents-tool-access", "least-privilege-for-pipeline-identities"],
+    nextSlug: "protecting-main-branch-beyond-pr-approval",
   },
   module: module_,
   diagram,

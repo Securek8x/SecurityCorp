@@ -79,6 +79,7 @@ const sections: UniversalSections = {
     "CWE-89: Improper Neutralization of Special Elements used in an SQL Command (SQL Injection): https://cwe.mitre.org/data/definitions/89.html",
   ],
   relatedSlugs: ["securing-api-authentication-authorization", "practical-secure-code-review-checklist", "secrets-detection-scanner-limits"],
+  nextSlug: "preventing-path-traversal-through-boundary-validation",
 };
 
 const module_: GuideModule = {

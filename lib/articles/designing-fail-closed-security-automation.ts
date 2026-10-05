@@ -98,6 +98,7 @@ const sections: UniversalSections = {
     "securing-api-authentication-authorization",
     "designing-security-tests-for-failure-conditions",
   ],
+  nextSlug: "designing-security-tests-for-failure-conditions",
 };
 
 const module_: DeepDiveModule = {

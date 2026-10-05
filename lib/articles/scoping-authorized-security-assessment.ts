@@ -156,6 +156,8 @@ export const article: KnowledgeArticle = {
       "CISA, Penetration Testing (service and rules-of-engagement overview): https://www.cisa.gov/resources-tools/services/penetration-testing-0",
       "Penetration Testing Execution Standard (PTES), Pre-Engagement Interactions: https://pentest-standard.readthedocs.io/en/latest/preengagement_interactions.html",
     ],
+    relatedSlugs: ["rules-of-engagement-for-an-isolated-lab", "designing-security-tests-for-failure-conditions"],
+    nextSlug: "rules-of-engagement-for-an-isolated-lab",
   },
   module: module_,
 };

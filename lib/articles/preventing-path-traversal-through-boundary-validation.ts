@@ -83,6 +83,7 @@ const sections: UniversalSections = {
     "OWASP Input Validation Cheat Sheet: https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
   ],
   relatedSlugs: ["input-validation-not-complete-control", "securing-api-authentication-authorization"],
+  nextSlug: "securing-api-authentication-authorization",
 };
 
 const module_: GuideModule = {

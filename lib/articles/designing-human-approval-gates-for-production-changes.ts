@@ -106,6 +106,7 @@ const sections: UniversalSections = {
     "verifying-build-artifacts-before-deployment",
     "designing-security-tests-for-failure-conditions",
   ],
+  nextSlug: "hardening-a-private-gitea-server",
 };
 
 const module_: GuideModule = {

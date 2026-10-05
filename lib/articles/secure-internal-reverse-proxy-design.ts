@@ -109,6 +109,8 @@ export const article: KnowledgeArticle = {
       "IETF RFC 7239, Forwarded HTTP Extension: https://www.rfc-editor.org/rfc/rfc7239",
       "CIS Controls v8, Control 12: Network Infrastructure Management: https://www.cisecurity.org/controls/network-infrastructure-management",
     ],
+    relatedSlugs: ["tls-certificate-validation-explained", "hardening-a-private-gitea-server"],
+    nextSlug: "safely-analyzing-packet-captures",
   },
   module: {
     kind: "guide",

@@ -90,6 +90,7 @@ const sections: UniversalSections = {
     "CWE — Common Weakness Enumeration: https://cwe.mitre.org/",
   ],
   relatedSlugs: ["secrets-detection-scanner-limits", "sboms-what-they-solve", "practical-secure-code-review-checklist"],
+  nextSlug: "dependency-confusion-package-trust",
 };
 
 const module_: DeepDiveModule = {

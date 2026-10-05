@@ -100,6 +100,8 @@ export const article: KnowledgeArticle = {
       "NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations (see the AC-4 Information Flow Enforcement and CM-3 Configuration Change Control controls): https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
       "NIST SP 800-53 Rev. 5 (see the SC-7 Boundary Protection control): https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     ],
+    relatedSlugs: ["common-causes-of-unexpected-network-exposure", "validating-a-service-is-not-publicly-reachable"],
+    nextSlug: "common-causes-of-unexpected-network-exposure",
   },
   module: {
     kind: "checklist",

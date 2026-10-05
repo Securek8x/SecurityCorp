@@ -100,6 +100,8 @@ export const article: KnowledgeArticle = {
       "NIST SP 800-61 Rev. 2, Computer Security Incident Handling Guide: https://csrc.nist.gov/pubs/sp/800/61/r2/final",
       "NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations (see the IR-4 Incident Handling and AU-9 Protection of Audit Information controls): https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
     ],
+    relatedSlugs: ["dns-security-control-and-attack-surface", "logs-are-not-proof-verifying-automated-actions"],
+    nextSlug: "turning-attack-hypothesis-into-detection",
   },
   module: {
     kind: "checklist",

@@ -255,6 +255,7 @@ export const article: KnowledgeArticle = {
       "SPIFFE, SPIFFE Concepts documentation: https://spiffe.io/docs/latest/spiffe-about/spiffe-concepts/",
     ],
     relatedSlugs: ["least-privilege-for-pipeline-identities", "securing-api-authentication-authorization", "docker-to-k3s-migration-zero-change"],
+    nextSlug: "cloud-iam-permission-creep",
   },
   module: module_,
   diagram,

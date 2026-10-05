@@ -118,6 +118,7 @@ const sections: UniversalSections = {
     "MITRE ATT&CK: https://attack.mitre.org/",
   ],
   relatedSlugs: ["scoping-authorized-security-assessment", "understanding-network-trust-boundaries", "segmentation-vs-isolation"],
+  nextSlug: "turning-attack-hypothesis-into-detection",
 };
 
 const module_: GuideModule = {
