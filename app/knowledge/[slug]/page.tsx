@@ -4,17 +4,16 @@ import { Shell } from "@/components/site-shell";
 import { JsonLd } from "@/components/json-ld";
 import { ReadingProgress } from "@/components/reading-progress";
 import { KnowledgeArticleShell } from "@/components/knowledge-article-shell";
-import { knowledgeArticles, findKnowledgeArticle } from "@/lib/knowledge-content";
+import { publishedKnowledgeArticles, findKnowledgeArticle } from "@/lib/knowledge-content";
 import { knowledgeArticleJsonLd, breadcrumbJsonLd } from "@/lib/json-ld";
 import { pageOgImages, pageTwitterImages } from "@/lib/seo";
 
-// Sourced from the full (not just published) list — see the
-// STATIC_EXPORT_PLACEHOLDER comment in lib/knowledge-content.ts for why:
-// static export requires at least one path here. findKnowledgeArticle
-// below only ever resolves published articles, so anything non-published,
-// including that placeholder, renders as a 404, never real content.
+// Published articles only. Building a path for a drafting article made its
+// URL answer HTTP 200 with a "Page not found" body: a soft 404 for search
+// engines, and a confirmation to anyone guessing that the draft slug exists.
+// Unbuilt slugs fall through to the host's real 404.
 export function generateStaticParams() {
-  return knowledgeArticles.map((a) => ({ slug: a.meta.slug }));
+  return publishedKnowledgeArticles.map((a) => ({ slug: a.meta.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
