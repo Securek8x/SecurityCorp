@@ -1,60 +1,49 @@
 "use client";
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
-import type { Article } from "@/lib/content";
+import type { PublicationEntry } from "@/lib/publication-index";
 import { ContentDate } from "@/components/content-date";
 
-const FILTERS = ["All", "Detection Engineering", "Container Security", "Home Lab Security", "Foundational", "Intermediate"];
-
-export function GuidesFilter({ articles }: { articles: Article[] }) {
-  const [filter, setFilter] = useState("All");
-
-  const filtered = useMemo(() => {
-    if (filter === "All") return articles;
-    return articles.filter((a) => a.category === filter || a.level === filter);
-  }, [articles, filter]);
+/** Scannable guide index (redesign, Bead securitycorp-source-wo8.4): one list,
+ * newest first, filterable by topic. Without JavaScript every entry renders. */
+export function GuidesFilter({ entries }: { entries: PublicationEntry[] }) {
+  const topics = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const e of entries) counts.set(e.topic, (counts.get(e.topic) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([t]) => t);
+  }, [entries]);
+  const [topic, setTopic] = useState("All");
+  const shown = topic === "All" ? entries : entries.filter((e) => e.topic === topic);
 
   return (
     <>
-      <div role="group" aria-label="Filter guides" className="guides-filter">
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            type="button"
-            className="filter-chip"
-            aria-pressed={filter === f}
-            onClick={() => setFilter(f)}
-          >
-            {f}
+      <div role="group" aria-label="Filter guides by topic" className="pub-filter">
+        {["All", ...topics].map((t) => (
+          <button key={t} type="button" aria-pressed={topic === t} onClick={() => setTopic(t)}>
+            {t}
           </button>
         ))}
         <span className="filter-count" aria-live="polite">
-          {filtered.length} {filtered.length === 1 ? "guide" : "guides"}
+          {shown.length} {shown.length === 1 ? "guide" : "guides"}
         </span>
       </div>
-
-      {filtered.length === 0 ? (
-        <p className="filter-empty">No guides match that filter yet — check back as the publication grows.</p>
-      ) : (
-        <section className="guide-index">
-          {filtered.map((a) => (
-            <Link href={`/guides/${a.slug}`} className="guide-card record-trace clip-corner-sm" data-tilt key={a.slug}>
-              <span className="article-no">{a.number}</span>
-              <div className="article-meta">
-                <span>{a.category}</span>
-                <span>{a.level}</span>
-              </div>
-              <h2>{a.title}</h2>
-              <p>{a.dek}</p>
-              <div className="guide-foot">
-                <span><ContentDate value={a.publishedAt} /> · {a.read} read</span>
-                <ArrowUpRight aria-hidden="true" />
-              </div>
+      <ul className="pub-list">
+        {shown.map((e) => (
+          <li key={e.href}>
+            <Link href={e.href} className="pub-entry">
+              <h2>{e.title}</h2>
+              <p>{e.summary}</p>
+              <span className="pub-meta">
+                <span>{e.topic}</span>
+                <span>{e.format}</span>
+                <span>{e.level}</span>
+                <span>{e.readMinutes} min read</span>
+              </span>
+              <ContentDate value={e.publishedAt} className="pub-date" />
             </Link>
-          ))}
-        </section>
-      )}
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
