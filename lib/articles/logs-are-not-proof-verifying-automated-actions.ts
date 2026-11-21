@@ -43,7 +43,7 @@ const sections: UniversalSections = {
   ],
   problem: [
     "Automated security actions are usually recorded as effective the moment their tooling reports success. What the tooling can observe is its own request and response, not the downstream state the request was meant to change.",
-    "A firewall API can confirm a rule was accepted into a ruleset, but not that a matching packet is dropped at the enforcement point. An IAM API can confirm a revoke request was processed, but not that every session and cached token derived from the credential is now rejected. The tool is reporting on itself.",
+    "An IAM API, for example, can confirm a revoke request was processed, but not that every session and cached token derived from the credential is now rejected. The tool is reporting on itself.",
   ],
   threatModel: [
     "The examples use a fictional team, Thistlewood Systems, running four automated actions: a firewall-rule pipeline, an access-revocation workflow, a patch-rollout pipeline for internet-facing services, and an EDR quarantine action. The scenarios are about reported success diverging from actual effect, not an attack on the automation platform.",
@@ -98,7 +98,7 @@ const module_: GuideModule = {
   procedure: [
     "List every automated security action whose only evidence of success is its own completion signal.",
     "For each, write down the state it claims to produce (\"traffic on this path is blocked,\" not \"the deployment call returned success\").",
-    "Choose the matching check from \"How it works\": test the traffic, test the protected resource, query the running version, or probe the host from outside.",
+    "Run the matching check: firewall rule, send the traffic it should block; revocation, try the credential against the protected resource; patch, query the running version; quarantine, probe the host from outside.",
     "Run the check from a vantage point, credential, and network position independent of the automation.",
     "Record method, vantage point, timestamp, and outcome in a durable record separate from the automation's log.",
   ],
