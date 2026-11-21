@@ -219,7 +219,7 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
     textBlock("sec-threat-model", "Threat model", sections.threatModel),
     textBlock("sec-main-content", "How it works", sections.mainContent),
     ...moduleBlocks(module),
-    textBlock("sec-validation", "Validation and evidence", sections.validationEvidence),
+    textBlock("sec-validation", "Evidence status", sections.validationEvidence),
     textBlock("sec-limitations", "Limitations", sections.limitations),
     listBlock("sec-defensive-recommendations", "Recommendations", sections.defensiveRecommendations),
     listBlock("sec-key-takeaways", "Key takeaways", sections.keyTakeaways),
