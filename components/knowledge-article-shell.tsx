@@ -215,13 +215,13 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
       : null,
     listBlock("sec-what-you-will-learn", "What you will learn", sections.whatYouWillLearn),
     listBlock("sec-intended-audience", "Intended audience", sections.intendedAudience),
-    textBlock("sec-problem", "Problem or security question", sections.problem),
-    textBlock("sec-threat-model", "Threat model or relevant risk", sections.threatModel),
-    textBlock("sec-main-content", "Main technical content", sections.mainContent),
+    textBlock("sec-problem", "The problem", sections.problem),
+    textBlock("sec-threat-model", "Threat model", sections.threatModel),
+    textBlock("sec-main-content", "How it works", sections.mainContent),
     ...moduleBlocks(module),
-    textBlock("sec-validation", "Validation or evidence", sections.validationEvidence),
+    textBlock("sec-validation", "Validation and evidence", sections.validationEvidence),
     textBlock("sec-limitations", "Limitations", sections.limitations),
-    listBlock("sec-defensive-recommendations", "Defensive recommendations", sections.defensiveRecommendations),
+    listBlock("sec-defensive-recommendations", "Recommendations", sections.defensiveRecommendations),
     listBlock("sec-key-takeaways", "Key takeaways", sections.keyTakeaways),
     listBlock("sec-references", "References", sections.references),
   ].filter((b): b is Block => b !== null);
@@ -241,8 +241,8 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
 
   return (
     <>
-      <Link href="/knowledge" className="back">
-        <ArrowLeft size={15} aria-hidden="true" /> All knowledge articles
+      <Link href="/guides" className="back">
+        <ArrowLeft size={15} aria-hidden="true" /> All guides
       </Link>
       <article>
         <header>
@@ -252,14 +252,17 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             {category && ` / ${category.name}`}
           </p>
           <h1>{meta.title}</h1>
-          <p className="dek">{meta.summary}</p>
+          {/* Byline sits directly under the title and the first paragraph
+              follows it (redesign, Bead securitycorp-source-wo8.4). The
+              summary still drives the catalog, metadata, and social cards;
+              on the page it gives way to the lead, which carries the answer. */}
           <div className="byline">
             <span>By Ravi Teja Thota</span>
             {meta.publishedAt && <span>Published <ContentDate value={meta.publishedAt} /></span>}
             {meta.lastReviewedAt && meta.lastReviewedAt !== meta.publishedAt && <span>Last reviewed <ContentDate value={meta.lastReviewedAt} /></span>}
             <span>{meta.estimatedReadingMinutes} min read</span>
-            <span>{meta.difficulty}</span>
-            <span>{EVIDENCE_LABEL[meta.evidenceState]}</span>
+            <span>{meta.difficulty.charAt(0).toUpperCase() + meta.difficulty.slice(1)}</span>
+            <span>Evidence: {EVIDENCE_LABEL[meta.evidenceState]}</span>
             {freshnessStatus && FRESHNESS_LABEL[freshnessStatus] && <span>{FRESHNESS_LABEL[freshnessStatus]}</span>}
             <div className="byline-actions">
               <ShareButton title={meta.title} label="Share this article" />
@@ -276,16 +279,9 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
               {freshness.testedWith?.length ? `Tested with: ${freshness.testedWith.join(", ")}` : null}
             </p>
           ) : null}
-          {meta.tags.length > 0 && (
-            <div className="tags">
-              {meta.tags.map((t) => (
-                <span key={t}>{tagLabel(t)}</span>
-              ))}
-            </div>
-          )}
         </header>
 
-        {lead && <p className="lead">{renderInline(lead)}</p>}
+        {lead ? <p className="lead">{renderInline(lead)}</p> : <p className="lead">{renderInline(meta.summary)}</p>}
 
         {/* Renders any real asset (stage "asset" or "reviewed"), regardless
             of reviewStatus — this is deliberate: it's what lets a real
@@ -344,6 +340,13 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
             </div>
           </section>
         ))}
+        {meta.tags.length > 0 && (
+          <div className="tags article-tags" aria-label="Topics">
+            {meta.tags.map((t) => (
+              <span key={t}>{tagLabel(t)}</span>
+            ))}
+          </div>
+        )}
       </article>
 
       {next && (
