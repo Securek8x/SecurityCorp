@@ -139,7 +139,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   {s.code && (
                     <div className="code-block">
                       <CopyCodeButton code={s.code} />
-                      <pre>
+                      <pre tabIndex={0} aria-label={`Code: ${s.heading}`}>
                         <code>{s.code}</code>
                       </pre>
                     </div>
