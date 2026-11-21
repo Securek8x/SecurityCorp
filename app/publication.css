@@ -190,7 +190,8 @@ footer.site-footer{max-width:var(--page-max);margin:var(--space-6) auto 0;paddin
 .copy-code-btn{border-radius:4px;font:600 .75rem/1 var(--font-sans);text-transform:none;letter-spacing:0}
 .closing-note,.prereq-box{margin:var(--space-3) 0 0;padding:1rem 1.25rem;border:1px solid var(--line);background:var(--surface-raised);border-radius:6px}
 .closing-note strong,.prereq-box strong{font:600 var(--text-sm)/1.3 var(--font-sans);text-transform:none;letter-spacing:0;color:var(--ink);margin-bottom:.4rem}
-.prereq-box ul{font-size:1rem;line-height:1.6}
+.prereq-box ul{font-size:1rem;line-height:1.6;list-style:disc;padding-left:1.2rem;margin:0}
+.prereq-box li+li{margin-top:.3rem}
 .callout{border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:6px;padding:1rem 1.25rem}
 .callout strong{font:600 var(--text-sm)/1.3 var(--font-sans);text-transform:none;letter-spacing:0}
 .callout p{font-size:1rem}
