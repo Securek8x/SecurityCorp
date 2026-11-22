@@ -54,7 +54,7 @@ const sections: UniversalSections = {
     "**Keep the check independent.** A scanner routed through the enforcement point it is testing, or an access check that reuses the session that issued the revoke call, can fail the same way and agree incorrectly. A check is independent only if it would still catch the failure when the original cause is present.",
   ],
   validationEvidence: [
-    "This guide is a verification framework, not a test result. Nothing described here was deployed or verified against a live or lab system for this guide, and no timing or outcome data was measured. Its evidence state stays UNVERIFIED until an organization applying it records its own independent verification evidence.",
+    "This guide is a verification framework, not a test result. Nothing described here was deployed or verified against a live or lab system for this guide, and no timing or outcome data was measured. Its evidence state stays UNVERIFIED until an organization applying it records its own independent verification evidence; internal consistency is not grounds to upgrade the label.",
   ],
   limitations: [
     "It describes a discipline, not the rule-evaluation order, token caching, image-layer caching, or isolation scope of any specific product. Translate each step into your tooling and re-validate it there.",
