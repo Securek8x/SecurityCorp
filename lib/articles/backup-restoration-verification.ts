@@ -23,8 +23,10 @@ export const article: KnowledgeArticle = {
     audience: ["practitioner", "security-engineer"],
     estimatedReadingMinutes: 5,
     publishedAt: "2026-09-03",
-    updatedAt: "2026-09-03",
+    updatedAt: "2026-11-22",
     lastReviewedAt: "2026-09-03",
+    changeNote:
+      "Shortened for faster reading. The answer now opens the article, the learning goals, audience, recommendations, and takeaways that repeated the checklist were removed, and the explanation was condensed into five steps. All eight checklist rows are unchanged.",
     labRequired: false,
     authorizedLabOnly: false,
     vendorNeutral: true,

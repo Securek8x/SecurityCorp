@@ -35,46 +35,30 @@ import type { UniversalSections, GuideModule } from "../knowledge-content-types.
 
 const sections: UniversalSections = {
   executiveSummary: [
-    "A success signal from an automated security action proves the action was attempted and accepted, not that its effect exists. A rule deployment that exits 0 does not prove traffic is blocked; a revoke call that returns 200 does not prove the credential is rejected. Verify each action's effect with an independent check, from a vantage point that does not share the automation's reporting path, and repeat that check on a schedule. Every example here is fictional or documentation-safe.",
+    "A success signal from an automated security action proves the action was attempted and accepted, not that its effect exists. Verify the effect directly, from a vantage point that does not share the automation's reporting path, and repeat the check on a schedule. Four checks cover the common actions: for a firewall rule, send the traffic it should block; for an access revocation, try the credential against the resource it protected; for a patch rollout, query the version that is actually running; for a quarantine, probe the host from outside it.",
   ],
   prerequisites: [
-    "At least one automated security action you own (firewall-rule deployment, access revocation, patch rollout, or endpoint quarantine) and knowledge of how it reports success.",
-    "Access to, or authority to request, a vantage point independent of that automation: a separate scanner, a second system, an out-of-band API, or an authorized test client.",
+    "An automated security action you own, and knowledge of how it reports success.",
+    "A verification method independent of that automation's reporting: a separate scanner, a second system, an out-of-band API, or an authorized test client.",
+    "Authority to run that check against the real target without the control it tests blocking the check.",
   ],
   problem: [
-    "Automated security actions are usually recorded as effective the moment their tooling reports success. What the tooling can observe is its own request and response, not the downstream state the request was meant to change.",
-    "An IAM API, for example, can confirm a revoke request was processed, but not that every session and cached token derived from the credential is now rejected. The tool is reporting on itself.",
+    "Automated security actions are usually recorded as effective the moment their tooling reports success. The tooling can observe only its own request and response, not the downstream state the request was meant to change.",
   ],
   threatModel: [
-    "The examples use a fictional team, Thistlewood Systems, running four automated actions: a firewall-rule pipeline, an access-revocation workflow, a patch-rollout pipeline for internet-facing services, and an EDR quarantine action. The scenarios are about reported success diverging from actual effect, not an attack on the automation platform.",
+    "The examples use a fictional team, Thistlewood Systems, that automates firewall-rule deployment, access revocation, patch rollout for internet-facing services, and EDR quarantine. The scenarios concern reported success diverging from actual effect, not an attack on the automation platform.",
     "Four divergences illustrate the gap. (1) A new firewall rule is accepted, but an older, higher-priority rule matches the same traffic first, so the new rule is never evaluated. (2) A revocation succeeds at the identity provider, but a downstream service caches credential validity with a longer time-to-live than anyone remembered, so the identity keeps working for hours. (3) A patch rollout is green at every stage, but a stale cached image layer was never invalidated and the restarted service runs the old binary. (4) The EDR agent reports a host isolated, but the policy covers only the interface the agent knows about; a second interface stays reachable.",
-    "Adversaries can produce the same gap on purpose. MITRE ATT&CK documents Impair Defenses (T1562, including T1562.004, Disable or Modify System Firewall). If you only check the original success log, an action that worked and stayed in effect looks identical to one that worked and was later undone. Independent, recurring verification tells them apart.",
+    "Adversaries can produce the same gap on purpose (MITRE ATT&CK T1562, Impair Defenses, including T1562.004, Disable or Modify System Firewall). In the original success log, an action that stayed in effect looks identical to one that was later undone; only recurring, independent verification tells them apart.",
   ],
   mainContent: [
-    "**Write down the claim, not the command.** Each action asserts a resulting state. A rule deployment claims matching traffic is blocked or allowed. A revocation claims the identity can no longer act anywhere it previously could. A patch rollout claims the patched code is what executes. A quarantine claims the host cannot reach, or be reached by, the paths it severs.",
-    "**Firewall rules: test the traffic, not the ruleset.** From an authorized test vantage point against a lab or fictional target, send the exact traffic the rule claims to affect and confirm the outcome matches its intent. A rule that is present but pre-empted earlier in the evaluation order produces the same deployment log as one that works.",
-    "**Access revocation: test the protected resource, not the identity system.** Try the revoked credential, session, or token against the resource it used to reach, from an authorized test path, and confirm it is rejected there. The identity provider's dashboard only shows that its own record changed.",
-    "**Patch rollout: check what is running, not what the pipeline reported.** Query the running service for its version, build identifier, or a cryptographic attestation, and compare it with the intended patched version. Where build provenance is available, SLSA exists to make \"what is running\" verifiable against \"what was supposed to be built and deployed.\"",
-    "**Quarantine: verify from outside the host.** From a separate network vantage point, not the host's own agent, confirm the host is unreachable on every path the quarantine claims to close, including interfaces the agent may not see.",
     "**Keep the check independent.** A scanner routed through the enforcement point it is testing, or an access check that reuses the session that issued the revoke call, can fail the same way and agree incorrectly. A check is independent only if it would still catch the failure when the original cause is present.",
-    "**Record results outside the automation's log, and repeat them.** Store method, vantage point, timestamp, and outcome in a separate dated record a reviewer can read without trusting the tool being checked. Then re-run the check on a cadence that matches how often the state can change, and after related configuration changes: a later rule can pre-empt a verified one, a repopulated cache can revive a revoked credential, an old image can be redeployed, and a remediation step can lift an isolation.",
   ],
   validationEvidence: [
-    "This guide is a verification framework, not a reproduced test result. No action described here was deployed or independently verified against a live or lab system for this guide, and no timing or outcome data was measured. Its evidence state is UNVERIFIED and stays UNVERIFIED until an organization applying it records its own independent verification evidence; internal consistency is not grounds to upgrade the label.",
+    "This guide is a verification framework, not a test result. Nothing described here was deployed or verified against a live or lab system for this guide, and no timing or outcome data was measured. Its evidence state stays UNVERIFIED until an organization applying it records its own independent verification evidence.",
   ],
   limitations: [
-    "Backup and disaster-recovery restoration is covered by the sibling article \"A Backup Is Not Proven Until It Is Restored,\" not here.",
     "It describes a discipline, not the rule-evaluation order, token caching, image-layer caching, or isolation scope of any specific product. Translate each step into your tooling and re-validate it there.",
-    "Detecting an in-progress attempt to disable or bypass these actions (the ATT&CK T1562 behaviors above) is a detection-engineering concern, covered separately.",
-    "Designing the action itself to fail closed when a dependency is unavailable is covered by \"Designing Fail-Closed Security Automation.\"",
-  ],
-  defensiveRecommendations: [
-    "Never accept an exit code, API response, log entry, or dashboard status as evidence of an action's effect on its own.",
-    "Write down the state each automated action claims to produce before designing its check.",
-    "Run each check from a vantage point that does not share the automation's reporting path, credential, or network position.",
-    "Keep verification records separate from the automation's own log.",
-    "Repeat verification on a defined cadence and after related configuration changes.",
-    "Where a control cannot be verified safely, record it as UNVERIFIED rather than inferring success.",
+    "Out of scope here: backup restoration (see \"A Backup Is Not Proven Until It Is Restored\"), detecting attempts to disable these actions (a detection-engineering concern), and designing the action to fail closed (see \"Designing Fail-Closed Security Automation\").",
   ],
   references: [
     "NIST SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations (see the CA-2 Control Assessments, CA-7 Continuous Monitoring, and AU-6 Audit Record Review, Analysis, and Reporting controls): https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
@@ -90,28 +74,25 @@ const sections: UniversalSections = {
 
 const module_: GuideModule = {
   kind: "guide",
-  requirements: [
-    "An out-of-band verification method, independent of each tool's own reporting, for at least one class of action in scope.",
-    "Authority to run that check against the real target without the check being blocked by the control it tests.",
-    "An inventory of which automated security actions currently report success only through their own completion signal.",
-  ],
   procedure: [
     "List every automated security action whose only evidence of success is its own completion signal.",
     "For each, write down the state it claims to produce (\"traffic on this path is blocked,\" not \"the deployment call returned success\").",
-    "Run the matching check: firewall rule, send the traffic it should block; revocation, try the credential against the protected resource; patch, query the running version; quarantine, probe the host from outside.",
-    "Run the check from a vantage point, credential, and network position independent of the automation.",
-    "Record method, vantage point, timestamp, and outcome in a durable record separate from the automation's log.",
+    "Choose a vantage point, credential, and network position that do not share the automation's reporting path, then run the matching check below.",
+    "**Firewall rule.** From an authorized test vantage point against a lab or fictional target, send the exact traffic the rule claims to affect. Expected: the outcome matches the rule's intent, whatever the deployment log says.",
+    "**Access revocation.** From an authorized test path, try the revoked credential, session, or token against the resource it used to reach. Expected: that resource rejects it.",
+    "**Patch rollout.** Query the running service for its version, build identifier, or a cryptographic attestation. Expected: it matches the intended patched version. Where build provenance is available, SLSA lets you verify that against what was supposed to be built and deployed.",
+    "**Quarantine.** From a separate network vantage point, not the host's own agent, probe every path the quarantine claims to close, including interfaces the agent may not see. Expected: the host is unreachable on all of them.",
+    "Record method, vantage point, timestamp, and outcome in a dated record separate from the automation's log, so a reviewer can read it without trusting the tool being checked.",
   ],
   validation: [
-    "Re-run each check on a defined cadence and after related configuration changes, not only right after the action.",
+    "Re-run each check on a defined cadence and after related configuration changes, not only right after the action. A later rule, a repopulated cache, a redeployed old image, or a remediation step can each undo a verified result.",
     "Confirm each check does not share a failure mode with the automation it verifies.",
-    "Where no safe, authorized test path exists, record the control as UNVERIFIED.",
-    "Periodically compare verification records with the automation's logs; a pattern of logged success that verification contradicts is a finding about the platform, not an isolated incident.",
+    "Where no safe, authorized test path exists, record the control as UNVERIFIED rather than inferring success.",
+    "Periodically compare verification records with the automation's logs. A pattern of logged success that verification contradicts is a platform finding, not an isolated incident.",
   ],
   rollback: [
     "If a check shows a claimed effect did not occur, treat it as a control failure and remediate the action, not as a logging discrepancy.",
     "If a check proves unreliable or too disruptive, redesign it (a narrower test path, a lower-impact probe) instead of reverting to trusting the completion signal.",
-    "Escalate repeated mismatches across actions as a platform-level finding.",
     "Record the date each action's verification became routine, so a later reviewer can tell when the control started producing real evidence.",
   ],
 };
@@ -129,10 +110,12 @@ export const article: KnowledgeArticle = {
     status: "published",
     tags: ["security-control-validation", "logging-monitoring", "access-control", "patch-management"],
     audience: ["practitioner", "security-engineer"],
-    estimatedReadingMinutes: 6,
+    estimatedReadingMinutes: 5,
     publishedAt: "2026-09-03",
-    updatedAt: "2026-09-03",
+    updatedAt: "2026-11-22",
     lastReviewedAt: "2026-09-03",
+    changeNote:
+      "Shortened for faster reading. The four checks now appear in the opening. Each check and its expected result moved into the procedure, the requirements were merged into the prerequisites, and the recommendations, which repeated the procedure and validation steps, were removed. Sources and the evidence status are unchanged.",
     labRequired: false,
     authorizedLabOnly: false,
     vendorNeutral: true,

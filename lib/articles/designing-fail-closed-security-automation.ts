@@ -35,35 +35,25 @@ const sections: UniversalSections = {
   ],
   problem: [
     "Teams often describe a control as \"fail closed\" as if that were one global property. It is the sum of many small decisions, one per code path that can be interrupted before it reaches a verdict. A system can deny correctly on the path its designers reviewed and allow on three paths nobody did, and both look identical until a dependency fails.",
-    "Ordinary defaults lean toward allow. A default-initialized boolean is often wired to mean \"not blocked.\" An uncaught exception unwinds past the enforcement code, and code that never runs denies nothing. A conditional with no matching branch does nothing, which at an enforcement point means nothing was denied.",
   ],
   threatModel: [
     "The examples use a fictional team, Larkfield Systems, whose internal gateway calls an external policy service before forwarding requests to a sensitive administrative endpoint. The scenarios concern what the gateway does when that call returns no usable answer, not an attacker targeting the policy service.",
     "Four failures illustrate the pattern. (1) A connection timeout throws an unhandled exception that skips the line setting the request to denied, and the handler's flag, initialized to permitted by local convention, is never overwritten. (2) A 500-millisecond bypass added during a past overload incident was never removed; eighteen months later it is a permanent, undocumented fail-open path. (3) The gateway filters with a deny-list, so a request the policy service never evaluated passes exactly like one it approved. (4) After those fixes, a routine policy-service restart denies every in-flight request across the platform, because nothing distinguishes a compromised service from one that is warming up.",
   ],
   mainContent: [
-    "**Treat \"cannot determine\" as a third outcome.** Every real check sometimes fails to complete: a partition, a restart, a timeout, an exception, a response the parser cannot read. Modeling the decision as a boolean lets that third outcome collapse into the boolean's starting value, which has already decided every code path that never reaches its own assignment.",
-    "**Four ordinary mechanisms push the collapse toward allow.** An uncaught exception skips enforcement that runs after the decision call. A default branch with no failure case falls through to \"continue.\" A \"temporary\" bypass added under incident pressure has no owner or expiry, so it becomes permanent. A timeout treated as \"probably fine\" replaces verification with an assumption.",
+    "**Treat \"cannot determine\" as a third outcome.** Every real check sometimes fails to complete: a partition, a restart, a timeout, an exception, a response the parser cannot read. Modeling the decision as a boolean lets that third outcome collapse into the boolean's starting value, which has already decided every code path that never reaches its own assignment. A fail-closed gateway denies in that case not because the request was found malicious, but because the check that would have confirmed it was safe never completed. What it enforces is not \"this request is safe\" but \"this request was not verified as safe, so it is denied.\"",
+    "**Four ordinary mechanisms push the collapse toward allow.** An uncaught exception unwinds past the enforcement code, and code that never runs denies nothing, so audit each decision for calls that can throw before enforcement. A default branch with no failure case falls through to \"continue,\" which at an enforcement point means nothing was denied. A \"temporary\" bypass added under incident pressure has no owner or expiry, so it becomes permanent; record each one with an owner and a removal date when it is added. A timeout treated as \"probably fine\" replaces verification with an assumption.",
     "**Prefer allow-lists where legitimate cases can be enumerated.** A deny-list permits everything it does not name, including cases nobody anticipated and requests the check never classified. An allow-list denies anything unlisted by the same mechanism, so \"not on the list\" and \"the list could not be checked\" both deny. Allow-lists cost more maintenance, but they fail closed by construction; a deny-list fails closed only if someone separately handles the case where it could not be evaluated.",
     "**Make Indeterminate deny by construction.** Return Allow, Deny, or Indeterminate as an explicit value rather than throwing, so every call site must handle the third case. Map Indeterminate to Deny at the enforcement boundary through the type itself (a compiler-enforced exhaustive match, or a wrapper with no unchecked path to \"allowed\"), not through a convention each future caller must remember.",
-    "**Decide per control when fail-closed is the wrong default.** A control's own failure has a blast radius: a gateway that cannot tolerate a brief policy-service restart hands that dependency control over the platform's availability. Separate the per-request default, which should almost always deny, from the response to sustained unavailability, which is a design decision. A circuit breaker keeps per-request denial immediate during a blip and offers a monitored, time-boxed, visible degraded mode once unavailability passes a threshold set in advance, instead of an undocumented bypass added mid-incident. Make that call for each control: a low-sensitivity internal dashboard and a system that can exfiltrate customer records are different decisions, even behind the same policy service.",
+    "**Decide per control when fail-closed is the wrong default.** A control's own failure has a blast radius: a gateway that cannot tolerate a brief policy-service restart hands that dependency control over the platform's availability. Separate the per-request default, which should almost always deny, from the response to sustained unavailability, which is a design decision. A circuit breaker keeps per-request denial immediate during a blip and offers a monitored, time-boxed, visible degraded mode once unavailability passes a threshold set in advance, instead of an undocumented bypass added mid-incident. Make that call per control and write down which failure is worse for it: an unauthorized request getting through, or the control's outage taking down what it protects. A low-sensitivity internal dashboard and a system that can exfiltrate customer records are different decisions, even behind the same policy service.",
   ],
   validationEvidence: [
     "This deep-dive describes a structural mechanism with a fictional scenario. It includes no reproduced incident, captured trace, or assessment of a real control. Its evidence state remains UNVERIFIED: the claims rest on the cited standards, weakness classification, and design-pattern references, not on an exercise performed for this article.",
   ],
   limitations: [
     "It covers a single control's failure behavior. Decision sources that return a confidently wrong answer (distributed-consensus and Byzantine failures) are a different, harder problem.",
-    "It describes the pattern architecturally and does not cover configuring or tuning a specific circuit-breaker, service-mesh, or health-check product.",
     "Larkfield Systems is illustrative, not a reference architecture. Derive each control's blast-radius analysis from its own criticality and dependencies.",
-    "It does not cover incident response after a fail-open path is exploited, or the monitoring needed to detect one; see the catalog's detection and incident-response content.",
-  ],
-  defensiveRecommendations: [
-    "Model every decision that depends on an external check as Allow, Deny, or Indeterminate, and make Indeterminate deny by construction.",
-    "Use an allow-list wherever the legitimate cases can be enumerated.",
-    "Audit the exception paths around each security decision for calls that can throw before the enforcement assignment.",
-    "Record every bypass added during an incident as a tracked item with an owner and a removal date at the moment it is added.",
-    "Keep the per-request default (deny now) separate from the sustained-outage response (a monitored, time-boxed degraded mode behind a circuit breaker).",
-    "For each control, record which failure is worse: an unauthorized request getting through, or the control's outage taking down what it protects.",
+    "Out of scope: configuring or tuning a specific circuit-breaker, service-mesh, or health-check product, and detecting or responding to an exploited fail-open path (see the catalog's detection and incident-response content).",
   ],
   references: [
     "Saltzer, J. & Schroeder, M. — The Protection of Information in Computer Systems (1975), the original statement of the fail-safe defaults principle: https://www.cs.virginia.edu/~evans/cs551/saltzer/",
@@ -90,18 +80,12 @@ const module_: DeepDiveModule = {
   trustBoundaries: [
     "Gateway to decision source: where the third outcome lives. A gateway that fails open here has removed itself as a boundary toward the resource behind it, however correctly it enforces the decisions it does receive.",
     "A single failure versus sustained unavailability: the boundary a circuit breaker adds. Collapsing it is how a temporary bypass becomes permanent, or a brief blip becomes a full outage.",
-    "What a fail-closed control enforces is not \"this request is safe\" but \"this request was not verified as safe, so it is denied.\" Treating \"not yet verified\" as \"verified safe\" is the risk every mechanism in this deep-dive exists to prevent.",
-  ],
-  alternatives: [
-    "A tri-state decision type enforced by the type system: slightly more call-site code, no silent collapse.",
-    "A circuit breaker with a defined threshold and a monitored, time-boxed degraded mode: a narrow, deliberate exposure window in exchange for platform-wide availability.",
-    "A cached, short-lived last-known-good decision, used only while the breaker's degraded mode is active and only for a bounded period.",
-    "Redundant decision sources with a fail-closed quorum: this reduces how often the third outcome occurs rather than changing what happens when it does, and is justified only for highly critical controls.",
   ],
   tradeoffs: [
     "An unconditional fail-closed default trades availability for integrity. It is right when the control's absence is the worse outcome and harmful when the control's own failure has the wider blast radius.",
-    "A circuit breaker adds its own failure mode: a threshold that never trips, or trips too eagerly. Use one only where a control's outage could cause a broader outage.",
-    "An explicit third outcome costs design and code at every call site, and removes the most common structural cause of unintended fail-open behavior.",
+    "A tri-state decision type enforced by the type system costs design and code at every call site, and removes the most common structural cause of unintended fail-open behavior.",
+    "A circuit breaker with a defined threshold and a monitored, time-boxed degraded mode accepts a narrow, deliberate exposure window in exchange for platform-wide availability. It adds its own failure mode: a threshold that never trips, or trips too eagerly. Use one only where a control's outage could cause a broader outage.",
+    "A cached, short-lived last-known-good decision can be used only while the breaker's degraded mode is active, and only for a bounded period.",
   ],
 };
 
@@ -231,7 +215,10 @@ export const article: KnowledgeArticle = {
     audience: ["practitioner", "security-engineer"],
     estimatedReadingMinutes: 6,
     publishedAt: "2026-08-31",
+    updatedAt: "2026-11-22",
     lastReviewedAt: "2026-08-31",
+    changeNote:
+      "Shortened for faster reading. Recommendations and alternatives were folded into How it works and Tradeoffs, and the redundant-decision-source alternative was removed because its example was ambiguous. The fail-closed behavior described is unchanged.",
     labRequired: false,
     authorizedLabOnly: false,
     vendorNeutral: true,
