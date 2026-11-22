@@ -43,7 +43,7 @@ export default async function KnowledgeArticlePage({ params }: { params: Promise
   if (!article) notFound();
 
   return (
-    <Shell current="/topics">
+    <Shell current="/guides">
       <JsonLd data={knowledgeArticleJsonLd(article.meta)} />
       <JsonLd
         data={breadcrumbJsonLd([
