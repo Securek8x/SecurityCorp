@@ -69,7 +69,10 @@ const sections: UniversalSections = {
     "SLSA (Supply-chain Levels for Software Artifacts), provenance verification for build and deployment artifacts: https://slsa.dev/",
   ],
   relatedSlugs: ["backup-restoration-verification", "designing-fail-closed-security-automation", "designing-human-approval-gates-for-production-changes"],
-  nextSlug: "backup-restoration-verification",
+  nextSlug: "backup-restoration-verification",  anchorAliases: {
+    "mod-requirements": "prerequisites",
+    "sec-defensive-recommendations": "mod-procedure",
+  },
 };
 
 const module_: GuideModule = {

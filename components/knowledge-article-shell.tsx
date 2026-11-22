@@ -208,6 +208,13 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
   const next = sections.nextSlug ? findKnowledgeArticle(sections.nextSlug) : undefined;
 
   const [lead, ...restOfSummary] = sections.executiveSummary ?? [];
+  // Old fragment IDs kept alive at their closest surviving section
+  // (UniversalSections.anchorAliases). Empty, hidden block targets: they
+  // only give a removed heading's URL somewhere to land.
+  const aliasTargets = (target: string) =>
+    Object.entries(sections.anchorAliases ?? {})
+      .filter(([, t]) => t === target)
+      .map(([alias]) => <span key={alias} id={alias} aria-hidden="true" style={{ display: "block", height: 0 }} />);
 
   const blocks: Block[] = [
     restOfSummary.length > 0
@@ -315,6 +322,7 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
 
         {sections.prerequisites && sections.prerequisites.length > 0 && (
           <aside className="prereq-box" aria-labelledby="prereq-heading">
+            {aliasTargets("prerequisites")}
             <strong id="prereq-heading">What you should know first</strong>
             <ul>
               {sections.prerequisites.map((p) => (
@@ -337,6 +345,7 @@ export function KnowledgeArticleShell({ article }: { article: KnowledgeArticle }
           <section key={b.id} id={b.id}>
             <span className="step">{String(i + 1).padStart(2, "0")}</span>
             <div>
+              {aliasTargets(b.id)}
               <h2>
                 {b.heading} <HeadingLink id={b.id} />
               </h2>
