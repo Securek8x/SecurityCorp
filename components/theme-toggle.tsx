@@ -51,5 +51,5 @@ export function ThemeToggle() {
 
   const isDark = pref === "dark";
   const Icon = isDark ? Moon : Sun;
-  return <button className="theme-toggle" type="button" aria-pressed={isDark} aria-label={`Switch to ${isDark ? "light" : "dark"} mode`} onClick={toggle}><Icon size={15} aria-hidden="true" />{isDark ? "Dark" : "Light"}</button>;
+  return <button className="theme-toggle" type="button" aria-pressed={isDark} aria-label={`Switch to ${isDark ? "light" : "dark"} mode`} onClick={toggle}><Icon size={16} aria-hidden="true" /></button>;
 }

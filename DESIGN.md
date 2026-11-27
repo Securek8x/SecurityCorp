@@ -2,21 +2,23 @@
 name: SecurityCorp
 description: Public cybersecurity portfolio and knowledge interface
 colors:
-  night: "#040609"
-  paper: "#070b12"
-  ink: "#e8f1f8"
-  muted: "#93a6b9"
-  line: "#1b2836"
-  surface-raised: "#121c2b"
-  acid: "#00e5ff"
-  primary-hover: "#5cf0ff"
-  accent2: "#8b5cf6"
-  go: "#33ff99"
-  warn: "#f5b942"
-  danger: "#ff6b6b"
+  night: "#070605"
+  paper: "#0c0a09"
+  ink: "#f3ece2"
+  muted: "#a89b8b"
+  line: "#2e261e"
+  surface-raised: "#1f1913"
+  acid: "#ff7a1a"
+  primary-hover: "#ff9440"
+  accent2: "#ff2e88"
+  go: "#b4ff3a"
+  warn: "#ffb020"
+  danger: "#ff2e88"
 typography:
   body:
     fontFamily: "var(--font-sans-nf, system-ui, sans-serif)"
+  display:
+    fontFamily: "var(--font-display-nf, Impact, sans-serif)"
   label:
     fontFamily: "var(--font-mono-nf, monospace)"
 rounded:
@@ -29,20 +31,22 @@ spacing:
 
 ## Overview
 
-**Creative North Star: “The security operations interface.”**
+**Creative North Star: “The tiger’s lab notebook.”**
 
-The incumbent system is a deep-navy, cyberpunk/netrunner public interface: calm
-operations surfaces, restrained cyan/teal signal color, precise typography, and
-purposeful technical diagrams. It is an established visual world; frontend
-work refines or extends it and does not replace it.
+Cyberpunk, but taken from the tiger rather than a generic navy-and-cyan
+security template. Warm black surfaces, tiger orange as the primary signal,
+acid green for recorded results, and magenta only as a rare third accent.
+The tiger guardian is the identifier and stays in the logo, the homepage
+poster, and the author mark.
 
 Key characteristics:
 
-- Deep-navy surfaces with cyan signal accents and limited supporting colors.
-- Tiger guardian imagery and existing Three.js/CSS motion remain signature
-  assets and behavior.
-- Dense technical information is structured for a mixed audience and readable
-  at mobile and tablet widths.
+- Warm-black surfaces, orange primary, green for recorded results.
+- Display headings (Big Shoulders), IBM Plex Sans for reading, IBM
+  Plex Mono for technical UI. All three are self-hosted through `next/font`.
+- Evidence stays honest: a homepage status says only whether a result was
+  recorded, reported, or never claimed.
+- Dense technical information stays readable at mobile and tablet widths.
 
 ## Colors
 
@@ -51,9 +55,9 @@ Light-theme mappings remain first-class; do not introduce a second palette.
 
 ## Typography
 
-Use the existing self-hosted sans and mono variables from `app/layout.tsx` and
-`app/globals.css`. Preserve the current hierarchy, readable line lengths, and
-mono treatment for labels and technical UI.
+Use the self-hosted display, sans, and mono variables from `app/layout.tsx`
+and `app/globals.css`. Display type is for headings. Mono is for labels,
+commands, and status. Keep readable line lengths.
 
 ## Layout
 
@@ -63,9 +67,9 @@ must not replace the established shell or navigation without explicit approval.
 
 ## Elevation & Depth
 
-Depth comes from tonal navy surfaces, thin borders, clipped corners, restrained
-cyan glow, and existing diagram layers. Avoid broad blur, gratuitous glow, or
-new shadow systems.
+Depth comes from warm-black surfaces, thin borders, clipped corners, and a
+restrained orange edge. Scanlines belong on the tiger poster, not across
+body text. Avoid broad blur, gratuitous glow, or a glowing network backdrop.
 
 ## Shapes
 
@@ -84,8 +88,8 @@ targets.
 
 ### Do:
 
-- Do preserve the current layout, content hierarchy, typography, palette,
-  tiger guardian, Three.js scenes, and motion grammar.
+- Do preserve the tiger guardian, the warm-black / orange / acid-green
+  palette, the display-plus-plex typography, and reduced-motion behavior.
 - Do use existing tokens and components, and validate accessibility,
   responsive behavior, and performance after frontend changes.
 - Do keep Cloudflare Pages/static-export compatibility and publication-safety
@@ -95,6 +99,8 @@ targets.
 
 - Don't create a generic SaaS appearance, purple-to-blue gradients, excessive
   animation, gratuitous glow, hover-only behavior, or desktop-only interaction.
-- Don't remove focus states, replace the palette or typography, regenerate the
-  design system, or replace the layout without explicit user authorization.
+- Don't remove focus states, or replace this palette or typography again,
+  without explicit user authorization.
+- Don't go back to the navy, cyan, and purple template, or to a neon
+  network-graph hero.
 - Don't use emoji or publish private infrastructure specifics.

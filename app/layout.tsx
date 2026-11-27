@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Big_Shoulders, IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { ogImages, twitterImages } from "@/lib/seo";
 import { websiteJsonLd } from "@/lib/json-ld";
@@ -8,16 +8,22 @@ import { getBuildInfo } from "@/lib/build-info";
 
 // Self-hosted at build time by next/font — no runtime request to Google Fonts,
 // no render-blocking network dependency, subset to latin to keep payload small.
-const spaceGrotesk = Space_Grotesk({
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: ["400", "500"],
   variable: "--font-sans-nf",
   display: "swap",
 });
-const jetbrainsMono = JetBrains_Mono({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500"],
   variable: "--font-mono-nf",
+  display: "swap",
+});
+const display = Big_Shoulders({
+  subsets: ["latin"],
+  weight: ["700", "800"],
+  variable: "--font-display-nf",
   display: "swap",
 });
 
@@ -74,8 +80,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f7fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#070b12" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f1ea" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c0a09" },
   ],
 };
 
@@ -85,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${plexSans.variable} ${plexMono.variable} ${display.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <link rel="alternate" type="application/rss+xml" title="SecurityCorp — RSS feed" href="/rss.xml" />
