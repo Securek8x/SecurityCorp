@@ -27,6 +27,13 @@ export type UniversalSections = Partial<{
    * which is an unordered "see also" set. The prose `prerequisites` above
    * describes required knowledge; this links to where to get it. */
   prerequisiteSlugs: string[];
+  /** Fragment IDs of sections an editorial revision removed, mapped to the
+   * rendered section that now holds their content (a section id such as
+   * "mod-tradeoffs", or "prerequisites" for the prerequisites box). The
+   * shell renders each old ID as an empty target inside that section so
+   * existing deep links keep landing on the relevant content without the
+   * removed heading coming back. Checked by lib/anchor-aliases.test.ts. */
+  anchorAliases: Record<string, string>;
 }>;
 
 // Content-type-specific modules. One reusable shell component switches on
