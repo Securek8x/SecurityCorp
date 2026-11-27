@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Menu, Rss } from "lucide-react";
+import { Menu, Rss } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { BrandLockup } from "@/components/brand-lockup";
 import { MotionController } from "@/components/motion-controller";
@@ -7,15 +7,15 @@ import { InteractiveSurfaceController } from "@/components/interactive-surface-c
 import { profileLinks } from "@/lib/profile";
 
 const NAV_LINKS = [
-  { href: "/topics", label: "Topics" },
   { href: "/guides", label: "Guides" },
+  { href: "/topics", label: "Topics" },
   { href: "/projects", label: "Projects" },
   { href: "/about", label: "About" },
 ];
 
 export function Header({ current }: { current?: string }) {
   return (
-    <header className="site-header">
+    <header className="site-header masthead">
       <div className="brand-group">
         <Link href="/" className="brand brand-link">
           <BrandLockup />
@@ -33,9 +33,6 @@ export function Header({ current }: { current?: string }) {
           </Link>
         ))}
       </nav>
-      <Link href="/guides" className="field-link">
-        Field notes <ArrowUpRight size={14} aria-hidden="true" />
-      </Link>
       <ThemeToggle />
     </header>
   );
@@ -43,12 +40,10 @@ export function Header({ current }: { current?: string }) {
 
 export function Footer() {
   return (
-    <footer>
+    <footer className="site-footer">
       <div>
-        <div className="brand footer-mark">
-          <BrandLockup />
-        </div>
-        <p>Security engineering, documented in the open.</p>
+        <p className="footer-name">SecurityCorp</p>
+        <p>Independent security engineering notes by Ravi Teja Thota.</p>
       </div>
       <nav className="footer-links" aria-label="Footer">
         {NAV_LINKS.map((l) => (

@@ -1,24 +1,13 @@
 import Link from "next/link";
 import type {Metadata} from "next";
-import {ArrowDown,ArrowRight,ArrowUpRight,BookOpen,ClipboardList} from "lucide-react";
-import {buildSystemsUnderTest} from "@/lib/systems-under-test";
-import {SystemsUnderTest} from "@/components/systems-under-test";
-import {ContentDate} from "@/components/content-date";
+import {ArrowRight} from "lucide-react";
 import {Shell} from "@/components/site-shell";
-import {articles,projects} from "@/lib/content";
-import {buildLog,buildLogEventLabel,formatBuildLogDate} from "@/lib/build-log";
-import {publishedKnowledgeArticles} from "@/lib/knowledge-content";
-import {latestSiteUpdate,utcToday} from "@/lib/site-updated";
-import {controlScenarios,resolveControlScenarios} from "@/lib/control-under-test";
-import {ControlUnderTest} from "@/components/control-under-test";
-import {HeroVisual} from "@/components/hero-visual";
+import {ContentDate} from "@/components/content-date";
+import MalwareIntakeDiagram from "@/components/diagrams/malware-intake-diagram";
+import {projects} from "@/lib/content";
+import {latestEntries} from "@/lib/publication-index";
+import {homeIntroPhoto} from "@/lib/site-photos";
 import {ogImages,twitterImages} from "@/lib/seo";
-import {homepageCertifications} from "@/lib/profile";
-import {CertificationItem} from "@/components/certification";
-
-// Build-log event types have their own glyphs — none shared with the
-// evidence-maturity marks, so an event never reads as an evidence level.
-const eventIcon = {publication:BookOpen,plan:ClipboardList} as const;
 
 export const metadata: Metadata = {
   title: "SecurityCorp — Security is a practice",
@@ -28,14 +17,61 @@ export const metadata: Metadata = {
   twitter: {card: "summary_large_image", title: "SecurityCorp — Security is a practice", description: "Hands-on security guides, honest lab notes, and defensive systems built to fail safely.", images: twitterImages("SecurityCorp — Security is a practice")},
 };
 
-// Derived at build time from published content; see lib/site-updated.ts.
-const siteUpdated = latestSiteUpdate({guides:articles,publishedKnowledge:publishedKnowledgeArticles,buildLog,today:utcToday()});
+/* The featured case study is P-01. Its observed result is read from the
+   project's checked evidence records (lib/content.ts) rather than restated
+   here, so the homepage can only show a result that has a recorded
+   observation. Today that is one record: the scanner outage. */
+const caseStudy = projects.find((p) => p.index === "P-01");
+const records = caseStudy && !("unavailable" in caseStudy.evidence) ? caseStudy.evidence.records : [];
+const observed = records.find((r) => r.maturity === "validated" && r.observation.kind === "recorded");
+const documentedCount = records.filter((r) => r.maturity === "documented").length;
 
-export default function Home(){return <Shell current="/"><main>
-<section className="hero grid-lines"><div className="hero-kicker entrance" style={{"--d":"0ms"} as React.CSSProperties}>Independent security field notes</div><div className="hero-copy"><h1 className="entrance" style={{"--d":"70ms"} as React.CSSProperties}>Security is a<br/><em>practice.</em></h1><p className="entrance" style={{"--d":"140ms"} as React.CSSProperties}>Hands-on guides, honest lab notes, and defensive systems built to fail safely. Written for engineers, learners, and the relentlessly curious.</p><Link href="/guides" className="primary-link primary-link-terminal entrance" style={{"--d":"210ms"} as React.CSSProperties}>Explore the field notes <ArrowRight size={17} aria-hidden="true"/></Link><a href="#failure-lab" className="hero-failure-link">Pick a failure. See what the control does. <ArrowDown size={17} aria-hidden="true"/></a></div><HeroVisual /><div className="scope-card clip-corner entrance" style={{"--d":"280ms"} as React.CSSProperties}><p className="mono-label">CURRENT SCOPE / 04</p><ul><li><span>01</span>Container & Kubernetes security</li><li><span>02</span>Detection engineering</li><li><span>03</span>Secure self-hosting</li><li><span>04</span>Cloud & identity</li></ul>{siteUpdated&&<div className="signal entrance" style={{"--d":"350ms"} as React.CSSProperties}><i/>Updated <ContentDate value={siteUpdated.date}/><span className="sr-only"> — the latest date among published guides, published knowledge articles, and recorded build-log events</span></div>}</div></section>
-<ControlUnderTest scenarios={resolveControlScenarios(controlScenarios,projects)} />
-<section className="latest"><div className="section-head"><div><h2>Guides from the lab</h2></div><Link href="/guides">View all guides <ArrowUpRight size={15} aria-hidden="true"/></Link></div><div className="article-list">{articles.map(a=><Link href={`/guides/${a.slug}`} className="article-row record-trace" key={a.slug}><span className="article-no">{a.number}</span><div><div className="article-meta"><span>{a.category}</span><span><ContentDate value={a.publishedAt}/></span><span>{a.read} read</span><span>{a.level}</span></div><h3>{a.title}</h3><p>{a.dek}</p></div><ArrowUpRight className="row-arrow" aria-hidden="true"/></Link>)}</div></section>
-<section className="projects-preview" aria-labelledby="systems-under-test-heading"><div className="section-head light"><div><p className="section-label">Selected builds</p><h2 id="systems-under-test-heading">Systems under test.</h2></div><p className="head-copy">Each system and the evidence behind it: what is only designed, what is documented, and what has a recorded observation.</p></div><SystemsUnderTest model={buildSystemsUnderTest(projects)}/><Link href="/projects" className="outline-link">Open the project index <ArrowRight size={16} aria-hidden="true"/></Link></section>
-<section className="build-log" aria-labelledby="build-log-heading"><p className="section-label">Publication activity</p><h2 id="build-log-heading">Build log.</h2><p className="head-copy">What changed, and when — publications and plans, not a live system feed.</p><div className="build-log-track" data-motion="once" data-motion-duration="2200"><div className="build-log-circuit-line" aria-hidden="true"/><ol role="list">{buildLog.map((entry)=>{const Icon=eventIcon[entry.type];const when=entry.date.precision==="day"?<ContentDate value={entry.date.value}/>:<time dateTime={String(entry.date.value)}>{formatBuildLogDate(entry.date)}</time>;return <li key={entry.title} className="build-log-row"><span className="build-log-node" aria-hidden="true"/><span className="build-log-date">{when}</span><span className="build-log-type"><Icon size={13} strokeWidth={1.75} aria-hidden="true"/>{buildLogEventLabel[entry.type]}</span><span className="build-log-what">{entry.href?<Link href={entry.href}>{entry.title}</Link>:entry.title}</span></li>})}</ol></div></section>
-<section className="author-strip"><div><p className="section-label">Your operator</p><h2>Ravi Teja Thota</h2><p>Writes SecurityCorp from the point where architecture diagrams meet inconvenient reality — Kubernetes, cloud, and detection engineering, tested before they&apos;re published.</p></div><div className="credentials">{homepageCertifications.map(c=><CertificationItem key={c.name} cert={c}/>)}</div><Link href="/about" className="text-link">More about the author <ArrowRight size={15}/></Link></section>
-</main></Shell>}
+export default function Home(){
+  const latest = latestEntries(6);
+  return <Shell current="/"><main>
+    <section className={`pub-wrap home-intro${homeIntroPhoto ? "" : " no-photo"}`} aria-labelledby="home-title">
+      <div>
+        <h1 id="home-title">Security engineering notes, tested before they&apos;re published.</h1>
+        <p>Practical guides on detection, containers, identity, and safe automation, written by a working security engineer. Each piece says what was observed and what is only designed.</p>
+        <Link href="/guides" className="pub-cta">Browse the guides <ArrowRight size={17} aria-hidden="true"/></Link>
+      </div>
+      {homeIntroPhoto && (
+        // eslint-disable-next-line @next/next/no-img-element -- static export, images.unoptimized
+        <figure className="home-photo"><img src={homeIntroPhoto.src} alt={homeIntroPhoto.alt} width={homeIntroPhoto.width} height={homeIntroPhoto.height} fetchPriority="high" /></figure>
+      )}
+    </section>
+
+    {caseStudy && <section className="pub-wrap home-section" aria-labelledby="case-study-heading">
+      <div className="home-section-head"><h2 id="case-study-heading">Case study</h2><Link href={`/projects/${caseStudy.slug}`}>Full case study</Link></div>
+      <div className="case-study">
+        <div>
+          <h3>A file intake gate that fails closed</h3>
+          <p>Untrusted files wait in a staging area that downstream services cannot read. They are released only after the transfer completes, the scan passes, and the move is verified. Any ambiguous outcome, including a scanner timeout, quarantines the file instead of releasing it.</p>
+          {observed && observed.observation.kind === "recorded" && <div className="case-result">
+            <strong>Observed result</strong>
+            <p>{observed.observation.result}</p>
+            <p className="case-scope">One of {records.length} failure paths has a recorded result. The other {documentedCount} are documented, not yet recorded.</p>
+          </div>}
+          <div className="case-links">
+            <Link href={`/projects/${caseStudy.slug}`}>Read the case study</Link>
+            {caseStudy.guideSlug && <Link href={`/guides/${caseStudy.guideSlug}`}>Build the gate: the guide</Link>}
+          </div>
+        </div>
+        <figure className="case-figure"><MalwareIntakeDiagram /></figure>
+      </div>
+    </section>}
+
+    <section className="pub-wrap home-section" aria-labelledby="latest-heading">
+      <div className="home-section-head"><h2 id="latest-heading">Latest guides</h2><Link href="/guides">All guides <ArrowRight size={15} aria-hidden="true"/></Link></div>
+      <ul className="pub-list">
+        {latest.map((e) => <li key={e.href}>
+          <Link href={e.href} className="pub-entry">
+            <h3>{e.title}</h3>
+            <p>{e.summary}</p>
+            <span className="pub-meta"><span>{e.topic}</span><span>{e.readMinutes} min read</span></span>
+            <ContentDate value={e.publishedAt} className="pub-date"/>
+          </Link>
+        </li>)}
+      </ul>
+    </section>
+  </main></Shell>}

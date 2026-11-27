@@ -3,21 +3,15 @@
    plain <img> with explicit dimensions for this fixed-size mark. */
 
 /**
- * The site logo: the tiger mark plus the original SECURITYCORP.NET lettering
- * (assets from scripts/extract-brand-assets.ts). The lettering is an alpha
- * mask filled with the theme ink, so it follows light/dark mode; ".NET" keeps
- * its own colours. Both images are decorative — the accessible name is the
- * visually hidden text.
+ * The site logo: the tiger mark plus a set-in-type "SecurityCorp" wordmark in
+ * the publication serif (redesign, Bead securitycorp-source-wo8.1). The mark
+ * is decorative; the accessible name is the visible wordmark text.
  */
 export function BrandLockup() {
   return (
     <>
-      <img className="brand-tiger" src="/brand/tiger-mark.webp" width={44} height={44} alt="" decoding="async" />
-      <span className="brand-lettering" aria-hidden="true">
-        <span className="brand-lettering-ink" />
-        <span className="brand-lettering-net" />
-      </span>
-      <span className="sr-only">SecurityCorp.net</span>
+      <img className="brand-tiger" src="/brand/tiger-mark.webp" width={28} height={28} alt="" decoding="async" />
+      <span className="brand-wordmark">SecurityCorp</span>
     </>
   );
 }

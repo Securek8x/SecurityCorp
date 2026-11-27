@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Source_Serif_4, Source_Sans_3, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "./publication.css";
 import { ogImages, twitterImages } from "@/lib/seo";
 import { websiteJsonLd } from "@/lib/json-ld";
 import { JsonLd } from "@/components/json-ld";
@@ -8,9 +9,19 @@ import { getBuildInfo } from "@/lib/build-info";
 
 // Self-hosted at build time by next/font — no runtime request to Google Fonts,
 // no render-blocking network dependency, subset to latin to keep payload small.
-const spaceGrotesk = Space_Grotesk({
+// Publication type system (redesign, Bead securitycorp-source-wo8.1): a warm
+// serif for headings and a humanist sans for long-form body text.
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: ["500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-serif-nf",
+  display: "swap",
+});
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  style: ["normal", "italic"],
   variable: "--font-sans-nf",
   display: "swap",
 });
@@ -74,8 +85,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f5f7fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#070b12" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfbf9" },
+    { media: "(prefers-color-scheme: dark)", color: "#131415" },
   ],
 };
 
@@ -85,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${sourceSerif.variable} ${sourceSans.variable} ${jetbrainsMono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <link rel="alternate" type="application/rss+xml" title="SecurityCorp — RSS feed" href="/rss.xml" />

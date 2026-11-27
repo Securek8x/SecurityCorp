@@ -23,9 +23,11 @@ approval gates are satisfied.
 
 ## Brand Commitments
 
-Preserve the deep-navy security-operations visual direction, cyberpunk/netrunner
-character, restrained cyan/teal accents, tiger guardian imagery, existing
-typography and spacing conventions, and the established interaction language.
+An independent security engineering publication (owner redesign decision
+2026-11-21, Beads epic securitycorp-source-wo8): quiet editorial typography,
+a restrained palette, original photography supplied by the owner, and
+evidence-first writing that keeps observed results distinct from design
+intent. The tiger mark remains the logo. See DESIGN.md.
 
 ## Accessibility & Inclusion
 

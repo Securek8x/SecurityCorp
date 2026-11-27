@@ -89,21 +89,21 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <ReadingProgress />
       <main className="article-page">
         <Link href="/guides" className="back">
-          <ArrowLeft size={15} aria-hidden="true" /> All field notes
+          <ArrowLeft size={15} aria-hidden="true" /> All guides
         </Link>
         <article>
           <header>
-            <p className="section-label">{article.category} / {article.number}</p>
+            <p className="section-label">{article.category}</p>
             <h1>{article.title}</h1>
-            <p className="dek">{article.dek}</p>
             <div className="byline">
               <span>By Ravi Teja Thota</span>
               <span>Published <ContentDate value={article.publishedAt} /></span>
               {article.lastReviewedAt !== article.publishedAt && <span>Last reviewed <ContentDate value={article.lastReviewedAt} /></span>}
               <span>{article.read} read</span>
               <span>{article.level}</span>
+              <div className="byline-actions"><ShareButton title={article.title} /></div>
             </div>
-            <ShareButton title={article.title} />
+            <p className="dek">{article.dek}</p>
           </header>
 
           <p className="lead">{article.intro}</p>
@@ -139,7 +139,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                   {s.code && (
                     <div className="code-block">
                       <CopyCodeButton code={s.code} />
-                      <pre>
+                      <pre tabIndex={0} aria-label={`Code: ${s.heading}`}>
                         <code>{s.code}</code>
                       </pre>
                     </div>
