@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Menu, Rss } from "lucide-react";
+import { Menu, Rss } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { BrandLockup } from "@/components/brand-lockup";
 import { MotionController } from "@/components/motion-controller";
@@ -33,9 +33,6 @@ export function Header({ current }: { current?: string }) {
           </Link>
         ))}
       </nav>
-      <Link href="/guides" className="field-link">
-        Field notes <ArrowUpRight size={14} aria-hidden="true" />
-      </Link>
       <ThemeToggle />
     </header>
   );
